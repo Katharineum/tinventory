@@ -18,14 +18,19 @@ from django.urls import path, include
 from rest_framework import routers
 
 from api import views
+from api.views import UserList, UserDetails, GroupList
 
 router = routers.DefaultRouter()
 # router.register('users', views.UserViewSet)
 # router.register('groups', views.GroupViewSet)
 router.register("categories", views.CategoryViewSet)
+
 urlpatterns = [
     path('', include(router.urls)),
     path('admin/', admin.site.urls),
-    path('api-auth/', include('rest_framework.urls'))
-
+    path('api-auth/', include('rest_framework.urls')),
+    path('o/', include('oauth2_provider.urls', namespace='oauth2_provider')),
+    path('users/', UserList.as_view()),
+    path('users/<pk>/', UserDetails.as_view()),
+    path('groups/', GroupList.as_view()),
 ]
