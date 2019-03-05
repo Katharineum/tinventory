@@ -30,10 +30,11 @@ router.register("categories", views.CategoryViewSet)
 urlpatterns = [
                   # path('', include(router.urls)),
                   path("", include("ui.urls")),
-    path('admin/', admin.site.urls),
-    path('api-auth/', include('rest_framework.urls')),
-    path('o/', include('oauth2_provider.urls', namespace='oauth2_provider')),
-    path('users/', UserList.as_view()),
-    path('users/<pk>/', UserDetails.as_view()),
-    path('groups/', GroupList.as_view()),
+
+                  path('admin/', admin.site.urls),
+                  path('api-auth/', include('rest_framework.urls')),
+                  path('o/', include('oauth2_provider.urls', namespace='oauth2_provider')),
+                  # path('users/', UserList.as_view()),
+                  # path('users/<pk>/', UserDetails.as_view()),
+                  # path('groups/', GroupList.as_view()),
               ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

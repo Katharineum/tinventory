@@ -2,210 +2,77 @@
 
 <!doctype html>
 <html lang="de">
-
 <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="{% static "vendor/bootstrap/css/bootstrap.min.css" %}">
-    <link href="{% static "vendor/fonts/circular-std/style.css" %}" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css"
+          integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
     <link rel="stylesheet" href="{% static "style.css" %}">
-    <link rel="stylesheet" href="{% static "custom.css" %}">
-    <link rel="stylesheet" href="{% static "vendor/fonts/fontawesome/css/fontawesome-all.css" %}">
-    <link rel="stylesheet"
-          href="{% static "vendor/fonts/material-design-iconic-font/css/materialdesignicons.min.css" %}">
-    <link rel="stylesheet" href="{% static "vendor/fonts/flag-icon-css/flag-icon.min.css" %}">
+
     <title>TInventory</title>
 </head>
-
 <body>
-<!-- ============================================================== -->
-<!-- main wrapper -->
-<!-- ============================================================== -->
-<div class="dashboard-main-wrapper">
-    <!-- ============================================================== -->
-    <!-- navbar -->
-    <!-- ============================================================== -->
-    <div class="dashboard-header">
-        <nav class="navbar navbar-expand-lg bg-white fixed-top">
-            <a class="navbar-brand" href="/">TInventory</a>
+{% if user.is_authenticated %}
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <a class="navbar-brand" href="#"><i class="fas fa-search-location"></i> TInventory</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
                     aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <div class="collapse navbar-collapse " id="navbarSupportedContent">
-                <ul class="navbar-nav ml-auto navbar-right-top">
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                    </li>
                     <li class="nav-item">
-                        <div id="custom-search" class="top-search-bar">
-                            <input class="form-control" type="text" placeholder="Suchen">
+                        <a class="nav-link" href="#">Link</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Dropdown
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="#">Action</a>
+                            <a class="dropdown-item" href="#">Another action</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="#">Something else here</a>
                         </div>
                     </li>
-
-                    <li class="nav-item dropdown nav-user">
-                        <a class="nav-link nav-icons" href="#" id="navbarDropdownMenuLink1" data-toggle="dropdown"
-                           aria-haspopup="true" aria-expanded="false">
-                            <i class="fas fa-fw fa-user"></i>
-                        </a>
-
-                        <div class="dropdown-menu dropdown-menu-right nav-user-dropdown"
-                             aria-labelledby="navbarDropdownMenuLink2">
-                            <div class="nav-user-info">
-                                <h5 class="mb-0 text-white nav-user-name">John Abraham </h5>
-                            </div>
-                            <a class="dropdown-item" href="#"><i class="fas fa-power-off mr-2"></i>Logout</a>
-                        </div>
+                    <li class="nav-item">
+                        <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav align-right">
+                    <li class="navbar-text">
+                        Angemeldet als {{ user }}
+                    </li>
+                    <li>
+                        <a class="nav-link" href="{% url "logout" %}">Abmelden</a>
                     </li>
                 </ul>
             </div>
         </nav>
-    </div>
-    <!-- ============================================================== -->
-    <!-- end navbar -->
-    <!-- ============================================================== -->
-    <!-- ============================================================== -->
-    <!-- left sidebar -->
-    <!-- ============================================================== -->
-    <div class="nav-left-sidebar sidebar-dark">
-        <div class="menu-list">
-            <nav class="navbar navbar-expand-lg navbar-light">
-                <a class="d-xl-none d-lg-none" href="#">Dashboard</a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
-                        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarNav">
-                    <ul class="navbar-nav flex-column">
-                        <li class="nav-divider">
-                            Menu
-                        </li>
-                        <li class="nav-item ">
-                            <a class="nav-link active" href="#" data-toggle="collapse" aria-expanded="false"
-                               data-target="#submenu-1" aria-controls="submenu-1"><i
-                                    class="fa fa-fw fa-user-circle"></i>Dashboard <span
-                                    class="badge badge-success">6</span></a>
-                            <div id="submenu-1" class="collapse submenu" style="">
-                                <ul class="nav flex-column">
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false"
-                                           data-target="#submenu-1-2" aria-controls="submenu-1-2">E-Commerce</a>
-                                        <div id="submenu-1-2" class="collapse submenu" style="">
-                                            <ul class="nav flex-column">
-                                                <li class="nav-item">
-                                                    <a class="nav-link" href="index.html">E Commerce Dashboard</a>
-                                                </li>
-                                                <li class="nav-item">
-                                                    <a class="nav-link" href="ecommerce-product.html">Product List</a>
-                                                </li>
-                                                <li class="nav-item">
-                                                    <a class="nav-link" href="ecommerce-product-single.html">Product
-                                                        Single</a>
-                                                </li>
-                                                <li class="nav-item">
-                                                    <a class="nav-link" href="ecommerce-product-checkout.html">Product
-                                                        Checkout</a>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="dashboard-finance.html">Finance</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="dashboard-sales.html">Sales</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false"
-                                           data-target="#submenu-1-1" aria-controls="submenu-1-1">Infulencer</a>
-                                        <div id="submenu-1-1" class="collapse submenu" style="">
-                                            <ul class="nav flex-column">
-                                                <li class="nav-item">
-                                                    <a class="nav-link" href="dashboard-influencer.html">Influencer</a>
-                                                </li>
-                                                <li class="nav-item">
-                                                    <a class="nav-link" href="influencer-finder.html">Influencer
-                                                        Finder</a>
-                                                </li>
-                                                <li class="nav-item">
-                                                    <a class="nav-link" href="influencer-profile.html">Influencer
-                                                        Profile</a>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false"
-                               data-target="#submenu-2" aria-controls="submenu-2"><i class="fa fa-fw fa-rocket"></i>UI
-                                Elements</a>
-                            <div id="submenu-2" class="collapse submenu" style="">
-                                <ul class="nav flex-column">
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="pages/cards.html">Cards <span
-                                                class="badge badge-secondary">New</span></a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="pages/general.html">General</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="pages/carousel.html">Carousel</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="pages/listgroup.html">List Group</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="pages/typography.html">Typography</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="pages/accordions.html">Accordions</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="pages/tabs.html">Tabs</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li>
+    </header>
+{% endif %}
 
-                        <li class="nav-divider">
-                            Features
-                        </li>
-                    </ul>
-                </div>
-            </nav>
-        </div>
-    </div>
-    <!-- ============================================================== -->
-    <!-- end left sidebar -->
-    <!-- ============================================================== -->
-    <!-- ============================================================== -->
-    <!-- wrapper  -->
-    <!-- ============================================================== -->
-    <div class="dashboard-wrapper">
-        <div class="container-fluid dashboard-content">
-            <div class="row">
-                <div class="col-xl-10">
-                    <!-- ============================================================== -->
-                    <!-- pageheader  -->
-                    <!-- ============================================================== -->
-                    <div class="row">
-                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                            <div class="page-header" id="top">
-                                <h2 class="pageheader-title">Cards </h2>
-                                <p class="pageheader-text">Proin placerat ante duiullam scelerisque a velit ac porta,
-                                    fusce sit amet vestibulum mi. Morbi lobortis pulvinar quam.</p>
-                                <div class="page-breadcrumb">
-                                    <nav aria-label="breadcrumb">
-                                        <ol class="breadcrumb">
-                                            <li class="breadcrumb-item"><a href="#"
-                                                                           class="breadcrumb-link">Dashboard</a></li>
-                                            <li class="breadcrumb-item"><a href="#" class="breadcrumb-link">UI
-                                                Elements</a></li>
-                                            <li class="breadcrumb-item active" aria-current="page">Cards</li>
-                                        </ol>
-                                    </nav>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+</body>
+</html>
