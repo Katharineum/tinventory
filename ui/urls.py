@@ -10,7 +10,7 @@ urlpatterns = [
     path("categories/new", views.category_new, name="ui_category_new"),
     path("locations/", views.locations, name="ui_locations"),
     path("locations/<int:id>/edit", views.location_edit, name="ui_locations_edit"),
-    # path("locations/<int:id>/delete", views.location_delete, name="ui_location_delete"),
-    # path("locations/new", views.location_new, name="ui_location_new"),
+    path("locations/<int:id>/delete", views.location_delete, name="ui_location_delete"),
+    path("locations/new", views.location_new, name="ui_location_new"),
     path('accounts/', include('django.contrib.auth.urls')),
 ]

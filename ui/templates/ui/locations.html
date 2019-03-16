@@ -13,7 +13,7 @@
 
 <div class="card mb-2">
     <div class="card-body">
-        <a role="button" class="btn btn-success" href="{% url "ui_category_new" %}">Neuen Ort erstellen</a>
+        <a role="button" class="btn btn-success" href="{% url "ui_location_new" %}">Neuen Ort erstellen</a>
     </div>
 </div>
 
@@ -38,7 +38,7 @@
                         <div class="btn-group" role="group" aria-label="Aktionen">
                             <a role="button" class="btn btn-primary" href="{% url "ui_locations_edit" location.id %}">Bearbeiten</a>
                             <a role="button" class="btn btn-danger delete-button"
-                               href="{% url "ui_category_delete" location.id %}">Löschen</a>
+                               href="{% url "ui_location_delete" location.id %}">Löschen</a>
                         </div>
                     </td>
                 </tr>

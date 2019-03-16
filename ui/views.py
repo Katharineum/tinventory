@@ -93,27 +93,27 @@ def location_edit(request, id):
             return redirect('ui_locations')
 
     return render(request, "ui/location_form.html", {"location": location, "form": form, "mode": "edit"})
-#
-#
-# @login_required
-# def location_new(request):
-#     if request.method == 'GET':
-#         form = CategoryForm()
-#     else:
 
-# form = CategoryForm(request.POST)
-# if form.is_valid():
-#     name = form.cleaned_data['name']
-#     Category.objects.create(name=name)
-#     request.session["msg"] = "Die Kategorie wurde erfolgreich erstellt."
-#     return redirect('ui_categories')
-#
-# return render(request, "ui/location_form.html", {"form": form, "mode": "new"})
-#
-#
-# @login_required
-# def location_delete(request, id):
-#     location = get_object_or_404(Category, pk=id)
-#     location.delete()
-#     request.session["msg"] = "Die Kategorie wurde erfolgreich gelöscht."
-#     return redirect("ui_categories")
+
+@login_required
+def location_new(request):
+    if request.method == 'GET':
+        form = LocationForm()
+    else:
+        form = LocationForm(request.POST)
+        if form.is_valid():
+            name = form.cleaned_data['name']
+            number = form.cleaned_data["number"]
+            Location.objects.create(name=name, number=number)
+            request.session["msg"] = "Der Ort wurde erfolgreich erstellt."
+            return redirect('ui_locations')
+
+    return render(request, "ui/location_form.html", {"form": form, "mode": "new"})
+
+
+@login_required
+def location_delete(request, id):
+    location = get_object_or_404(Location, pk=id)
+    location.delete()
+    request.session["msg"] = "Der Ort wurde erfolgreich gelöscht."
+    return redirect("ui_locations")
