@@ -2,8 +2,8 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404, redirect
 
 # Create your views here.
-from api.models import Category
-from ui.forms import CategoryForm
+from api.models import Category, Location
+from ui.forms import CategoryForm, LocationForm
 
 
 @login_required
@@ -31,10 +31,7 @@ def category_edit(request, id):
     if request.method == 'GET':
         form = CategoryForm(instance=category)
     else:
-        # A POST request: Handle Form Upload
-        # Bind data from request.POST into a PostForm
         form = CategoryForm(request.POST, instance=category)
-        # If data is valid, proceeds to create a new post and redirect the user
         if form.is_valid():
             name = form.cleaned_data['name']
             Category.objects.filter(id=id).update(name=name)
@@ -49,10 +46,7 @@ def category_new(request):
     if request.method == 'GET':
         form = CategoryForm()
     else:
-        # A POST request: Handle Form Upload
-        # Bind data from request.POST into a PostForm
         form = CategoryForm(request.POST)
-        # If data is valid, proceeds to create a new post and redirect the user
         if form.is_valid():
             name = form.cleaned_data['name']
             Category.objects.create(name=name)
@@ -68,3 +62,58 @@ def category_delete(request, id):
     category.delete()
     request.session["msg"] = "Die Kategorie wurde erfolgreich gelöscht."
     return redirect("ui_categories")
+
+
+@login_required
+def locations(request):
+    locations = Location.objects.all()
+    context = {
+        "locations": locations
+    }
+    if request.session.get("msg", False):
+        context["msg"] = request.session["msg"]
+        request.session["msg"] = None
+
+    return render(request, "ui/locations.html", context)
+
+
+@login_required
+def location_edit(request, id):
+    location = get_object_or_404(Location, pk=id)
+
+    if request.method == 'GET':
+        form = LocationForm(instance=location)
+    else:
+        form = LocationForm(request.POST, instance=location)
+        if form.is_valid():
+            name = form.cleaned_data['name']
+            number = form.cleaned_data["number"]
+            Location.objects.filter(id=id).update(name=name, number=number)
+            request.session["msg"] = "Der Ort wurde erfolgreich aktualisiert."
+            return redirect('ui_locations')
+
+    return render(request, "ui/location_form.html", {"location": location, "form": form, "mode": "edit"})
+#
+#
+# @login_required
+# def location_new(request):
+#     if request.method == 'GET':
+#         form = CategoryForm()
+#     else:
+
+# form = CategoryForm(request.POST)
+# if form.is_valid():
+#     name = form.cleaned_data['name']
+#     Category.objects.create(name=name)
+#     request.session["msg"] = "Die Kategorie wurde erfolgreich erstellt."
+#     return redirect('ui_categories')
+#
+# return render(request, "ui/location_form.html", {"form": form, "mode": "new"})
+#
+#
+# @login_required
+# def location_delete(request, id):
+#     location = get_object_or_404(Category, pk=id)
+#     location.delete()
+#     request.session["msg"] = "Die Kategorie wurde erfolgreich gelöscht."
+#     return redirect("ui_categories")
