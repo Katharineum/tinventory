@@ -1,0 +1,68 @@
+{% include "header.html" %}
+
+<nav aria-label="breadcrumb" class="m-1">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url "ui_index" %}">Startseite</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Kategorien</li>
+    </ol>
+</nav>
+
+<h1 class="display-5 m-1">Kategorien</h1>
+{% if msg %}
+    <div class="card mb-2">
+        <div class="card-body">
+            <div class="alert alert-success mb-0" role="alert">
+                {{ msg }}
+            </div>
+        </div>
+    </div>
+{% endif %}
+
+<div class="card mb-2">
+    <div class="card-body">
+        <a role="button" class="btn btn-success" href="{% url "ui_category_new" %}">Neue Kategorie erstellen</a>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <table class="table">
+            <thead>
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Name</th>
+                <th scope="col" class="table-actions">Aktionen</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for category in categories %}
+                <tr>
+                    <th scope="row">{{ category.id }}</th>
+                    <td>{{ category.name }}</td>
+                    <td>
+                        <div class="btn-group" role="group" aria-label="Basic example">
+                            <a role="button" class="btn btn-primary" href="{% url "ui_categories_edit" category.id %}">Bearbeiten</a>
+                            <a role="button" class="btn btn-danger delete-button"
+                               href="{% url "ui_category_delete" category.id %}">Löschen</a>
+                        </div>
+
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('.table').DataTable();
+    });
+
+    $(".delete-button").click(function (e) {
+        if (!confirm("Wirklich löschen?")) {
+            e.preventDefault();
+        }
+    })
+</script>
+{% include "footer.html" %}

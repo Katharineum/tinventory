@@ -17,10 +17,3 @@ class Location(models.Model):
     def __str__(self):
         return self.name
 
-# Create your models here.
-
-# class Model(models.Model):
-#     name = models.CharField()
-#     manufacturer = models.CharField(blank=True)
-#     link = models.URLField(blank=True)
-#     description = models.TextField(blank=True)
