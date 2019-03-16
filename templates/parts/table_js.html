@@ -1,0 +1,11 @@
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('.table').DataTable();
+    });
+
+    $(".delete-button").click(function (e) {
+        if (!confirm("Wirklich löschen?")) {
+            e.preventDefault();
+        }
+    })
+</script>

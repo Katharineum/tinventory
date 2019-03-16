@@ -8,15 +8,8 @@
 </nav>
 
 <h1 class="display-5 m-1">Kategorien</h1>
-{% if msg %}
-    <div class="card mb-2">
-        <div class="card-body">
-            <div class="alert alert-success mb-0" role="alert">
-                {{ msg }}
-            </div>
-        </div>
-    </div>
-{% endif %}
+
+{% include "parts/msg.html" %}
 
 <div class="card mb-2">
     <div class="card-body">
@@ -45,7 +38,6 @@
                             <a role="button" class="btn btn-danger delete-button"
                                href="{% url "ui_category_delete" category.id %}">Löschen</a>
                         </div>
-
                     </td>
                 </tr>
             {% endfor %}
@@ -54,15 +46,5 @@
     </div>
 </div>
 
-<script type="text/javascript">
-    $(document).ready(function () {
-        $('.table').DataTable();
-    });
-
-    $(".delete-button").click(function (e) {
-        if (!confirm("Wirklich löschen?")) {
-            e.preventDefault();
-        }
-    })
-</script>
+{% include "parts/table_js.html" %}
 {% include "footer.html" %}
