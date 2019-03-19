@@ -35,6 +35,7 @@ class Preset(models.Model):
     manufacturer = models.CharField(max_length=100, blank=True, verbose_name="Hersteller")
     description = models.TextField(blank=True, verbose_name="Beschreibung")
     category = models.ForeignKey(Category, models.SET_DEFAULT, default=default_preset, verbose_name="Kategorie")
+    image = models.ImageField(upload_to="images/presets/", blank=True, verbose_name="Bild")
 
     def __str__(self):
         return self.name

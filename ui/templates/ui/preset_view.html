@@ -1,0 +1,80 @@
+{% include "header.html" %}
+
+<nav aria-label="breadcrumb" class="m-1">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url "ui_index" %}">Startseite</a></li>
+        <li class="breadcrumb-item" aria-current="page"><a href="{% url "ui_presets" %}">Presets</a></li>
+        <li class="breadcrumb-item active" aria-current="page">{{ preset.name }}</li>
+    </ol>
+</nav>
+
+<h1 class="display-5 m-1">{{ preset.name }} <span class="text-muted">#{{ preset.id }}</span></h1>
+
+{% include "parts/msg.html" %}
+
+
+<div class="row">
+    <div class="col-sm">
+        <div class="card mb-2">
+            <div class="card-body">
+
+                <div class="btn-group" role="group" aria-label="Aktionen">
+                    <a role="button" class="btn btn-primary"
+                       href="{% url "ui_presets_edit" preset.id %}">Bearbeiten</a>
+                    <a role="button" class="btn btn-danger delete-button"
+                       href="{% url "ui_location_delete" preset.id %}">Löschen</a>
+                </div>
+
+            </div>
+        </div>
+        <div class="card mb-2">
+            <div class="card-body">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">
+                        <div class="row">
+                            <div class="col-sm-3"><strong>Kategorie</strong></div>
+                            <div class="col-sm-9">{{ preset.category }}</div>
+                        </div>
+                    </li>
+                    <li class="list-group-item">
+                        <div class="row">
+                            <div class="col-sm-3"><strong>Hersteller</strong></div>
+                            <div class="col-sm-9">{{ preset.manufacturer }}</div>
+                        </div>
+                    </li>
+                    <li class="list-group-item">
+                        <div class="row">
+                            <div class="col-sm-3"><strong>Beschreibung</strong></div>
+                            <div class="col-sm-9">{{ preset.description|linebreaksbr }}</div>
+                        </div>
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+        <div class="card mb-2">
+            <div class="card-body">
+                <a role="button" class="btn btn-primary" href="{% url "ui_presets" %}">Zurück zur Übersicht</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm">
+        <div class="card mb-2">
+            <div class="card-body text-center">
+                {% if preset.image %}
+                    <img src="/media/{{ preset.image }}" class="img-fluid" alt="{{ preset.name }}">
+                {% else %}
+                    <span class="text-muted "><span class="fa-stack fa-2x">
+                     <i class="fas fa-image fa-stack-1x"></i>
+                    <i class="fas fa-ban fa-stack-2x"></i>
+                </span></span>
+                {% endif %}
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% include "parts/table_js.html" %}
+{% include "footer.html" %}

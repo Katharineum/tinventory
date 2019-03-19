@@ -2,8 +2,8 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404, redirect
 
 # Create your views here.
-from api.models import Category, Location
-from ui.forms import CategoryForm, LocationForm
+from api.models import Category, Location, Preset
+from ui.forms import CategoryForm, LocationForm, PresetForm
 
 
 @login_required
@@ -33,8 +33,9 @@ def category_edit(request, id):
     else:
         form = CategoryForm(request.POST, instance=category)
         if form.is_valid():
-            name = form.cleaned_data['name']
-            Category.objects.filter(id=id).update(name=name)
+            # name = form.cleaned_data['name']
+            # Category.objects.filter(id=id).update(name=name)
+            form.save()
             request.session["msg"] = "Die Kategorie wurde erfolgreich aktualisiert."
             return redirect('ui_categories')
 
@@ -48,8 +49,9 @@ def category_new(request):
     else:
         form = CategoryForm(request.POST)
         if form.is_valid():
-            name = form.cleaned_data['name']
-            Category.objects.create(name=name)
+            # name = form.cleaned_data['name']
+            # Category.objects.create(name=name)
+            form.save()
             request.session["msg"] = "Die Kategorie wurde erfolgreich erstellt."
             return redirect('ui_categories')
 
@@ -86,9 +88,10 @@ def location_edit(request, id):
     else:
         form = LocationForm(request.POST, instance=location)
         if form.is_valid():
-            name = form.cleaned_data['name']
-            number = form.cleaned_data["number"]
-            Location.objects.filter(id=id).update(name=name, number=number)
+            form.save()
+            # name = form.cleaned_data['name']
+            # number = form.cleaned_data["number"]
+            # Location.objects.filter(id=id).update(name=name, number=number)
             request.session["msg"] = "Der Ort wurde erfolgreich aktualisiert."
             return redirect('ui_locations')
 
@@ -102,9 +105,10 @@ def location_new(request):
     else:
         form = LocationForm(request.POST)
         if form.is_valid():
-            name = form.cleaned_data['name']
-            number = form.cleaned_data["number"]
-            Location.objects.create(name=name, number=number)
+            # name = form.cleaned_data['name']
+            # number = form.cleaned_data["number"]
+            # Location.objects.create(name=name, number=number)
+            form.save()
             request.session["msg"] = "Der Ort wurde erfolgreich erstellt."
             return redirect('ui_locations')
 
@@ -117,3 +121,63 @@ def location_delete(request, id):
     location.delete()
     request.session["msg"] = "Der Ort wurde erfolgreich gelöscht."
     return redirect("ui_locations")
+
+
+@login_required
+def presets(request):
+    presets = Preset.objects.all()
+    context = {
+        "presets": presets
+    }
+    if request.session.get("msg", False):
+        context["msg"] = request.session["msg"]
+        request.session["msg"] = None
+
+    return render(request, "ui/presets.html", context)
+
+
+@login_required
+def preset_view(request, id):
+    preset = get_object_or_404(Preset, pk=id)
+    context = {
+        "preset": preset
+    }
+    return render(request, "ui/preset_view.html", context)
+
+
+@login_required
+def preset_edit(request, id):
+    preset = get_object_or_404(Preset, pk=id)
+
+    if request.method == 'GET':
+        form = PresetForm(instance=preset)
+    else:
+        form = PresetForm(request.POST, instance=preset)
+        if form.is_valid():
+            form.save()
+            request.session["msg"] = "Das Preset wurde erfolgreich aktualisiert."
+            return redirect('ui_presets')
+
+    return render(request, "ui/preset_form.html", {"preset": preset, "form": form, "mode": "edit"})
+
+
+@login_required
+def preset_new(request):
+    if request.method == 'GET':
+        form = PresetForm()
+    else:
+        form = PresetForm(request.POST)
+        if form.is_valid():
+            form.save()
+            request.session["msg"] = "Das Preset wurde erfolgreich erstellt."
+            return redirect('ui_presets')
+
+    return render(request, "ui/preset_form.html", {"form": form, "mode": "new"})
+
+
+@login_required
+def preset_delete(request, id):
+    preset = get_object_or_404(Location, pk=id)
+    preset.delete()
+    request.session["msg"] = "Der Ort wurde erfolgreich gelöscht."
+    return redirect("ui_presets")
