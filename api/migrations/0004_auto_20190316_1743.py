@@ -37,7 +37,8 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='preset',
             name='category',
-            field=models.ForeignKey(default=api.models.default_preset, on_delete=django.db.models.deletion.SET_DEFAULT,
+            field=models.ForeignKey(default=api.models.default_category,
+                                    on_delete=django.db.models.deletion.SET_DEFAULT,
                                     to='api.Category', verbose_name='Kategorie'),
         ),
         migrations.AlterField(

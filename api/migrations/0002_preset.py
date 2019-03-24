@@ -19,7 +19,7 @@ class Migration(migrations.Migration):
                 ('manufacturer', models.CharField(blank=True, max_length=100)),
                 ('description', models.TextField(blank=True)),
                 ('category',
-                 models.ForeignKey(default=api.models.default_preset, on_delete=django.db.models.deletion.SET_DEFAULT,
+                 models.ForeignKey(default=api.models.default_category, on_delete=django.db.models.deletion.SET_DEFAULT,
                                    to='api.Category')),
             ],
         ),
