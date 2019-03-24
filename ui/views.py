@@ -177,7 +177,7 @@ def preset_new(request):
 
 @login_required
 def preset_delete(request, id):
-    preset = get_object_or_404(Location, pk=id)
+    preset = get_object_or_404(Preset, pk=id)
     preset.delete()
-    request.session["msg"] = "Der Ort wurde erfolgreich gelöscht."
+    request.session["msg"] = "Das Preset wurde erfolgreich gelöscht."
     return redirect("ui_presets")

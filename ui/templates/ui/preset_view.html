@@ -22,7 +22,7 @@
                     <a role="button" class="btn btn-primary"
                        href="{% url "ui_presets_edit" preset.id %}">Bearbeiten</a>
                     <a role="button" class="btn btn-danger delete-button"
-                       href="{% url "ui_location_delete" preset.id %}">Löschen</a>
+                       href="{% url "ui_preset_delete" preset.id %}">Löschen</a>
                 </div>
 
             </div>
@@ -64,10 +64,7 @@
                 {% if preset.image %}
                     <img src="/media/{{ preset.image }}" class="img-fluid" alt="{{ preset.name }}">
                 {% else %}
-                    <span class="text-muted "><span class="fa-stack fa-2x">
-                     <i class="fas fa-image fa-stack-1x"></i>
-                    <i class="fas fa-ban fa-stack-2x"></i>
-                </span></span>
+                    {% include "parts/no_image.html" %}
                 {% endif %}
 
             </div>
