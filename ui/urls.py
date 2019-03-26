@@ -17,5 +17,10 @@ urlpatterns = [
     path("presets/<int:id>/edit", views.preset_edit, name="ui_presets_edit"),
     path("presets/<int:id>/delete", views.preset_delete, name="ui_preset_delete"),
     path("presets/new", views.preset_new, name="ui_preset_new"),
+    path("items/", views.items, name="ui_items"),
+    path("items/<int:id>", views.item_view, name="ui_items_view"),
+    path("items/<int:id>/edit", views.item_edit, name="ui_items_edit"),
+    path("items/<int:id>/delete", views.item_delete, name="ui_item_delete"),
+    path("items/new", views.item_new, name="ui_item_new"),
     path('accounts/', include('django.contrib.auth.urls')),
 ]

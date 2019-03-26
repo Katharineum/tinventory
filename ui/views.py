@@ -2,8 +2,8 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404, redirect
 
 # Create your views here.
-from api.models import Category, Location, Preset
-from ui.forms import CategoryForm, LocationForm, PresetForm
+from api.models import Category, Location, Preset, Item
+from ui.forms import CategoryForm, LocationForm, PresetForm, ItemForm
 
 
 @login_required
@@ -181,3 +181,63 @@ def preset_delete(request, id):
     preset.delete()
     request.session["msg"] = "Das Preset wurde erfolgreich gelöscht."
     return redirect("ui_presets")
+
+
+@login_required
+def items(request):
+    items = Item.objects.all()
+    context = {
+        "items": items
+    }
+    if request.session.get("msg", False):
+        context["msg"] = request.session["msg"]
+        request.session["msg"] = None
+
+    return render(request, "ui/items.html", context)
+
+
+@login_required
+def item_view(request, id):
+    item = get_object_or_404(Item, pk=id)
+    context = {
+        "item": item
+    }
+    return render(request, "ui/item_view.html", context)
+
+
+@login_required
+def item_edit(request, id):
+    item = get_object_or_404(Item, pk=id)
+
+    if request.method == 'GET':
+        form = ItemForm(instance=item)
+    else:
+        form = ItemForm(request.POST, instance=item)
+        if form.is_valid():
+            form.save()
+            request.session["msg"] = "Das Objekt wurde erfolgreich aktualisiert."
+            return redirect('ui_items')
+
+    return render(request, "ui/item_form.html", {"item": item, "form": form, "mode": "edit"})
+
+
+@login_required
+def item_new(request):
+    if request.method == 'GET':
+        form = ItemForm()
+    else:
+        form = ItemForm(request.POST)
+        if form.is_valid():
+            form.save()
+            request.session["msg"] = "Das Objekt wurde erfolgreich erstellt."
+            return redirect('ui_items')
+
+    return render(request, "ui/item_form.html", {"form": form, "mode": "new"})
+
+
+@login_required
+def item_delete(request, id):
+    item = get_object_or_404(Item, pk=id)
+    item.delete()
+    request.session["msg"] = "Das Objekt wurde erfolgreich gelöscht."
+    return redirect("ui_items")

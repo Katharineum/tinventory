@@ -1,0 +1,106 @@
+{% include "header.html" %}
+
+<nav aria-label="breadcrumb" class="m-1">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url "ui_index" %}">Startseite</a></li>
+        <li class="breadcrumb-item" aria-current="page"><a href="{% url "ui_items" %}">Objekte</a></li>
+        <li class="breadcrumb-item active" aria-current="page">{{ item.name }}</li>
+    </ol>
+</nav>
+
+<h1 class="display-5 m-1">{{ item.name }} <span class="text-muted">#{{ item.id }}</span></h1>
+
+{% include "parts/msg.html" %}
+
+
+<div class="row">
+    <div class="col-sm">
+        <div class="card mb-2">
+            <div class="card-body">
+
+                <div class="btn-group" role="group" aria-label="Aktionen">
+                    <a role="button" class="btn btn-primary"
+                       href="{% url "ui_items_edit" item.id %}">Bearbeiten</a>
+                    <a role="button" class="btn btn-danger delete-button"
+                       href="{% url "ui_item_delete" item.id %}">Löschen</a>
+                </div>
+
+            </div>
+        </div>
+        <div class="card mb-2">
+            <div class="card-body">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">
+                        <div class="row">
+                            <div class="col-sm-3"><strong>Kategorie</strong></div>
+                            <div class="col-sm-9">{{ item.category }}</div>
+                        </div>
+                    </li>
+                    <li class="list-group-item">
+                        <div class="row">
+                            <div class="col-sm-3"><strong>Preset</strong> <i class="text-muted">(optional)</i></div>
+                            <div class="col-sm-9">
+                                {% if item.preset %}
+                                    <a href="{% url "ui_presets_view" item.preset.id %}">{{ item.preset }}</a></div>
+                                {% else %}
+                                    <span class="text-muted">Basiert auf keinem Preset</span>
+                                {% endif %}
+                        </div>
+                    </li>
+                    <li class="list-group-item">
+                        <div class="row">
+                            <div class="col-sm-3"><strong>Notizen</strong> <i class="text-muted">(optional)</i></div>
+                            <div class="col-sm-9">{{ item.notes|linebreaksbr }}</div>
+                        </div>
+                    </li>
+                    <li class="list-group-item">
+                        <div class="row">
+                            <div class="col-sm-3"><strong>Ort</strong></div>
+                            <div class="col-sm-9">{{ item.location }}</div>
+                        </div>
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+        <div class="card mb-2">
+            <div class="card-body">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">
+                        <div class="row">
+                            <div class="col-sm-3"><strong>Status</strong></div>
+                            <div class="col-sm-9"><span class="badge badge-success">Am Lagerort/Verfügbar</span></div>
+                        </div>
+                    </li>
+                    <li class="list-group-item">
+                        <div class="row">
+                            <div class="col-sm-3"><strong>Zuletzt gesehen</strong></div>
+                            <div class="col-sm-9">{{ item.last_time_seen_at }} von xy</div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="card mb-2">
+            <div class="card-body">
+                <a role="button" class="btn btn-primary" href="{% url "ui_items" %}">Zurück zur Übersicht</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm">
+        <div class="card mb-2">
+            <div class="card-body text-center">
+                {% if item.preset.image %}
+                    <img src="/media/{{ item.preset.image }}" class="img-fluid" alt="{{ item }}">
+                {% else %}
+                    {% include "parts/no_image.html" %}
+                {% endif %}
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% include "parts/table_js.html" %}
+{% include "footer.html" %}
