@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'oauth2_provider',
     'rest_framework',
     "bootstrapform",
+    'widget_tweaks',
     'api',
     "ui"
 ]

@@ -3,7 +3,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 
 # Create your views here.
 from api.models import Category, Location, Preset, Item
-from ui.forms import CategoryForm, LocationForm, PresetForm, ItemForm
+from ui.forms import CategoryForm, LocationForm, PresetForm, ItemForm, InventoryForm
 
 
 @login_required
@@ -241,3 +241,17 @@ def item_delete(request, id):
     item.delete()
     request.session["msg"] = "Das Objekt wurde erfolgreich gelöscht."
     return redirect("ui_items")
+
+
+@login_required
+def inventory(request):
+    msg = None
+    if request.method == 'GET':
+        form = InventoryForm()
+    else:
+        form = InventoryForm(request.POST)
+        if form.is_valid():
+            form.save()
+            msg = "Das Objekt wurde erfolgreich erstellt."
+
+    return render(request, "ui/inventory.html", {"form": form, "msg": msg})

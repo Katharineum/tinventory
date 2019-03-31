@@ -14,3 +14,20 @@ body {
 .table-actions {
     width: 20px;
 }
+
+.btn.active {
+    outline: 0;
+    box-shadow: 0 0 0 .2rem rgba(0, 123, 255, .25)
+}
+
+.btn-primary.active {
+    box-shadow: 0 0 0 .2rem rgba(38, 143, 255, .5)
+}
+
+.btn-danger.active {
+    box-shadow: 0 0 0 .2rem rgba(225, 83, 97, .5)
+}
+
+.btn-success.active {
+    box-shadow: 0 0 0 .2rem rgba(72, 180, 97, .5)
+}
