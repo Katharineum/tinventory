@@ -35,5 +35,5 @@ class InventoryForm(Form):
     preset_new_name = forms.CharField(label="Name des Preset")
     preset_new_manufacturer = forms.CharField(label="Hersteller des Preset")
     name = forms.CharField(required=True, label="Bezeichnung")
-    notes = forms.CharField(widget=forms.Textarea, label="Notizen")
+    notes = forms.CharField(widget=forms.Textarea, label="Notizen", required=False)
     location = forms.ModelChoiceField(Location.objects.all(), label="Ort", required=True)

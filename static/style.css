@@ -31,3 +31,24 @@ body {
 .btn-success.active {
     box-shadow: 0 0 0 .2rem rgba(72, 180, 97, .5)
 }
+
+form .form-control:valid, form .form-control:invalid {
+    background: no-repeat right 6px top 6px;
+    background-size: calc(1.5em + .75rem + 2px - 2 * .375rem - 1px);
+    padding-right: 36px;
+}
+
+form .form-control:valid {
+    background-image: url("/static/valid.svg");
+}
+
+form .form-control:invalid {
+    background-image: url("/static/invalid.svg");
+}
+
+form .form-control.no-check {
+    background: inherit;
+    padding-right: 6px;
+}
+
+
