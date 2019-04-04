@@ -45,9 +45,13 @@
                                 {{ form.category_select.errors }}
                             </div>
                         {% endif %}
-                        {{ form.category_select.label_tag }}
+                        <label for="{{ form.category_select.id_for_label }}"><strong>Kategorie
+                            auswählen</strong></label>
                         {{ form.category_select|add_class:"form-control" }}
                     </div>
+                </div>
+                <div class="col-sm-1 text-center">
+                    <em>oder</em>
                 </div>
                 <div class="col-sm">
                     <div class="form-group">
@@ -56,7 +60,8 @@
                                 {{ form.category_new.errors }}
                             </div>
                         {% endif %}
-                        {{ form.category_new.label_tag }}
+                        <label for="{{ form.category_new.id_for_label }}"><strong>eine neue Kategorie
+                            erstellen</strong></label>
                         {{ form.category_new|add_class:"form-control" }}
                     </div>
                 </div>
@@ -91,19 +96,23 @@
             <div class="row">
                 <div class="col-sm">
                     <div class="form-group preset">
-                        <p><strong>Preset auswählen</strong></p>
                         {% if form.preset_select.errors %}
                             <div class="alert alert-danger" role="alert">
                                 {{ form.preset_select.errors }}
                             </div>
                         {% endif %}
+                        <label for="{{ form.preset_select.id_for_label }}"><strong>Preset auswählen</strong></label>
                         {{ form.preset_select|add_class:"form-control" }}
                     </div>
 
 
                 </div>
+                <div class="col-sm-1 text-center">
+                    <em>oder</em>
+                </div>
                 <div class="col-sm">
-                    <p class="preset"><strong>oder ein neues Preset erstellen</strong></p>
+                    <label for="{{ form.preset_new_name.id_for_label }}" class="preset"><strong>ein neues Preset
+                        erstellen</strong></label>
                     <div class="form-group preset">
                         {% if form.preset_new_name.errors %}
                             <div class="alert alert-danger" role="alert">
@@ -120,7 +129,7 @@
                                 {{ form.preset_new_manufacturer.errors }}
                             </div>
                         {% endif %}
-                        {{ form.preset_new_manufacturer|add_class:"form-control"|attr:"placeholder:Hersteller des neuen Presets (optional)" }}
+                        {{ form.preset_new_manufacturer|add_class:"form-control"|attr:"placeholder:Hersteller des neuen Presets (optional)"|add_class:"no-check" }}
                     </div>
                 </div>
             </div>
@@ -170,6 +179,17 @@
 
 </form>
 <script type="text/javascript">
+    function noRequired(sel) {
+        sel.removeAttr("required");
+        sel.addClass("no-check");
+
+    }
+
+    function required(sel) {
+        sel.attr("required", "required");
+        sel.removeClass("no-check");
+    }
+
     $(document).ready(function () {
         console.log("Ready");
         $("#preset_yes").change(function () {
@@ -178,7 +198,40 @@
         $("#preset_no").change(function () {
             console.log("Hi");
             $(".preset").css("display", "none");
-        })
+        });
+
+        const selCategoryA = $("#id_category_select");
+        const selCategoryB = $("#id_category_new");
+
+        selCategoryA.change(function () {
+            console.log("select");
+            selCategoryB.val("");
+            noRequired(selCategoryB);
+            required(selCategoryA);
+        });
+        selCategoryB.on("input", function () {
+            selCategoryA.val("");
+            noRequired(selCategoryA);
+            required(selCategoryB);
+        });
+
+        const selPresetA = $("#id_preset_select");
+        const selPresetB = $("#id_preset_new_name");
+        const selPresetC = $("#id_preset_new_manufacturer");
+        selPresetA.change(function () {
+            selPresetB.val("");
+            selPresetC.val("");
+            noRequired(selPresetB);
+            required(selPresetA);
+        });
+        selPresetB.on("input", function () {
+            selPresetC.trigger("input");
+        });
+        selPresetC.on("input", function () {
+            selPresetA.val("");
+            noRequired(selPresetA);
+            required(selPresetB);
+        });
     });
 </script>
 {% include "footer.html" %}
