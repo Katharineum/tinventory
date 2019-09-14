@@ -245,13 +245,15 @@ def item_delete(request, id):
 
 @login_required
 def inventory(request):
-    msg = None
+    context = {}
     if request.method == 'GET':
         form = InventoryForm()
     else:
         form = InventoryForm(request.POST)
         if form.is_valid():
-            form.save()
-            msg = "Das Objekt wurde erfolgreich erstellt."
-
-    return render(request, "ui/inventory.html", {"form": form, "msg": msg})
+            item = form.save()
+            context["msg"] = "Das Objekt wurde erfolgreich erstellt."
+            context["created_item"] = item
+            form = InventoryForm()
+    context["form"] = form
+    return render(request, "ui/inventory.html", context)

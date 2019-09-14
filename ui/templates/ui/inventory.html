@@ -3,8 +3,12 @@
 
 <nav aria-label="breadcrumb" class="m-1">
     <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="{% url "ui_index" %}">Startseite</a></li>
-        <li class="breadcrumb-item"><a href="{% url "ui_items" %}">Objekte</a></li>
+        <li class="breadcrumb-item">
+            <a href="{% url "ui_index" %}">Startseite</a>
+        </li>
+        <li class="breadcrumb-item">
+            <a href="{% url "ui_items" %}">Objekte</a>
+        </li>
         <li class="breadcrumb-item active" aria-current="page">Inventarisierung</li>
 
     </ol>
@@ -13,20 +17,25 @@
 <h1 class="display-5 m-1">Inventarisierung</h1>
 
 {% include "parts/msg.html" %}
+{% if msg %}
+    <div class="card mb-2">
+        <div class="card-body">
+            <h5>Was soll nun passieren?</h5>
+            <a role="button" class="btn btn-success" href="#form">Weiteres Objekt erstellen</a>
+            <a role="button" class="btn btn-success" href="{% url "ui_items_view" created_item.id %}">
+                Objekt anzeigen
+            </a>
+            <a role="button" class="btn btn-success" href="#form">Barcode drucken</a>
+        </div>
+    </div>
+{% endif %}
 
-{#<div class="card mb-2">#}
-{#    <div class="card-body">#}
-{#        <a role="button" class="btn btn-success" href="{% url "ui_item_new" %}">Neues Objekt erstellen</a>#}
-{#    </div>#}
-{#</div>#}
-
-<form action="" method="post">
+<form action="" method="post" id="form">
     {% csrf_token %}
     {% if form.non_field_errors %}
         <div class="card mb-2">
             <div class="card-body">
                 <div class="alert alert-danger" role="alert">
-
                     {{ form.non_field_errors }}
                 </div>
             </div>
@@ -36,7 +45,9 @@
 
     <div class="card mb-2">
         <div class="card-body">
-            <h5>Kategorie auswählen <span class="text-danger">*</span></h5>
+            <h5>Kategorie auswählen
+                <span class="text-danger">*</span>
+            </h5>
             <div class="row">
                 <div class="col-sm">
                     <div class="form-group">
@@ -62,7 +73,7 @@
                         {% endif %}
                         <label for="{{ form.category_new.id_for_label }}"><strong>eine neue Kategorie
                             erstellen</strong></label>
-                        {{ form.category_new|add_class:"form-control" }}
+                        {{ form.category_new|add_class:"form-control"|add_class:"no-check"|attr:"placeholder:Name der neuen Kategorie" }}
                     </div>
                 </div>
             </div>
@@ -75,18 +86,20 @@
             <div class="row">
                 <div class="col-sm">
                     <h5>Soll für dieses Objekt ein Preset verwendet werden?</h5>
-                    <p><span class="text-muted">Die Angabe eines Presets ist optional.</span></p>
+                    <p>
+                        <span class="text-muted">Die Angabe eines Presets ist optional.</span>
+                    </p>
                 </div>
                 <div class="col-sm d-flex flex-row-reverse align-items-start">
                     <div class="btn-group btn-group-toggle" data-toggle="buttons">
                         <label class="btn btn-success active">
                             <input type="radio" name="use-preset" id="preset_yes" autocomplete="off" checked
-                                   value="yes"> Preset
-                            verwenden
+                                   value="yes">
+                            Preset verwenden
                         </label>
                         <label class="btn btn-danger">
-                            <input type="radio" name="use-preset" id="preset_no" autocomplete="off" value="no"> Kein
-                            Preset verwenden
+                            <input type="radio" name="use-preset" id="preset_no" autocomplete="off" value="no">
+                            Kein Preset verwenden
                         </label>
                     </div>
                 </div>
@@ -102,7 +115,7 @@
                             </div>
                         {% endif %}
                         <label for="{{ form.preset_select.id_for_label }}"><strong>Preset auswählen</strong></label>
-                        {{ form.preset_select|add_class:"form-control" }}
+                        {{ form.preset_select|add_class:"form-control"|add_class:"no-check" }}
                     </div>
 
 
@@ -111,17 +124,16 @@
                     <em>oder</em>
                 </div>
                 <div class="col-sm">
-                    <label for="{{ form.preset_new_name.id_for_label }}" class="preset"><strong>ein neues Preset
-                        erstellen</strong></label>
+                    <label for="{{ form.preset_new_name.id_for_label }}" class="preset">
+                        <strong>ein neues Preset erstellen</strong>
+                    </label>
                     <div class="form-group preset">
                         {% if form.preset_new_name.errors %}
                             <div class="alert alert-danger" role="alert">
                                 {{ form.preset_new_name.errors }}
                             </div>
                         {% endif %}
-                        {{ form.preset_new_name|add_class:"form-control"|attr:"placeholder:Name des neuen Presets" }}
-
-
+                        {{ form.preset_new_name|add_class:"form-control"|attr:"placeholder:Name des neuen Presets"|add_class:"no-check" }}
                     </div>
                     <div class="form-group preset">
                         {% if form.preset_new_manufacturer.errors %}
@@ -138,14 +150,18 @@
 
     <div class="card mb-2">
         <div class="card-body">
-            <h5>Weitere Metadaten für dieses Objekt <span class="text-danger">*</span></h5>
+            <h5>Weitere Metadaten für dieses Objekt
+                <span class="text-danger">*</span>
+            </h5>
             <div class="form-group ">
                 {% if form.name.errors %}
                     <div class="alert alert-danger" role="alert">
                         {{ form.name.errors }}
                     </div>
                 {% endif %}
-                <label for="{{ form.name.id_for_label }}">Bezeichnung <span class="text-danger">*</span></label>
+                <label for="{{ form.name.id_for_label }}">Bezeichnung
+                    <span class="text-danger">*</span>
+                </label>
                 {{ form.name|add_class:"form-control"|attr:"placeholder:Bezeichnung" }}
             </div>
             <div class="form-group ">
@@ -163,7 +179,9 @@
                         {{ form.location.errors }}
                     </div>
                 {% endif %}
-                <label for="{{ form.location.id_for_label }}">Ort <span class="text-danger">*</span></label>
+                <label for="{{ form.location.id_for_label }}">Ort
+                    <span class="text-danger">*</span>
+                </label>
                 {{ form.location|add_class:"form-control" }}
             </div>
         </div>
@@ -215,23 +233,23 @@
             required(selCategoryB);
         });
 
-        const selPresetA = $("#id_preset_select");
-        const selPresetB = $("#id_preset_new_name");
-        const selPresetC = $("#id_preset_new_manufacturer");
-        selPresetA.change(function () {
-            selPresetB.val("");
-            selPresetC.val("");
-            noRequired(selPresetB);
-            required(selPresetA);
-        });
-        selPresetB.on("input", function () {
-            selPresetC.trigger("input");
-        });
-        selPresetC.on("input", function () {
-            selPresetA.val("");
-            noRequired(selPresetA);
-            required(selPresetB);
-        });
+        {% comment %}  const selPresetA = $("#id_preset_select");
+          const selPresetB = $("#id_preset_new_name");
+          const selPresetC = $("#id_preset_new_manufacturer");
+          selPresetA.change(function () {
+              selPresetB.val("");
+              selPresetC.val("");
+              noRequired(selPresetB);
+              required(selPresetA);
+          });
+          selPresetB.on("input", function () {
+              selPresetC.trigger("input");
+          });
+          selPresetC.on("input", function () {
+              selPresetA.val("");
+              noRequired(selPresetA);
+              required(selPresetB);
+          });{% endcomment %}
     });
 </script>
 {% include "footer.html" %}
