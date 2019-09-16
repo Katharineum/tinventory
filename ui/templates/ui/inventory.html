@@ -42,6 +42,27 @@
         </div>
     {% endif %}
 
+    <div class="card mb-2">
+        <div class="card-body">
+            <h5>Barcode</h5>
+            <p class="alert alert-info">
+                <i class="fa fa-info"></i>
+                An dieser Stelle kann ein bereits bestehender, individueller Barcode eingescannt werden.
+            </p>
+            <div class="form-group ">
+                {% if form.barcode.errors %}
+                    <div class="alert alert-danger" role="alert">
+                        {{ form.barcode.errors }}
+                    </div>
+                {% endif %}
+                <label for="{{ form.barcode.id_for_label }}">
+                    Barcode
+                </label>
+                {{ form.barcode|add_class:"form-control"|attr:"placeholder:Barcode"|attr:"autofocus:autofocus" }}
+                <p class="text-muted">Feld freilassen, um Barcode automatisch zu generieren</p>
+            </div>
+        </div>
+    </div>
 
     <div class="card mb-2">
         <div class="card-body">

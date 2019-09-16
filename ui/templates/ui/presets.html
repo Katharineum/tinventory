@@ -2,7 +2,9 @@
 
 <nav aria-label="breadcrumb" class="m-1">
     <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="{% url "ui_index" %}">Startseite</a></li>
+        <li class="breadcrumb-item">
+            <a href="{% url "ui_index" %}">Startseite</a>
+        </li>
         <li class="breadcrumb-item active" aria-current="page">Presets</li>
     </ol>
 </nav>
@@ -34,15 +36,24 @@
                 <tr>
                     <th scope="row">{{ preset.id }}</th>
                     {#                    TODO Verlinkung zur Kategorie #}
-                    <td><a href="#">{{ preset.category }}</a></td>
-                    <td><a href="{% url "ui_presets_view"  preset.id %}">{{ preset.name }}</a></td>
+                    <td>
+                        <a href="#">{{ preset.category }}</a>
+                    </td>
+                    <td>
+                        <a href="{% url "ui_presets_view"  preset.id %}">{{ preset.name }}</a>
+                    </td>
                     <td>{{ preset.manufacturer }}</td>
                     <td>
                         <div class="btn-group" role="group" aria-label="Aktionen">
-                            <a role="button" class="btn btn-success" href="{% url "ui_presets_view" preset.id %}">Anzeigen</a>
-                            <a role="button" class="btn btn-primary" href="{% url "ui_presets_edit" preset.id %}">Bearbeiten</a>
+                            <a role="button" class="btn btn-success" href="{% url "ui_presets_view" preset.id %}">
+                                Anzeigen
+                            </a>
+                            <a role="button" class="btn btn-primary" href="{% url "ui_presets_edit" preset.id %}">
+                                Bearbeiten
+                            </a>
                             <a role="button" class="btn btn-danger delete-button"
-                               href="{% url "ui_preset_delete" preset.id %}">Löschen</a>
+                               href="{% url "ui_preset_delete" preset.id %}">Löschen
+                            </a>
                         </div>
                     </td>
                 </tr>

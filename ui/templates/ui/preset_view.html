@@ -2,13 +2,19 @@
 
 <nav aria-label="breadcrumb" class="m-1">
     <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="{% url "ui_index" %}">Startseite</a></li>
-        <li class="breadcrumb-item" aria-current="page"><a href="{% url "ui_presets" %}">Presets</a></li>
+        <li class="breadcrumb-item">
+            <a href="{% url "ui_index" %}">Startseite</a>
+        </li>
+        <li class="breadcrumb-item" aria-current="page">
+            <a href="{% url "ui_presets" %}">Presets</a>
+        </li>
         <li class="breadcrumb-item active" aria-current="page">{{ preset.name }}</li>
     </ol>
 </nav>
 
-<h1 class="display-5 m-1">{{ preset.name }} <span class="text-muted">#{{ preset.id }}</span></h1>
+<h1 class="display-5 m-1">{{ preset.name }}
+    <span class="text-muted">#{{ preset.id }}</span>
+</h1>
 
 {% include "parts/msg.html" %}
 
@@ -20,9 +26,11 @@
 
                 <div class="btn-group" role="group" aria-label="Aktionen">
                     <a role="button" class="btn btn-primary"
-                       href="{% url "ui_presets_edit" preset.id %}">Bearbeiten</a>
+                       href="{% url "ui_presets_edit" preset.id %}">Bearbeiten
+                    </a>
                     <a role="button" class="btn btn-danger delete-button"
-                       href="{% url "ui_preset_delete" preset.id %}">Löschen</a>
+                       href="{% url "ui_preset_delete" preset.id %}">Löschen
+                    </a>
                 </div>
 
             </div>
@@ -52,6 +60,33 @@
                 </ul>
             </div>
         </div>
+        {% if preset.items.all %}
+            <div class="card mb-2">
+                <div class="card-body">
+                    <h5>Objekte</h5>
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Status</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for item in preset.items.all %}
+                            <tr>
+                                <td>
+                                    <a href="{% url "ui_items_view"  item.id %}">{{ item.name }}</a>
+                                </td>
+                                <td>
+                                    {% include "ui/item_status.html" %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        {% endif %}
         <div class="card mb-2">
             <div class="card-body">
                 <a role="button" class="btn btn-primary" href="{% url "ui_presets" %}">Zurück zur Übersicht</a>
@@ -73,5 +108,5 @@
 </div>
 
 
-{% include "parts/table_js.html" %}
+{#{% include "parts/table_js.html" %}#}
 {% include "footer.html" %}

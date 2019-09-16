@@ -2,7 +2,9 @@
 
 <nav aria-label="breadcrumb" class="m-1">
     <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="{% url "ui_index" %}">Startseite</a></li>
+        <li class="breadcrumb-item">
+            <a href="{% url "ui_index" %}">Startseite</a>
+        </li>
         <li class="breadcrumb-item active" aria-current="page">Objekte</li>
     </ol>
 </nav>
@@ -22,7 +24,7 @@
         <table class="table">
             <thead>
             <tr>
-                <th scope="col">ID</th>
+                <th scope="col">ID (Barcode)</th>
                 <th scope="col">Kategorie</th>
                 <th scope="col">Preset <em class="text-muted">(optional)</em></th>
                 <th scope="col">Name</th>
@@ -33,26 +35,33 @@
             <tbody>
             {% for item in items %}
                 <tr>
-                    <th scope="row">{{ item.id }}</th>
+                    <th scope="row">{{ item.id }} (<i class="fas fa-barcode"></i> {{ item.barcode }})</th>
                     {#                    TODO Verlinkung zur Kategorie #}
-                    <td><a href="#">{{ item.category }}</a></td>
+                    <td>
+                        <a href="#">{{ item.category }}</a>
+                    </td>
                     <td>
                         {% if item.preset %}
                             <a href="{% url "ui_presets_view" item.preset.id %}">{{ item.preset }}</a>
                         {% endif %}
                     </td>
-                    <td><a href="{% url "ui_items_view"  item.id %}">{{ item.name }}</a></td>
                     <td>
-                        <span class="badge badge-success">Am Lagerort/Verfügbar</span> ({{ item.location }})
+                        <a href="{% url "ui_items_view"  item.id %}">{{ item.name }}</a>
+                    </td>
+                    <td>
+                        {% include "ui/item_status.html" %}
                     </td>
                     <td>
                         <div class="btn-group" role="group" aria-label="Aktionen">
                             <a role="button" class="btn btn-success"
-                               href="{% url "ui_items_view" item.id %}">Anzeigen</a>
+                               href="{% url "ui_items_view" item.id %}">Anzeigen
+                            </a>
                             <a role="button" class="btn btn-primary"
-                               href="{% url "ui_items_edit" item.id %}">Bearbeiten</a>
+                               href="{% url "ui_items_edit" item.id %}">Bearbeiten
+                            </a>
                             <a role="button" class="btn btn-danger delete-button"
-                               href="{% url "ui_item_delete" item.id %}">Löschen</a>
+                               href="{% url "ui_item_delete" item.id %}">Löschen
+                            </a>
                         </div>
                     </td>
                 </tr>

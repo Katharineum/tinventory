@@ -26,10 +26,11 @@ class PresetForm(ModelForm):
 class ItemForm(ModelForm):
     class Meta:
         model = Item
-        fields = ("name", "category", "preset", "notes", "location")
+        fields = ("barcode", "name", "category", "preset", "notes", "location")
 
 
 class InventoryForm(Form):
+    barcode = forms.CharField(label="Barcode", required=False)
     category_select = forms.ModelChoiceField(Category.objects.all(), label="Kategorie auswählen", required=True)
     category_new = forms.CharField(label="neue Kategorie erstellen", required=False)
     preset_select = forms.ModelChoiceField(Preset.objects.all(), label="Preset auswählen", required=False)
@@ -65,4 +66,4 @@ class InventoryForm(Form):
             preset = None
 
         return Item.objects.create(name=data["name"], notes=data["notes"], location=data["location"], category=category,
-                                   preset=preset)
+                                   preset=preset, barcode=data["barcode"])

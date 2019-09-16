@@ -5,6 +5,7 @@ from PIL import Image
 from io import BytesIO
 
 from fpdf import FPDF
+from treepoem import generate_barcode
 
 TEMP_DIR = "latex"
 FONTS_DIR = "fonts"
@@ -16,11 +17,15 @@ default_params = {
 
 
 def barcode(code):
-    params = default_params
-    params["data"] = str(code)
-    r = requests.get("https://barcode.tec-it.com/barcode.ashx", params=params)
-    i = Image.open(BytesIO(r.content))
+    # params = default_params
+    # params["data"] = str(code)
+    # r = requests.get("https://barcode.tec-it.com/barcode.ashx", params=params)
+    # i = Image.open(BytesIO(r.content))
     filename = os.path.join(TEMP_DIR, "barcode.png")
+    i = generate_barcode(
+        barcode_type="code128",
+        data=code
+    )
     i.save(filename)
     return filename
 
