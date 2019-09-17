@@ -88,3 +88,16 @@ class Item(models.Model):
     class Meta:
         verbose_name = "Objekt"
         verbose_name_plural = "Objekte"
+
+
+class Person(models.Model):
+    name = models.CharField(max_length=200, blank=False, verbose_name="Name")
+    email = models.EmailField(verbose_name="E-Mail", blank=True)
+
+    notes = models.TextField(blank=True, verbose_name="Notizen")
+    is_within_school = models.BooleanField(verbose_name="Schulintern?", default=False)
+    is_technician = models.BooleanField(verbose_name="Aktiver Techniker?", default=False)
+
+    class Meta:
+        verbose_name = "Person"
+        verbose_name_plural = "Personen"

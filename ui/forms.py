@@ -2,7 +2,7 @@ from django.core.exceptions import ValidationError
 from django.forms import ModelForm, Form
 from django import forms
 
-from api.models import Category, Location, Preset, Item
+from api.models import Category, Location, Preset, Item, Person
 
 
 class CategoryForm(ModelForm):
@@ -67,3 +67,9 @@ class InventoryForm(Form):
 
         return Item.objects.create(name=data["name"], notes=data["notes"], location=data["location"], category=category,
                                    preset=preset, barcode=data["barcode"])
+
+
+class PersonForm(ModelForm):
+    class Meta:
+        model = Person
+        fields = ("name", "email", "is_within_school", "is_technician", "notes")

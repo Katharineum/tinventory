@@ -3,9 +3,9 @@ from django.http import FileResponse
 from django.shortcuts import render, get_object_or_404, redirect
 
 # Create your views here.
-from api.models import Category, Location, Preset, Item
+from api.models import Category, Location, Preset, Item, Person
 from api.reports import barcode_pdf
-from ui.forms import CategoryForm, LocationForm, PresetForm, ItemForm, InventoryForm
+from ui.forms import CategoryForm, LocationForm, PresetForm, ItemForm, InventoryForm, PersonForm
 
 
 @login_required
@@ -271,3 +271,63 @@ def inventory(request):
             form = InventoryForm(initial=initial)
     context["form"] = form
     return render(request, "ui/inventory.html", context)
+
+
+@login_required
+def persons(request):
+    persons = Person.objects.all()
+    context = {
+        "persons": persons
+    }
+    if request.session.get("msg", False):
+        context["msg"] = request.session["msg"]
+        request.session["msg"] = None
+
+    return render(request, "ui/persons.html", context)
+
+
+@login_required
+def person_view(request, id):
+    person = get_object_or_404(Person, pk=id)
+    context = {
+        "person": person
+    }
+    return render(request, "ui/person_view.html", context)
+
+
+@login_required
+def person_edit(request, id):
+    person = get_object_or_404(Person, pk=id)
+
+    if request.method == 'GET':
+        form = PersonForm(instance=person)
+    else:
+        form = PersonForm(request.POST, instance=person)
+        if form.is_valid():
+            form.save()
+            request.session["msg"] = "Die Person wurde erfolgreich aktualisiert."
+            return redirect('ui_persons')
+
+    return render(request, "ui/person_form.html", {"person": person, "form": form, "mode": "edit"})
+
+
+@login_required
+def person_new(request):
+    if request.method == 'GET':
+        form = PersonForm()
+    else:
+        form = PersonForm(request.POST)
+        if form.is_valid():
+            form.save()
+            request.session["msg"] = "Die Person wurde erfolgreich erstellt."
+            return redirect('ui_persons')
+
+    return render(request, "ui/person_form.html", {"form": form, "mode": "new"})
+
+
+@login_required
+def person_delete(request, id):
+    person = get_object_or_404(Person, pk=id)
+    person.delete()
+    request.session["msg"] = "Die Person wurde erfolgreich gelöscht."
+    return redirect("ui_persons")
