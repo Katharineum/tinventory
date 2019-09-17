@@ -25,7 +25,9 @@
             <a role="button" class="btn btn-success" href="{% url "ui_items_view" created_item.id %}">
                 Objekt anzeigen
             </a>
-            <a role="button" class="btn btn-success" href="#form">Barcode drucken</a>
+            <a role="button" class="btn btn-success" href="{% url "ui_item_barcode" created_item.id %}">Barcode
+                drucken
+            </a>
         </div>
     </div>
 {% endif %}

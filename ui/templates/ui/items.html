@@ -56,6 +56,9 @@
                             <a role="button" class="btn btn-success"
                                href="{% url "ui_items_view" item.id %}">Anzeigen
                             </a>
+                            <a role="button" class="btn btn-secondary"
+                               href="{% url "ui_item_barcode" item.id %}" target="_blank"><i class="fa fa-barcode"></i>
+                            </a>
                             <a role="button" class="btn btn-primary"
                                href="{% url "ui_items_edit" item.id %}">Bearbeiten
                             </a>

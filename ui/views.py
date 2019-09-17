@@ -1,8 +1,10 @@
 from django.contrib.auth.decorators import login_required
+from django.http import FileResponse
 from django.shortcuts import render, get_object_or_404, redirect
 
 # Create your views here.
 from api.models import Category, Location, Preset, Item
+from api.reports import barcode_pdf
 from ui.forms import CategoryForm, LocationForm, PresetForm, ItemForm, InventoryForm
 
 
@@ -244,6 +246,14 @@ def item_delete(request, id):
 
 
 @login_required
+def item_barcode(request, id):
+    item = get_object_or_404(Item, pk=id)
+    filename = barcode_pdf(item.barcode)
+    f = open(filename, "rb")
+    return FileResponse(f, content_type="application/pdf")
+
+
+@login_required
 def inventory(request):
     context = {}
     if request.method == 'GET':
@@ -254,6 +264,10 @@ def inventory(request):
             item = form.save()
             context["msg"] = "Das Objekt wurde erfolgreich erstellt."
             context["created_item"] = item
-            form = InventoryForm()
+            initial = {}
+            initial["category_select"] = item.category
+            initial["preset_select"] = item.preset
+            initial["location"] = item.location
+            form = InventoryForm(initial=initial)
     context["form"] = form
     return render(request, "ui/inventory.html", context)

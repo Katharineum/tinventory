@@ -21,6 +21,7 @@ urlpatterns = [
     path("items/<int:id>", views.item_view, name="ui_items_view"),
     path("items/<int:id>/edit", views.item_edit, name="ui_items_edit"),
     path("items/<int:id>/delete", views.item_delete, name="ui_item_delete"),
+    path("items/<int:id>/barcode.pdf", views.item_barcode, name="ui_item_barcode"),
     path("items/new", views.item_new, name="ui_item_new"),
     path("inventory/", views.inventory, name="ui_inventory"),
     path('accounts/', include('django.contrib.auth.urls')),
