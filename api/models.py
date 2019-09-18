@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from django.db import models
 from django.db.models import Max
 
@@ -73,6 +74,12 @@ class Item(models.Model):
         id_max = Item.objects.all().aggregate(Max('id'))['id__max']
         return id_max + 1 if id_max else 1
 
+    def is_available(self):
+        if self.checks.count() > 0:
+            return False
+        else:
+            return True
+
     def save(self, *args, **kwargs):
         if self.barcode == "" or self.barcode is None:
             self.barcode = self.gen_barcode()
@@ -101,3 +108,31 @@ class Person(models.Model):
     class Meta:
         verbose_name = "Person"
         verbose_name_plural = "Personen"
+
+
+class CheckOutProcess(models.Model):
+    borrowing_person = models.ForeignKey(Person, on_delete=models.CASCADE, related_name="check_outs",
+                                         verbose_name="Ausleihende Person")
+    lending_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="check_outs",
+                                     verbose_name="Verleihender Nutzer")
+    checked_out_at = models.DateTimeField(auto_now_add=True, verbose_name="Check-Out-Zeitpunkt")
+    is_check_out_in_process = models.BooleanField(default=True, verbose_name="Check-Out im Prozess?")
+    check_in_until = models.DateTimeField(verbose_name="Check-In bis", blank=True, null=True)
+
+    class Meta:
+        verbose_name = "Check-Out-Vorgang"
+        verbose_name_plural = "Check-Out-Vorgänge"
+
+
+class Check(models.Model):
+    item = models.ForeignKey(Item, on_delete=models.CASCADE, related_name="checks", verbose_name="Objekt")
+    check_out = models.ForeignKey(CheckOutProcess, on_delete=models.CASCADE, related_name="checks",
+                                  verbose_name="Check-Out-Vorgang")
+    checked_in = models.BooleanField(default=False, verbose_name="Check-In durchgeführt?")
+    checked_in_at = models.DateTimeField(verbose_name="Check-In-Zeitpunkt", blank=True, null=True)
+    checked_in_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name="check_ins",
+                                      verbose_name="Check-In durchgeführt von", blank=True, null=True)
+
+    class Meta:
+        verbose_name = "Check"
+        verbose_name_plural = "Checks"

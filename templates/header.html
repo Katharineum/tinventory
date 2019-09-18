@@ -21,6 +21,11 @@
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
             integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
             crossorigin="anonymous"></script>
+    <script>
+        function focusIt(input) {
+            input[0].selectionStart = input[0].selectionEnd = 0;
+        }
+    </script>
     <title>TInventory</title>
 </head>
 <body>
@@ -55,6 +60,9 @@
                     </li>
                     <li class="nav-item active">
                         <a class="nav-link" href="{% url "ui_persons" %}">Personen</a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="{% url "ui_check_out" %}">Check-Out</a>
                     </li>
                     <li class="nav-item active">
                         <a class="nav-link" href="/admin/">Administration</a>

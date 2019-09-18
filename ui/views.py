@@ -3,7 +3,9 @@ from django.http import FileResponse
 from django.shortcuts import render, get_object_or_404, redirect
 
 # Create your views here.
-from api.models import Category, Location, Preset, Item, Person
+from django.utils import timezone
+
+from api.models import Category, Location, Preset, Item, Person, CheckOutProcess, Check
 from api.reports import barcode_pdf
 from ui.forms import CategoryForm, LocationForm, PresetForm, ItemForm, InventoryForm, PersonForm
 
@@ -331,3 +333,101 @@ def person_delete(request, id):
     person.delete()
     request.session["msg"] = "Die Person wurde erfolgreich gelöscht."
     return redirect("ui_persons")
+
+
+@login_required
+def check_out(request):
+    msg = False
+    msg_type = "success"
+    step = request.session["step"] if request.session.get("step", False) else 1
+    if step > 1:
+        process = CheckOutProcess.objects.get(id=request.session["process"])
+
+    if request.method == "POST":
+
+        # Cancel checkout
+        if request.POST.get("cancel", False):
+            print("Cancelling")
+            # Delete process object
+            if step > 1:
+                process.delete()
+
+            # Delete session vars
+            del request.session["step"]
+            del request.session["process"]
+
+            # Redirect to base url
+            return redirect("ui_check_out")
+
+        if step == 1 and request.POST.get("select-person", False):
+            # Select person
+            print("Suche Person")
+            try:
+                person = Person.objects.get(id=int(request.POST["select-person"]))
+            except (Person.DoesNotExist, ValueError):
+                return redirect("ui_check_out")
+            process = CheckOutProcess.objects.create(borrowing_person=person, lending_user=request.user)
+            request.session["process"] = process.id
+            request.session["step"] = 2
+            step = 2
+
+        if (step == 2 or step == 3) and request.POST.get("delete", False):
+            if step == 3 and process.checks.count() < 2:
+                return redirect("ui_check_out")
+            try:
+                id = int(request.POST["delete"])
+                check = process.checks.get(id=id)
+                check.delete()
+                msg = "Das Objekt wurde erfolgreich von der Check-Out-Liste entfernt."
+            except (Check.DoesNotExist, ValueError):
+                return redirect("ui_check_out")
+
+        if step == 2 and request.POST.get("scan", False):
+            scan = request.POST["scan"]
+            item = None
+
+            try:
+                id = int(scan)
+                item = Item.objects.get(id=id)
+            except (Item.DoesNotExist, ValueError):
+                try:
+                    item = Item.objects.get(barcode=scan)
+                except Item.DoesNotExist:
+                    msg = "Es gibt kein Objekt mit dieser ID oder diesem Barcode: {}".format(scan)
+                    msg_type = "bad"
+
+            if msg_type == "success":
+                if not item.is_available():
+                    if item.checks.all()[0].check_out == process:
+                        msg = "Dieses Objekt ist bereits zur Check-Out-Liste hinzugefügt worden."
+                        msg_type = "bad"
+                    else:
+                        msg = "Dieses Objekt ist aktuell ausgecheckt. Bitte vor dem Check-Out wieder Einchecken."
+                        msg_type = "bad"
+            if msg_type == "success":
+                check = process.checks.create(item=item)
+                msg = "Das Objekt wurde erfolgreich zur Check-Out-Liste hinzugefügt."
+
+        if step == 2 and request.POST.get("confirm", False) and process.checks.count() > 0:
+            request.session["step"] = 3
+            step = 3
+
+        elif step == 3 and request.POST.get("confirm", False) and process.checks.count() > 0:
+            process.is_check_out_in_process = False
+            process.checked_out_at = timezone.now()
+            del request.session["step"]
+            del request.session["process"]
+            step = 4
+
+    print(step)
+
+    if step == 1:
+        technicians = Person.objects.all().filter(is_technician=True).order_by("name")
+        persons = Person.objects.all().filter(is_technician=False).order_by("name")
+        return render(request, "ui/check-out-1.html", context={"technicians": technicians, "persons": persons})
+    elif step == 2:
+        return render(request, "ui/check-out-2.html", context={"process": process, "msg": msg, "msg_type": msg_type})
+    elif step == 3:
+        return render(request, "ui/check-out-3.html", context={"process": process})
+    elif step == 4:
+        return render(request, "ui/check-out-done.html", context={"process": process})

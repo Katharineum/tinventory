@@ -1,0 +1,81 @@
+{% load widget_tweaks %}
+{% include "header.html" %}
+
+<nav aria-label="breadcrumb" class="m-1">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a href="{% url "ui_index" %}">Startseite</a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">Check-Out</li>
+
+    </ol>
+</nav>
+
+<h1 class="display-5 m-1">Check-Out</h1>
+<div class="container">
+    <div class="card mb-2">
+        <div class="card-body">
+            <i class="fas fa-check-circle fa-3x text-success mr-3 float-left"></i>
+            <h3>1. Schritt: Ausleihende Person auswählen</h3>
+            <p>
+                Ausgegeben wird an {{ process.borrowing_person.name }}
+            </p>
+        </div>
+    </div>
+
+
+    <div class="card mb-2">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-sm">
+                    <i class="fas fa-check-circle fa-3x text-success mr-3 float-left"></i>
+                    <h3>2. Schritt: Objekte scannen oder auswählen</h3>
+                </div>
+                <div class="col-sm">
+                    {% if process.checks.all %}
+                        <ul class="list-group">
+                            {% for check in process.checks.all %}
+                                <li class="list-group-item">
+                                    {{ check.item.name }}
+                                    {% if check.item.preset %}
+                                        ({{ check.item.preset.name }})
+                                    {% endif %}
+                                    {% if process.checks.all|length > 1 %}
+                                        <form action="" method="post" class="d-inline">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="delete" value="{{ check.id }}">
+                                            <button type="submit" class="btn btn-outline-danger btn-sm float-right">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </form>
+                                    {% endif %}
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card mb-2">
+    <div class="card-body">
+        <i class="fas fa-arrow-circle-right fa-3x mr-3 float-left"></i>
+        <h2>3. Schritt: Vorgang bestätigen</h2>
+
+        <form action="" method="post" class="d-inline">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-success btn-lg" name="confirm" value="confirm">
+                <i class="fas fa-save mr-1"></i>
+                Scannen beenden
+            </button>
+            <button type="submit" class="btn btn-danger btn-lg" name="cancel" value="cancel">
+                <i class="far fa-times-circle mr-1"></i>
+                Check-Out abbrechen
+            </button>
+        </form>
+
+    </div>
+</div>
+{% include "footer.html" %}
