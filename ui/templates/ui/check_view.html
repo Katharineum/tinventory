@@ -6,14 +6,14 @@
             <a href="{% url "ui_index" %}">Startseite</a>
         </li>
         <li class="breadcrumb-item" aria-current="page">
-            <a href="{% url "ui_items" %}">Personen</a>
+            <a href="{% url "ui_checks" %}">Checks</a>
         </li>
-        <li class="breadcrumb-item active" aria-current="page">{{ person.name }}</li>
+        <li class="breadcrumb-item active" aria-current="page">#{{ check.id }}</li>
     </ol>
 </nav>
 
-<h1 class="display-5 m-1">{{ person.name }}
-    <span class="text-muted">#{{ person.id }}</span>
+<h1 class="display-5 m-1">
+    #{{ check.id }}
 </h1>
 
 {% include "parts/msg.html" %}
@@ -23,26 +23,34 @@
     <div class="col-sm">
         <div class="card mb-2">
             <div class="card-body">
-                <div class="btn-group" role="group" aria-label="Aktionen">
-                    <a role="button" class="btn btn-primary"
-                       href="{% url "ui_persons_edit" person.id %}">Bearbeiten
-                    </a>
-                    <a role="button" class="btn btn-danger delete-button"
-                       href="{% url "ui_person_delete" person.id %}">Löschen
-                    </a>
-                </div>
+                {#                <div class="btn-group" role="group" aria-label="Aktionen">#}
+                <a role="button" class="btn btn-primary" href="{% url "ui_loan_form" check.id %}" target="_blank">
+                    <i class="fas fa-file-pdf mr-2"></i>
+                    Ausleihformular ausdrucken
+                </a>
+                {#                    <a role="button" class="btn btn-danger delete-button"#}
+                {#                       href="{% url "ui_check_delete" check.id %}">Löschen#}
+                {#                    </a>#}
+                {#                </div>#}
             </div>
         </div>
         <div class="card mb-2">
             <div class="card-body">
                 <ul class="list-group list-group-flush">
+
                     <li class="list-group-item">
                         <div class="row">
-                            <div class="col-sm-3"><strong>E-Mail</strong> <i class="text-muted">(optional)</i></div>
+                            <div class="col-sm-3"><strong>Verleihende Person</strong></div>
                             <div class="col-sm-9">
-                                {% if person.email %}
-                                    <a href="mailto:{{ person.email }}">{{ person.email }}</a>
-                                {% endif %}
+                                {{ check.lending_user.get_full_name }}
+                            </div>
+                        </div>
+                    </li>
+                    <li class="list-group-item">
+                        <div class="row">
+                            <div class="col-sm-3"><strong>Ausleihende Person</strong></div>
+                            <div class="col-sm-9">
+                                <a href="{% url "ui_persons_view" check.borrowing_person.id %}">{{ check.borrowing_person.name }}</a>
                             </div>
                         </div>
                     </li>
@@ -50,49 +58,43 @@
                         <div class="row">
                             <div class="col-sm-3"><strong>Status</strong></div>
                             <div class="col-sm-9">
-                                {% include "ui/person_status.html" %}
+                                {% include "ui/check_status.html" %}
                             </div>
                         </div>
                     </li>
                     <li class="list-group-item">
                         <div class="row">
-                            <div class="col-sm-3"><strong>Notizen</strong> <i class="text-muted">(optional)</i></div>
-                            <div class="col-sm-9">{{ person.notes|linebreaksbr }}</div>
+                            <div class="col-sm-3"><strong>Zeitpunkt</strong></div>
+                            <div class="col-sm-9">
+                                {{ check.checked_out_at }}
+                            </div>
                         </div>
                     </li>
+                    <li class="list-group-item">
+                        <div class="row">
+                            <div class="col-sm-3"><strong>Rückgabe bis zum</strong></div>
+                            <div class="col-sm-9">
+                                {{ check.check_in_until|default:"k. A." }}
+                            </div>
+                        </div>
+                    </li>
+
 
                 </ul>
             </div>
         </div>
         <div class="card mb-2">
             <div class="card-body">
-                <a role="button" class="btn btn-primary" href="{% url "ui_persons" %}">Zurück zur Übersicht</a>
+                <a role="button" class="btn btn-secondary" href="{% url "ui_checks" %}">Zurück zur Übersicht</a>
             </div>
         </div>
     </div>
     <div class="col-sm">
         <div class="card mb-2">
             <div class="card-body">
-                <h5>Check-Outs</h5>
-                <ul class="list-group">
-                    {% for check in person.check_outs.all %}
-                        <li class="list-group-item">
-                            <a href="{% url "ui_checks_view" check.id %}">
-                                #{{ check.id }} ({{ check.checked_out_at }})
-                            </a>
-                            <button class="btn btn-outline-success btn-sm float-right">
-                                Anzeigen
-                            </button>
-                        </li>
-                    {% endfor %}
-                </ul>
-            </div>
-        </div>
-        <div class="card mb-2">
-            <div class="card-body">
                 <h5>Ausgecheckte Objekte</h5>
                 <ul class="list-group">
-                    {% for object in person.get_checks %}
+                    {% for object in check.checks.all %}
                         <li class="list-group-item">
                             <a href="{% url "ui_items_view" object.item.id %}">
                                 {{ object.item.name }}

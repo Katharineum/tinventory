@@ -6,7 +6,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import timezone
 
 from api.models import Category, Location, Preset, Item, Person, CheckOutProcess, Check
-from api.reports import barcode_pdf
+from api.reports import barcode_pdf, loan_form_pdf
 from ui.forms import CategoryForm, LocationForm, PresetForm, ItemForm, InventoryForm, PersonForm
 
 
@@ -415,6 +415,7 @@ def check_out(request):
         elif step == 3 and request.POST.get("confirm", False) and process.checks.count() > 0:
             process.is_check_out_in_process = False
             process.checked_out_at = timezone.now()
+            process.save()
             del request.session["step"]
             del request.session["process"]
             step = 4
@@ -431,3 +432,33 @@ def check_out(request):
         return render(request, "ui/check-out-3.html", context={"process": process})
     elif step == 4:
         return render(request, "ui/check-out-done.html", context={"process": process})
+
+
+@login_required
+def loan_form(request, id):
+    process = get_object_or_404(CheckOutProcess, pk=id)
+    filename = loan_form_pdf(process)
+    f = open(filename, "rb")
+    return FileResponse(f, content_type="application/pdf")
+
+
+@login_required
+def checks(request):
+    checks = CheckOutProcess.objects.all().filter(is_check_out_in_process=False)
+    context = {
+        "checks": checks
+    }
+    if request.session.get("msg", False):
+        context["msg"] = request.session["msg"]
+        request.session["msg"] = None
+
+    return render(request, "ui/checks.html", context)
+
+
+@login_required
+def check_view(request, id):
+    check = get_object_or_404(CheckOutProcess, pk=id, is_check_out_in_process=False)
+    context = {
+        "check": check
+    }
+    return render(request, "ui/check_view.html", context)

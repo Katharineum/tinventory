@@ -1,1 +1,13 @@
-<span class="badge badge-success">Am Lagerort/Verfügbar</span> ({{ item.location }})
+{% if item.is_available %}
+    <span class="badge badge-success">Am Lagerort/Verfügbar</span> ({{ item.location }})
+{% else %}
+    <span class="badge badge-danger">Ausgecheckt</span>
+
+    {% for check in item.checks.all %}
+        (an
+        <a href="{% url "ui_checks_view" check.check_out.id %}">
+            {{ check.check_out.borrowing_person.name }},
+            #{{ check.check_out.id }}</a>)
+    {% endfor %}
+
+{% endif %}

@@ -1,0 +1,9 @@
+{% if check.is_everything_checked_in %}
+    <span class="badge badge-success">
+        Alle Objekte eingecheckt
+    </span>
+{% else %}
+    <span class="badge badge-warning">
+        Ausgeliehene Objekte vorhanden
+    </span>
+{% endif %}

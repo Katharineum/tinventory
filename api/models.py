@@ -80,6 +80,12 @@ class Item(models.Model):
         else:
             return True
 
+    def get_check(self):
+        if self.is_available():
+            return self.checks.all()[0]
+        else:
+            return None
+
     def save(self, *args, **kwargs):
         if self.barcode == "" or self.barcode is None:
             self.barcode = self.gen_barcode()
@@ -105,6 +111,13 @@ class Person(models.Model):
     is_within_school = models.BooleanField(verbose_name="Schulintern?", default=False)
     is_technician = models.BooleanField(verbose_name="Aktiver Techniker?", default=False)
 
+    def get_checks(self):
+        checks = []
+        for check_out in self.check_outs.all():
+            checks += check_out.checks.all()
+        print(checks)
+        return checks
+
     class Meta:
         verbose_name = "Person"
         verbose_name_plural = "Personen"
@@ -117,7 +130,10 @@ class CheckOutProcess(models.Model):
                                      verbose_name="Verleihender Nutzer")
     checked_out_at = models.DateTimeField(auto_now_add=True, verbose_name="Check-Out-Zeitpunkt")
     is_check_out_in_process = models.BooleanField(default=True, verbose_name="Check-Out im Prozess?")
-    check_in_until = models.DateTimeField(verbose_name="Check-In bis", blank=True, null=True)
+    check_in_until = models.DateField(verbose_name="Check-In bis", blank=True, null=True)
+
+    def is_everything_checked_in(self):
+        return self.checks.filter(checked_in=False).count() <= 0
 
     class Meta:
         verbose_name = "Check-Out-Vorgang"

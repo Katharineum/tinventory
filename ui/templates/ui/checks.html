@@ -1,0 +1,71 @@
+{% include "header.html" %}
+
+<nav aria-label="breadcrumb" class="m-1">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a href="{% url "ui_index" %}">Startseite</a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">Checks</li>
+    </ol>
+</nav>
+
+<h1 class="display-5 m-1">Checks</h1>
+
+{% include "parts/msg.html" %}
+
+<div class="card mb-2">
+    <div class="card-body">
+        <a role="button" class="btn btn-primary" href="{% url "ui_check_out" %}">Check-Out</a>
+        <a role="button" class="btn btn-primary" href="{% url "ui_check_out" %}">Check-In</a>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <table class="table">
+            <thead>
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Zeitpunkt</th>
+                <th scope="col">Verleihende Person</th>
+                <th scope="col">Ausleihende Person</th>
+                <th scope="col">Anzahl der Objekte</th>
+                <th scope="col">Status</th>
+                <th scope="col" class="table-actions">Aktionen</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for check in checks %}
+                <tr>
+                    <th scope="row">
+                        <a href="{% url "ui_checks_view" check.id %}">{{ check.id }}</a>
+                    </th>
+                    <td>
+                        {{ check.checked_out_at }}
+                    </td>
+                    <td>
+                        {{ check.lending_user.get_full_name }}
+                    </td>
+                    <td>
+                        <a href="{% url "ui_persons_view" check.borrowing_person.id %}">{{ check.borrowing_person.name }}</a>
+                    </td>
+                    <td>
+                        {{ check.checks.count }}
+                    </td>
+                    <td>
+                        {% include "ui/check_status.html" %}
+                    </td>
+                    <td>
+                        <a role="button" class="btn btn-success"
+                           href="{% url "ui_checks_view" check.id %}">Mehr anzeigen
+                        </a>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% include "parts/table_js.html" %}
+{% include "footer.html" %}
