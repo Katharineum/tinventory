@@ -1,9 +1,12 @@
 __pycache__
 *.pyc
 env
+venv
 .idea
 *.sqlite3
 barcode.pdf
+tmp/
+media/
 
 ## Core latex/pdflatex auxiliary files:
 *.aux
