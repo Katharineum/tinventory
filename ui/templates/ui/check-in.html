@@ -1,0 +1,74 @@
+{% load widget_tweaks %}
+{% include "header.html" %}
+
+<nav aria-label="breadcrumb" class="m-1">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a href="{% url "ui_index" %}">Startseite</a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">Check-Out</li>
+
+    </ol>
+</nav>
+
+<h1 class="display-5 m-1">Check-In</h1>
+
+
+<div class="card mb-2">
+    <div class="card-body">
+        <h2>Objekte scannen</h2>
+        <div class="row">
+            <div class="col-sm">
+                <form class="row" action="" method="post">
+                    {% csrf_token %}
+                    <div class="col-sm">
+                        <div class="input-group input-group-lg">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="barcode-addon"><i class="fas fa-barcode"></i></span>
+                            </div>
+
+                            <input type="text" class="form-control no-check" placeholder="Barcode/ID"
+                                   aria-label="Barcode"
+                                   aria-describedby="barcode-addon" autofocus name="scan" id="barcode">
+                        </div>
+                        <small class="text-muted" style="margin-left: 54px;">
+                            Barcode einscannen oder ID des Objektes eingeben
+                        </small>
+                    </div>
+                    <div class="col-sm-1">
+                        <button class="btn btn-success btn-lg" type="submit">
+                            <i class="fas fa-undo"></i>
+                        </button>
+                    </div>
+                </form>
+
+            </div>
+            <div class="col-sm">
+                {% if msg  == "not_found" %}
+                    <p class="alert alert-danger">
+                        <i class="fas mr-1 fa-exclamation-circle"></i>
+                        Es wurde kein ausgeliehenes Objekt mit diesem Barcode oder dieser ID gefunden.
+                    </p>
+                {% elif msg == "checked_in" %}
+                    <p class="alert alert-success">
+                        <i class="fas mr-1 fa-check-circle"></i>
+                        Das Objekt <em>{{ check.item.name }}
+                        {% if object.item.preset %}
+                            ({{ object.item.preset.name }})
+                        {% endif %}</em>
+                        wurde erfolgreich eingecheckt.
+                    </p>
+                    <h6>Aktionen für den Check-Out-Vorgang #{{ check.check_out.id }}</h6>
+                    <a class="btn btn-primary" href="{% url "ui_check_in_confirmation" check.id %}">
+                        <i class="fas fa-file-pdf mr-2"></i>
+                        Rückgabebestätigung für bereits eingecheckte Objekte drucken
+                    </a>
+                    <a class="btn btn-primary" href="{% url "ui_checks_view" check.check_out.id %}">
+                        Check-Out-Vorgang anzeigen
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% include "footer.html" %}

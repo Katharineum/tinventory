@@ -2,8 +2,12 @@
     <span class="badge badge-success">
         Alle Objekte eingecheckt
     </span>
-{% else %}
+{% elif check.is_in_time %}
     <span class="badge badge-warning">
         Ausgeliehene Objekte vorhanden
+    </span>
+{% else %}
+    <span class="badge badge-danger">
+        Ausgeliehene Objekte <strong>überfällig</strong>
     </span>
 {% endif %}

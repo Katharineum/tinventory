@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User
 from django.db import models
 from django.db.models import Max
+from django.utils import timezone
 
 
 class Category(models.Model):
@@ -134,6 +135,12 @@ class CheckOutProcess(models.Model):
 
     def is_everything_checked_in(self):
         return self.checks.filter(checked_in=False).count() <= 0
+
+    def is_in_time(self):
+        if self.check_in_until:
+            return self.check_in_until >= timezone.now().date()
+        else:
+            return True
 
     class Meta:
         verbose_name = "Check-Out-Vorgang"

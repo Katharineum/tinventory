@@ -6,7 +6,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import timezone
 
 from api.models import Category, Location, Preset, Item, Person, CheckOutProcess, Check
-from api.reports import barcode_pdf, loan_form_pdf
+from api.reports import barcode_pdf, loan_form_pdf, check_in_confirmation_pdf
 from ui.forms import CategoryForm, LocationForm, PresetForm, ItemForm, InventoryForm, PersonForm
 
 
@@ -462,3 +462,41 @@ def check_view(request, id):
         "check": check
     }
     return render(request, "ui/check_view.html", context)
+
+
+@login_required
+def check_in(request):
+    context = {}
+    msg = False
+    if request.method == "POST" and request.POST.get("scan", False):
+        scan = request.POST["scan"]
+        check = None
+        print(scan)
+        try:
+            id = int(scan)
+            check = Check.objects.get(item_id=id, checked_in=False)
+        except (Check.DoesNotExist, ValueError):
+            try:
+                check = Check.objects.get(item__barcode=scan, checked_in=False)
+            except Check.DoesNotExist:
+                msg = "not_found"
+
+        if not msg:
+            print("Go on")
+            check.checked_in = True
+            check.checked_in_at = timezone.now()
+            check.checked_in_by = request.user
+            check.save()
+            context["check"] = check
+            msg = "checked_in"
+
+    context["msg"] = msg
+    return render(request, "ui/check-in.html", context)
+
+
+@login_required
+def check_in_confirmation(request, id):
+    process = get_object_or_404(CheckOutProcess, pk=id)
+    filename = check_in_confirmation_pdf(process)
+    f = open(filename, "rb")
+    return FileResponse(f, content_type="application/pdf")

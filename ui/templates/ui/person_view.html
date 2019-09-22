@@ -93,18 +93,26 @@
                 <h5>Ausgecheckte Objekte</h5>
                 <ul class="list-group">
                     {% for object in person.get_checks %}
-                        <li class="list-group-item">
-                            <a href="{% url "ui_items_view" object.item.id %}">
-                                {{ object.item.name }}
-                                {% if object.item.preset %}
-                                    ({{ object.item.preset.name }})
-                                {% endif %}
-                            </a>
-                            <button class="btn btn-outline-success btn-sm float-right">
-                                <i class="fas fa-undo mr-2"></i>
-                                Rückgabe
-                            </button>
-                        </li>
+                        {% if not object.checked_in %}
+                            <li class="list-group-item">
+                                <a href="{% url "ui_items_view" object.item.id %}">
+                                    {{ object.item.name }}
+                                    {% if object.item.preset %}
+                                        ({{ object.item.preset.name }})
+                                    {% endif %}
+                                </a>
+                                <span class="float-right">
+                                    <form action="{% url "ui_check_in" %}" method="post" class="d-inline">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="scan" value="{{ object.item.id }}">
+                                        <button class="btn btn-outline-success btn-sm" type="submit">
+                                            <i class="fas fa-undo mr-2"></i>
+                                            Check-In
+                                        </button>
+                                    </form>
+                                </span>
+                            </li>
+                        {% endif %}
                     {% endfor %}
                 </ul>
             </div>

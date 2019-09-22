@@ -29,9 +29,11 @@ urlpatterns = [
     path("persons/<int:id>/delete", views.person_delete, name="ui_person_delete"),
     path("persons/new", views.person_new, name="ui_person_new"),
     path("inventory/", views.inventory, name="ui_inventory"),
-    path("check-out/", views.check_out, name="ui_check_out"),
+    path("checks/out/", views.check_out, name="ui_check_out"),
     path("checks/<int:id>/loan-form.pdf", views.loan_form, name="ui_loan_form"),
     path("checks/", views.checks, name="ui_checks"),
     path("checks/<int:id>", views.check_view, name="ui_checks_view"),
+    path("checks/<int:id>/check-in.pdf", views.check_in_confirmation, name="ui_check_in_confirmation"),
+    path("checks/in/", views.check_in, name="ui_check_in"),
     path('accounts/', include('django.contrib.auth.urls')),
 ]

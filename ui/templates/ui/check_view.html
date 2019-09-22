@@ -23,15 +23,16 @@
     <div class="col-sm">
         <div class="card mb-2">
             <div class="card-body">
-                {#                <div class="btn-group" role="group" aria-label="Aktionen">#}
-                <a role="button" class="btn btn-primary" href="{% url "ui_loan_form" check.id %}" target="_blank">
-                    <i class="fas fa-file-pdf mr-2"></i>
-                    Ausleihformular ausdrucken
-                </a>
-                {#                    <a role="button" class="btn btn-danger delete-button"#}
-                {#                       href="{% url "ui_check_delete" check.id %}">Löschen#}
-                {#                    </a>#}
-                {#                </div>#}
+                <div class="btn-group" role="group" aria-label="Aktionen">
+                    <a role="button" class="btn btn-primary" href="{% url "ui_loan_form" check.id %}" target="_blank">
+                        <i class="fas fa-file-pdf mr-2"></i>
+                        Ausleihformular ausdrucken
+                    </a>
+                    <a class="btn btn-primary" href="{% url "ui_check_in_confirmation" check.id %}">
+                        <i class="fas fa-file-pdf mr-2"></i>
+                        Rückgabebestätigung für bereits eingecheckte Objekte drucken
+                    </a>
+                </div>
             </div>
         </div>
         <div class="card mb-2">
@@ -92,7 +93,7 @@
     <div class="col-sm">
         <div class="card mb-2">
             <div class="card-body">
-                <h5>Ausgecheckte Objekte</h5>
+                <h5>Objekte</h5>
                 <ul class="list-group">
                     {% for object in check.checks.all %}
                         <li class="list-group-item">
@@ -102,10 +103,25 @@
                                     ({{ object.item.preset.name }})
                                 {% endif %}
                             </a>
-                            <button class="btn btn-outline-success btn-sm float-right">
-                                <i class="fas fa-undo mr-2"></i>
-                                Rückgabe
-                            </button>
+                            <span class="float-right">
+                                {% if object.checked_in %}
+                                    <span class="badge badge-success">
+                                        Eingecheckt
+                                    </span>
+                                {% else %}
+                                    <span class="badge badge-danger">
+                                        Ausgecheckt
+                                    </span>
+                                    <form action="{% url "ui_check_in" %}" method="post" class="d-inline">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="scan" value="{{ object.item.id }}">
+                                        <button class="btn btn-outline-success btn-sm" type="submit">
+                                            <i class="fas fa-undo mr-2"></i>
+                                            Check-In
+                                        </button>
+                                    </form>
+                                {% endif %}
+                            </span>
                         </li>
                     {% endfor %}
                 </ul>
