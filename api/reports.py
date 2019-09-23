@@ -1,9 +1,5 @@
 import os
 
-import requests
-from PIL import Image
-from io import BytesIO
-
 from django.utils import formats
 from fpdf import FPDF
 from treepoem import generate_barcode

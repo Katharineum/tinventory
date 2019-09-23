@@ -1,5 +1,5 @@
 from django.contrib.auth.models import User, Group
-from rest_framework import viewsets, generics, permissions
+from rest_framework import viewsets, generics, permissions, routers
 
 from api.models import Category
 from .serializers import CategorySerializer, UserSerializer, GroupSerializer
@@ -28,3 +28,8 @@ class GroupList(generics.ListAPIView):
 class CategoryViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
+
+
+router = routers.DefaultRouter()
+router.register(r'categories', CategoryViewSet)
+# router.register(r'groups', views.GroupViewSet)
