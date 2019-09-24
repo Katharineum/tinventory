@@ -1,13 +1,14 @@
 from django.contrib.auth.models import User, Group
 from rest_framework import viewsets, generics, permissions, routers
+from rest_framework.generics import ListAPIView
 
 from api.models import Category
 from .serializers import CategorySerializer, UserSerializer, GroupSerializer
 from oauth2_provider.contrib.rest_framework import TokenHasReadWriteScope, TokenHasScope
 
 
-class UserList(generics.ListCreateAPIView):
-    permission_classes = [permissions.IsAuthenticated, TokenHasReadWriteScope]
+class UserList(viewsets.ReadOnlyModelViewSet):
+    permission_classes = [permissions.IsAuthenticated]
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
@@ -32,4 +33,5 @@ class CategoryViewSet(viewsets.ModelViewSet):
 
 router = routers.DefaultRouter()
 router.register(r'categories', CategoryViewSet)
+router.register(r'users', UserList)
 # router.register(r'groups', views.GroupViewSet)
