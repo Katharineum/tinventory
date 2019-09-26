@@ -3,7 +3,7 @@
 {% else %}
     <span class="badge badge-danger">Ausgecheckt</span>
 
-    {% for check in item.checks.all %}
+    {% for check in item.get_checks %}
         (an
         <a href="{% url "ui_checks_view" check.check_out.id %}">
             {{ check.check_out.borrowing_person.name }},

@@ -76,16 +76,16 @@ class Item(models.Model):
         return id_max + 1 if id_max else 1
 
     def is_available(self):
-        if self.checks.count() > 0:
+        if self.checks.filter(checked_in=False).count() > 0:
             return False
         else:
             return True
 
-    def get_check(self):
-        if self.is_available():
-            return self.checks.all()[0]
+    def get_checks(self):
+        if not self.is_available():
+            return self.checks.filter(checked_in=False).all()
         else:
-            return None
+            return []
 
     def save(self, *args, **kwargs):
         if self.barcode == "" or self.barcode is None:
