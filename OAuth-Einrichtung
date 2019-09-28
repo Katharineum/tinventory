@@ -1,0 +1,7 @@
+1. Application erstellen
+
+2. Dummy-Nutzer erstellen und sich als selbiger anmelden
+2. http://localhost:8000/o/authorize/?client_id=w5KqeTXPUb6mpiDH1cfB8I88FySnJIKBF2Vcx5zz&state=random_state_string&response_type=code
+aufrufen (client_id ersetzen)
+
+3. Code aus der nächsten URL kopieren (kIgHwlMK7yIInYnmhMZuC5cQshW6v1)

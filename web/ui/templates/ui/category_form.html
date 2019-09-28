@@ -3,21 +3,25 @@
 
 <nav aria-label="breadcrumb" class="m-1">
     <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="{% url "ui_index" %}">Startseite</a></li>
-        <li class="breadcrumb-item active"><a href="{% url "ui_locations" %}">Orte</a></li>
+        <li class="breadcrumb-item">
+            <a href="{% url "ui_index" %}">Startseite</a>
+        </li>
+        <li class="breadcrumb-item active">
+            <a href="{% url "ui_categories" %}">Kategorien</a>
+        </li>
         {% if mode == "edit" %}
-            <li class="breadcrumb-item active" aria-current="page">„{{ location.name }}“</li>
+            <li class="breadcrumb-item active" aria-current="page">„{{ category.name }}“</li>
         {% else %}
-            <li class="breadcrumb-item active" aria-current="page">Neuen Ort erstellen</li>
+            <li class="breadcrumb-item active" aria-current="page">Neue Kategorie erstellen</li>
         {% endif %}
     </ol>
 </nav>
 
 <h1 class="display-5 m-1">
     {% if mode == "edit" %}
-        Ort bearbeiten
+        Kategorie bearbeiten
     {% else %}
-        Neuen Ort erstellen
+        Neue Kategorie erstellen
     {% endif %}
 </h1>
 
@@ -28,7 +32,7 @@
             {{ form|bootstrap }}
 
             <button type="submit" class="btn btn-success">Speichern</button>
-            <a role="button" class="btn btn-danger" href="{% url "ui_locations" %}">Abbrechen</a>
+            <a role="button" class="btn btn-danger" href="{% url "ui_categories" %}">Abbrechen</a>
         </form>
     </div>
 </div>

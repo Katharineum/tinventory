@@ -2,7 +2,9 @@
 
 <nav aria-label="breadcrumb" class="m-1">
     <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="{% url "ui_index" %}">Startseite</a></li>
+        <li class="breadcrumb-item">
+            <a href="{% url "ui_index" %}">Startseite</a>
+        </li>
         <li class="breadcrumb-item active" aria-current="page">Kategorien</li>
     </ol>
 </nav>
@@ -34,9 +36,12 @@
                     <td>{{ category.name }}</td>
                     <td>
                         <div class="btn-group" role="group" aria-label="Aktionen">
-                            <a role="button" class="btn btn-primary" href="{% url "ui_categories_edit" category.id %}">Bearbeiten</a>
+                            <a role="button" class="btn btn-primary" href="{% url "ui_categories_edit" category.id %}">
+                                Bearbeiten
+                            </a>
                             <a role="button" class="btn btn-danger delete-button"
-                               href="{% url "ui_category_delete" category.id %}">Löschen</a>
+                               href="{% url "ui_category_delete" category.id %}">Löschen
+                            </a>
                         </div>
                     </td>
                 </tr>
