@@ -1,0 +1,12 @@
+wheel
+django
+requests
+django-bootstrap-form
+django-cors-headers
+django-oauth-toolkit
+django-widget-tweaks
+djangorestframework
+fpdf
+oauthlib
+Pillow
+treepoem

@@ -19,10 +19,10 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'pco787$$17)mfgb3j&9uw!&!u0_n#w&@0rza5d#x7yce_f1vzs'
+SECRET_KEY = os.getenv("TINVENTORY_SECRET_KEY", 'pco787$$17)mfgb3j&9uw!&!u0_n#w&@0rza5d#x7yce_f1vzs')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv("TINVENTORY_DEBUG", True)
 
 ALLOWED_HOSTS = []
 
@@ -86,10 +86,25 @@ WSGI_APPLICATION = 'tinventory.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': os.getenv('TINVENTORY_DB_ENGINE', 'django.db.backends.sqlite3'),
+        'NAME': os.getenv("TINVENTORY_DB_NAME", os.path.join(BASE_DIR, 'db.sqlite3')),
     }
 }
+
+e = os.getenv('TINVENTORY_DB_USER')
+if e:
+    DATABASES['default']['USER'] = e
+e = os.getenv('TINVENTORY_DB_PASSWORD')
+if e:
+    DATABASES['default']['PASSWORD'] = e
+e = os.getenv('TINVENTORY_DB_HOST')
+if e:
+    DATABASES['default']['HOST'] = e
+e = os.getenv('TINVENTORY_DB_PORT')
+if e:
+    DATABASES['default']['PORT'] = e
+
+print(DATABASES)
 
 # Password validation
 # https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators
@@ -129,6 +144,7 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
 ]
+STATIC_ROOT = os.path.join(BASE_DIR, "staticcollect")
 
 REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,

@@ -1,0 +1,53 @@
+version: "3.7"
+services:
+  maria:
+    image: mariadb:10
+    volumes:
+      - /srv/tinventory/mysql:/var/lib/mysql
+    environment:
+      - MYSQL_DATABASE=tinventory
+      - MYSQL_USER=tinventory
+      - MYSQL_PASSWORD=zbakhKStr543mT_OB/r}actiTSNHOT
+      - MYSQL_RANDOM_ROOT_PASSWORD=yes
+    restart: always
+  tinventory:
+    build: .
+    volumes:
+      - /srv/tinventory/static:/var/www/static
+      - /srv/tinventory/media:/var/www/media
+    environment:
+      - TINVENTORY_SECRET_KEY=tirnotaeronuadtirnDTNTORSOEDR78745289756Nrtiansetirnae
+      - TINVENTORY_DEBUG_MODE=True
+      - TINVENTORY_DB_ENGINE=django.db.backends.mysql
+      - TINVENTORY_DB_NAME=tinventory
+      - TINVENTORY_DB_USER=tinventory
+      - TINVENTORY_DB_PASSWORD=zbakhKStr543mT_OB/r}actiTSNHOT
+      - TINVENTORY_DB_HOST=maria
+      - TINVENTORY_DB_PORT=3306
+    #      - TINVENTORY_SUPERUSER=admin
+    #      - TINVENTORY_SUPERUSER_MAIL=admin@admin.com
+    #      - TINVENTORY_SUPERUSER_PASSWORD=1234Geheim
+    depends_on:
+      - maria
+    restart: always
+  web:
+    image: nginx:alpine
+    volumes:
+      - ./docker-setup/nginx-app.conf:/etc/nginx/conf.d/default.conf:ro
+      - /srv/tinventory/static:/var/www/static:ro
+      - /srv/tinventory/media:/var/www/media:ro
+    depends_on:
+      - tinventory
+    ports:
+      - "127.0.0.1:8504:80"
+    restart: always
+
+  portainer:
+    image: portainer/portainer
+    command: -H unix:///var/run/docker.sock
+    restart: always
+    ports:
+      - 9000:9000
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /srv/portainer/data:/data
