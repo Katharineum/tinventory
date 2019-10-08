@@ -35,7 +35,7 @@
             <tbody>
             {% for item in items %}
                 <tr>
-                    <th scope="row">{{ item.id }} (<i class="fas fa-barcode"></i> {{ item.barcode }})</th>
+                    <th scope="row">{{ item.id }} (<code>{{ item.barcode }}</code>)</th>
                     {#                    TODO Verlinkung zur Kategorie #}
                     <td>
                         <a href="#">{{ item.category }}</a>

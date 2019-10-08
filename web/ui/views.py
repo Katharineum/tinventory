@@ -250,7 +250,7 @@ def item_delete(request, id):
 @login_required
 def item_barcode(request, id):
     item = get_object_or_404(Item, pk=id)
-    filename = barcode_pdf(item.barcode)
+    filename = barcode_pdf(item)
     f = open(filename, "rb")
     return FileResponse(f, content_type="application/pdf")
 

@@ -59,7 +59,7 @@
                         wurde erfolgreich eingecheckt.
                     </p>
                     <h6>Aktionen für den Check-Out-Vorgang #{{ check.check_out.id }}</h6>
-                    <a class="btn btn-primary" href="{% url "ui_check_in_confirmation" check.id %}">
+                    <a class="btn btn-primary" href="{% url "ui_check_in_confirmation" check.check_out.id %}">
                         <i class="fas fa-file-pdf mr-2"></i>
                         Rückgabebestätigung für bereits eingecheckte Objekte drucken
                     </a>

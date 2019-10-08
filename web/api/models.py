@@ -68,7 +68,7 @@ class Item(models.Model):
     # last_time_seen_by = models.ForeignKey
 
     def gen_barcode(self):
-        return "OBJ{num:08d}".format(num=Item.get_next_item_id())
+        return "{num:05d}".format(num=Item.get_next_item_id())
 
     @staticmethod
     def get_next_item_id():

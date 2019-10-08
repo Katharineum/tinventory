@@ -1,16 +1,23 @@
 import os
 
 from django.utils import formats
-from fpdf import FPDF
+import fpdf
 from treepoem import generate_barcode
+
+from api.models import Item
 from tinventory.settings import BASE_DIR
 
 TEMP_DIR = "tmp"
 FONTS_DIR = "fonts"
 
+fpdf.FPDF_FONT_DIR = os.path.join(BASE_DIR, FONTS_DIR)
+fpdf.set_global("FPDF_FONT_DIR", os.path.join(BASE_DIR, FONTS_DIR))
+print(fpdf.FPDF_FONT_DIR)
+FPDF_FONT_DIR = os.path.join(BASE_DIR, FONTS_DIR)
+
 
 def barcode(code):
-    filename = os.path.join(TEMP_DIR, "barcode.png")
+    filename = os.path.join(BASE_DIR, TEMP_DIR, "barcode.png")
     i = generate_barcode(
         barcode_type="code128",
         data=code
@@ -20,15 +27,22 @@ def barcode(code):
     return filename
 
 
-class Report(FPDF):
+class Report(fpdf.FPDF):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        self.add_font("Roboto Condensed", fname=os.path.join(FONTS_DIR, "RobotoCondensed-Regular.ttf"), uni=True)
-        self.add_font("Roboto Condensed Bold", fname=os.path.join(FONTS_DIR, "RobotoCondensed-Bold.ttf"), uni=True)
-        self.add_font("Roboto Condensed Light", fname=os.path.join(FONTS_DIR, "RobotoCondensed-Light.ttf"), uni=True)
-        self.add_font("mono", fname=os.path.join(FONTS_DIR, "RobotoMono-Regular.ttf"), uni=True)
-        self.add_font("line", fname=os.path.join(FONTS_DIR, "Montserrat-Regular.ttf"), uni=True)
+        self.add_font("Roboto Condensed", fname="RobotoCondensed-Regular.ttf",
+                      uni=True)
+        self.add_font("Roboto Condensed Bold", fname="RobotoCondensed-Bold.ttf",
+                      uni=True)
+        self.add_font("Roboto Condensed Light", fname="RobotoCondensed-Light.ttf",
+                      uni=True)
+        self.add_font("mono", fname="RobotoMono-Regular.ttf", uni=True)
+        self.add_font("line", fname="Montserrat-Regular.ttf", uni=True)
+        self.add_font("code39", fname="code39.ttf", uni=True)
+        self.add_font("code39-s", fname="code39_S.ttf", uni=True)
+
+        print("RobotoMono-Regular.ttf")
 
     def heading(self):
         self.normal_font()
@@ -44,6 +58,12 @@ class Report(FPDF):
     def small_font(self):
         self.set_font('Roboto Condensed Light', size=9)
 
+    def barcode_font(self, size=23):
+        self.set_font("code39", size=size)
+
+    def barcode_font_small(self, size=15):
+        self.set_font("code39-s", size=size)
+
     def normal_color(self):
         self.set_text_color(0, 0, 0)
 
@@ -51,24 +71,24 @@ class Report(FPDF):
         self.set_text_color(66, 66, 66)
 
     def save_in_tmp(self, filename):
-        filename = os.path.join(TEMP_DIR, filename)
+        filename = os.path.join(BASE_DIR, TEMP_DIR, filename)
         self.output(filename, 'F')
         return filename
 
 
-def barcode_pdf(code):
-    barcode_filename = barcode(code)
+def barcode_pdf(item: Item):
     pdf = Report(orientation='P', unit='mm', format=(54, 17))
     pdf.add_page()
     pdf.set_font('Roboto Condensed', size=6)
     pdf.text(3, 3, 'Eigentum der Technik-AG, Katharineum zu Lübeck')
-    pdf.image(barcode_filename, 3, 3.5, 48, 14)
+    pdf.barcode_font()
+    pdf.text(3, 12, txt="*{}*".format(item.barcode))
+    pdf.set_font('Roboto Condensed', size=6)
     pdf.set_fill_color(255, 255, 255)
     pdf.rect(0, 13, 54, 4, style="F")
-    pdf.text(3, 15, "ID: {}".format(code))
-    filename = os.path.join(TEMP_DIR, "{}.pdf".format(code))
-    pdf.output(filename, 'F')
-    return filename
+    pdf.text(3, 15, "ID: {}".format(item.id))
+
+    return pdf.save_in_tmp("barcode-{}.pdf".format(item.id))
 
 
 def loan_form_pdf(process):
@@ -121,9 +141,18 @@ def loan_form_pdf(process):
         pdf.cell(w=0, txt="folgendes ausgeliehen:", ln=1)
         pdf.cell(w=0, h=8, ln=1)
 
-        pdf.mono_font()
         for check in process.checks.all():
-            pdf.cell(w=0, h=8, txt="- {} (ID: {})".format(check.item.name, check.item.id), ln=1)
+
+            if check.item.preset:
+                txt = "- {} ({}, #{})".format(check.item.name, check.item.preset.name, check.item.id)
+            else:
+                txt = "- {} (#{})".format(check.item.name, check.item.id)
+            pdf.mono_font()
+            pdf.cell(w=0, h=8, txt=txt, ln=1)
+
+            # pdf.barcode_font_small(size=15)
+            # pdf.cell(w=10, h=8, txt="*{}*".format(check.item.barcode), ln=1)
+
 
         pdf.cell(w=0, h=20, ln=1)
 
@@ -136,13 +165,14 @@ def loan_form_pdf(process):
         pdf.small_font()
         pdf.cell(w=50, txt="Unterschrift des Ausleihenden")
         pdf.cell(w=65)
-        pdf.cell(w=50, txt="Unterschrift des Technik-AG-Mitglieds", ln=1)
+        pdf.cell(w=30, txt="Unterschrift des Technik-AG-Mitglieds", ln=1)
 
         pdf.text(x=10, y=285,
                  txt="Ausleihvorgang {}–{} #{}".format(process.borrowing_person.name, process.checked_out_at,
                                                        process.id))
-        filename = barcode(str(process.id))
-        pdf.image(filename, x=150, y=277, h=10, w=50)
+
+        pdf.barcode_font(30)
+        pdf.text(x=150, y=287, txt="*{}*".format(process.id))
 
     return pdf.save_in_tmp("loan-form-{}.pdf".format(process.id))
 
@@ -234,7 +264,8 @@ def check_in_confirmation_pdf(process):
         pdf.text(x=10, y=285,
                  txt="Ausleihvorgang {}–{} #{}".format(process.borrowing_person.name, process.checked_out_at,
                                                        process.id))
-        filename = barcode(str(process.id))
-        pdf.image(filename, x=150, y=277, h=10, w=50)
+
+        pdf.barcode_font(30)
+        pdf.text(x=150, y=287, txt="*{}*".format(process.id))
 
     return pdf.save_in_tmp("check-in-{}.pdf".format(process.id))
