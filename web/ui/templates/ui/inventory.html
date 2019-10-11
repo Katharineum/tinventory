@@ -48,7 +48,7 @@
         <div class="card-body">
             <h5>Barcode</h5>
             <p class="alert alert-info">
-                <i class="fa fa-info"></i>
+                <i class="fa fa-info mr-2"></i>
                 An dieser Stelle kann ein bereits bestehender, individueller Barcode eingescannt werden.
             </p>
             <div class="form-group ">
@@ -61,7 +61,7 @@
                     Barcode
                 </label>
                 {{ form.barcode|add_class:"form-control"|attr:"placeholder:Barcode"|attr:"autofocus:autofocus" }}
-                <p class="text-muted">Feld freilassen, um Barcode automatisch zu generieren</p>
+                <small class="text-muted">Feld freilassen, um Barcode automatisch zu generieren</small>
             </div>
         </div>
     </div>
@@ -113,19 +113,19 @@
                         <span class="text-muted">Die Angabe eines Presets ist optional.</span>
                     </p>
                 </div>
-                <div class="col-sm d-flex flex-row-reverse align-items-start">
-                    <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                        <label class="btn btn-success active">
-                            <input type="radio" name="use-preset" id="preset_yes" autocomplete="off" checked
-                                   value="yes">
-                            Preset verwenden
-                        </label>
-                        <label class="btn btn-danger">
-                            <input type="radio" name="use-preset" id="preset_no" autocomplete="off" value="no">
-                            Kein Preset verwenden
-                        </label>
-                    </div>
-                </div>
+                {#                <div class="col-sm d-flex flex-row-reverse align-items-start">#}
+                {#                    <div class="btn-group btn-group-toggle" data-toggle="buttons">#}
+                {#                        <label class="btn btn-success active">#}
+                {#                            <input type="radio" name="use-preset" id="preset_yes" autocomplete="off" checked#}
+                {#                                   value="yes">#}
+                {#                            Preset verwenden#}
+                {#                        </label>#}
+                {#                        <label class="btn btn-danger">#}
+                {#                            <input type="radio" name="use-preset" id="preset_no" autocomplete="off" value="no">#}
+                {#                            Kein Preset verwenden#}
+                {#                        </label>#}
+                {#                    </div>#}
+                {#                </div>#}
             </div>
 
 
@@ -256,23 +256,23 @@
             required(selCategoryB);
         });
 
-        {% comment %}  const selPresetA = $("#id_preset_select");
-          const selPresetB = $("#id_preset_new_name");
-          const selPresetC = $("#id_preset_new_manufacturer");
-          selPresetA.change(function () {
-              selPresetB.val("");
-              selPresetC.val("");
-              noRequired(selPresetB);
-              required(selPresetA);
-          });
-          selPresetB.on("input", function () {
-              selPresetC.trigger("input");
-          });
-          selPresetC.on("input", function () {
-              selPresetA.val("");
-              noRequired(selPresetA);
-              required(selPresetB);
-          });{% endcomment %}
+        const selPresetA = $("#id_preset_select");
+        const selPresetB = $("#id_preset_new_name");
+        const selPresetC = $("#id_preset_new_manufacturer");
+        selPresetA.change(function () {
+            selPresetB.val("");
+            selPresetC.val("");
+            {#noRequired(selPresetB);#}
+            {#required(selPresetA);#}
+        });
+        selPresetB.on("input", function () {
+            selPresetC.trigger("input");
+        });
+        selPresetC.on("input", function () {
+            selPresetA.val("");
+            {#noRequired(selPresetA);#}
+            {#required(selPresetB);#}
+        });
     });
 </script>
 {% include "footer.html" %}

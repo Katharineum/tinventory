@@ -65,10 +65,13 @@ class Item(models.Model):
                                  related_name="items")
     last_time_seen_at = models.DateTimeField(auto_now=True, verbose_name="Letztes Mal gesehen am")
 
-    # last_time_seen_by = models.ForeignKey
 
     def gen_barcode(self):
-        return "{num:05d}".format(num=Item.get_next_item_id())
+        if self.id:
+            id = self.id
+        else:
+            id = Item.get_next_item_id()
+        return "{num:05d}".format(num=id)
 
     @staticmethod
     def get_next_item_id():

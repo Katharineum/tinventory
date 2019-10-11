@@ -31,7 +31,7 @@ class ItemForm(ModelForm):
 
 class InventoryForm(Form):
     barcode = forms.CharField(label="Barcode", required=False)
-    category_select = forms.ModelChoiceField(Category.objects.all(), label="Kategorie auswählen", required=True)
+    category_select = forms.ModelChoiceField(Category.objects.all(), label="Kategorie auswählen", required=False)
     category_new = forms.CharField(label="neue Kategorie erstellen", required=False)
     preset_select = forms.ModelChoiceField(Preset.objects.all(), label="Preset auswählen", required=False)
     preset_new_name = forms.CharField(label="Name des Preset", required=False)
@@ -42,8 +42,9 @@ class InventoryForm(Form):
 
     def clean(self):
         cleaned_data = super().clean()
+        print(cleaned_data)
 
-        if cleaned_data["category_select"] is None and cleaned_data["category_new"] == "":
+        if cleaned_data.get("category_select", None) is None and cleaned_data["category_new"] == "":
             return ValidationError("Es wird eine Kategorie benötigt.")
 
         # if cleaned_data["preset_select"] is None and cleaned_data["preset_new_name"] == "":
@@ -51,17 +52,17 @@ class InventoryForm(Form):
 
     def save(self):
         data = self.cleaned_data
-        if data["category_select"] is not None:
+        if data.get("category_select", None) is not None:
             category = data["category_select"]
-            print(category)
         else:
-            category = Category.objects.create(name=data["category_name"])
+            category = Category.objects.create(name=data["category_new"])
 
-        if data["preset_select"] is not None:
+        if data.get("preset_select", None) is not None:
             preset = data["preset_select"]
 
         elif data["preset_new_name"] != "":
-            preset = Preset.objects.create(name=data["preset_new_name"], manufacturer=data["preset_new_manufacturer"])
+            preset = Preset.objects.create(name=data["preset_new_name"], manufacturer=data["preset_new_manufacturer"],
+                                           category=category)
         else:
             preset = None
 

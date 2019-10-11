@@ -4,13 +4,13 @@ from rest_framework import serializers
 from api.models import *
 
 
-class UserSerializer(serializers.ModelSerializer):
+class UserSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = User
         fields = ("id", 'username', "first_name", "last_name")
 
 
-class PersonSerializer(serializers.ModelSerializer):
+class PersonSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Person
         fields = ("id", "name")
@@ -22,20 +22,19 @@ class CategorySerializer(serializers.HyperlinkedModelSerializer):
         fields = ("id", "name",)
 
 
-class CheckProcessSerializer(serializers.ModelSerializer):
+class CheckProcessSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = CheckOutProcess
-        # fields = ("id", "borrowing_person", "lending_user")
         fields = "__all__"
 
 
-class PresetSerializer(serializers.ModelSerializer):
+class PresetSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Preset
         fields = ("id", "name", "manufacturer", "description")
 
 
-class ItemSerializer(serializers.ModelSerializer):
+class ItemSerializer(serializers.HyperlinkedModelSerializer):
     preset = PresetSerializer(many=False, read_only=True)
 
     class Meta:
@@ -43,7 +42,7 @@ class ItemSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class CheckSerializer(serializers.ModelSerializer):
+class CheckSerializer(serializers.HyperlinkedModelSerializer):
     item = ItemSerializer(many=False, read_only=True)
 
     class Meta:

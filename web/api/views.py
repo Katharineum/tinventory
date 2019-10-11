@@ -40,8 +40,7 @@ class CheckProcessViewSet(viewsets.ModelViewSet):
         msg_type = "success"
 
         process = self.get_object()
-        print(process)
-        print(request.data)
+
         if not request.data.get("scan", False):
             msg = "Fehlendes Argument."
             msg_type = "bad"
@@ -93,4 +92,3 @@ router.register(r'persons/technicians', TechniciansList)
 router.register(r'persons/normal', NormalPersonsList)
 router.register(r'check_processes', CheckProcessViewSet)
 router.register(r'checks', CheckViewSet)
-# router.register(r'groups', views.GroupViewSet)
