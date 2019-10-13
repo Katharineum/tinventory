@@ -1,4 +1,9 @@
 FROM python:3.7-stretch
+LABEL maintainer="tinventory@jonathanweth.de"
+LABEL org.label-schema.name="katharineum/tinventory"
+LABEL org.label-schema.description="Inventory toolkit in order not to lose technology stuff anymore"
+LABEL org.label-schema.vcs-url="https://github.com/Katharineum/tinventory"
+
 ENV LANG C.UTF-8
 ENV PYTHONUNBUFFERED 1
 RUN apt-get update && \

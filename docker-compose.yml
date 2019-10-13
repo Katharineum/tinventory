@@ -13,7 +13,7 @@ services:
   tinventory:
     build: .
     volumes:
-      - /srv/tinventory/static:/var/www/static
+      - /srv/tinventory/static:/var/www/staticcollect
       - /srv/tinventory/media:/var/www/media
     environment:
       - TINVENTORY_SECRET_KEY=tirnotaeronuadtirnDTNTORSOEDR78745289756Nrtiansetirnae
