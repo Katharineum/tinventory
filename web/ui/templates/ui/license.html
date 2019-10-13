@@ -1,0 +1,67 @@
+{% include "header.html" %}
+
+<nav aria-label="breadcrumb" class="m-1">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a href="{% url "ui_index" %}">Startseite</a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">Lizenz</li>
+    </ol>
+</nav>
+
+<div class="card mb-2">
+    <div class="card-body">
+        <h5>Copyright</h5>
+        <p>Copyright &copy; 2019 Jonathan Weth, Lübeck.</p>
+
+        <p>
+            GitHub:
+            <a href="https://github.com/Katharineum/tinventory">https://github.com/Katharineum/tinventory</a>
+        </p>
+        <p>
+            Kontakt:
+            <a href="mailto:tinventory@jonathanweth.de">tinventory@jonathanweth.de</a>
+        </p>
+    </div>
+</div>
+
+<div class="card mb-2">
+    <div class="card-body">
+        <h5>Lizenz</h5>
+        Dieses Programm ist Freie Software: Sie können es unter den Bedingungen
+        der GNU General Public License, wie von der Free Software Foundation,
+        Version 3 der Lizenz, weiter verteilen und/oder modifizieren.
+
+        Dieses Programm wird in der Hoffnung bereitgestellt, dass es nützlich sein wird, jedoch
+        OHNE JEDE GEWÄHR,; sogar ohne die implizite
+        Gewähr der MARKTFÄHIGKEIT oder EIGNUNG FÜR EINEN BESTIMMTEN ZWECK.
+        Siehe die GNU General Public License für weitere Einzelheiten.
+
+        Im folgenden finden Sie eine Kopie der GNU General Public License Version 3. Weitere Informationen sowie die
+        Lizenz finden Sie auch unter
+        <a href="https://www.gnu.org/licenses/">https://www.gnu.org/licenses/</a>
+        .
+    </div>
+</div>
+<div class="card">
+    <div class="card-body">
+        <h5>Verwendete Open Source-Komponenten</h5>
+        Folgende OpenSource-Komponenten wurden in TInventory benutzt:
+
+        <ul class="list-group mt-2 mb-2">
+            {% for component in components %}
+                <li class="list-group-item">
+                    <h6>{{ component.0 }}</h6>
+                    <a href="{{ component.1 }}">{{ component.1 }}</a>
+                    · Lizensiert unter der
+                    <a href="{{ component.3 }}">{{ component.2 }}</a>
+                </li>
+            {% endfor %}
+        </ul>
+
+        Die einzelnen OpenSource-Komponenten benutzen teilweise Zusatzbibliotheken, die hier leider nicht näher
+        aufgeführt werden können.
+    </div>
+</div>
+
+{% include "footer.html" %}

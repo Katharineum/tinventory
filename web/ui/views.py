@@ -1,3 +1,19 @@
+#  Copyright (c) 2019 Jonathan Weth, Lübeck.
+#
+#  This file is part of TInventory.
+#
+#  TInventory is free software: you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License as published by
+#  the Free Software Foundation, either version 3 of the License.
+#
+#  TInventory is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU General Public License for more details.
+#
+#  You should have received a copy of the GNU General Public License
+#  along with TInventory.  If not, see <http://www.gnu.org/licenses/>.
+
 from django.contrib.auth.decorators import login_required, permission_required
 from django.http import FileResponse
 from django.shortcuts import render, get_object_or_404, redirect
@@ -520,3 +536,44 @@ def check_in_confirmation(request, id):
     filename = check_in_confirmation_pdf(process)
     f = open(filename, "rb")
     return FileResponse(f, content_type="application/pdf")
+
+
+def license(request):
+    LICENSE_APACHE_2 = "Apache 2.0 License"
+    LICENSE_BSD = "2-Clause BSD License"
+    LICENSE_BSD_3 = "3-Clause BSD License"
+    LICENSE_MIT = "MIT License"
+
+    components = [
+        ("Docker (u.a. Engine, CLI, docker-compose)", "https://github.com/docker", LICENSE_APACHE_2,
+         "https://github.com/docker/docker/blob/master/LICENSE"),
+        ("Django", "https://www.djangoproject.com/", "Django BSD License",
+         "https://github.com/django/django/blob/master/LICENSE"),
+        ("Python 3", "https://www.python.org/", "PSF LICENSE AGREEMENT FOR PYTHON",
+         "https://docs.python.org/3/license.html"),
+        (
+            "Bootstrap", "https://getbootstrap.com/", LICENSE_MIT,
+            "https://github.com/twbs/bootstrap/blob/master/LICENSE"),
+        ("jQuery", "https://jquery.com/", LICENSE_MIT, "https://github.com/jquery/jquery/blob/master/LICENSE.txt"),
+        ("FontAwesome Icon Font", "https://github.com/FortAwesome/Font-Awesome", "SIL OFL 1.1 License",
+         "https://scripts.sil.org/OFL"),
+        ("DataTables", "https://datatables.net", LICENSE_MIT, "https://datatables.net/license/mit"),
+        ("pip", "https://pypi.org/project/pip/", LICENSE_MIT, "https://github.com/pypa/pip/blob/master/LICENSE.txt"),
+        ("requests", "https://requests.kennethreitz.org/", LICENSE_APACHE_2,
+         "https://github.com/psf/requests/blob/master/LICENSE"),
+        ("django-bootstrap-form", "https://github.com/tzangms/django-bootstrap-form", LICENSE_BSD_3,
+         "https://github.com/tzangms/django-bootstrap-form/blob/master/LICENSE"),
+        ("django-cors-headers", "https://github.com/adamchainz/django-cors-headers", LICENSE_MIT,
+         "https://github.com/adamchainz/django-cors-headers/blob/master/LICENSE"),
+        ("django-oauth-toolkit", "https://github.com/jazzband/django-oauth-toolkit", LICENSE_BSD,
+         "https://github.com/jazzband/django-oauth-toolkit/blob/master/LICENSE"),
+        ("django-widget-tweaks", "https://github.com/jazzband/django-widget-tweaks", LICENSE_MIT,
+         "https://github.com/jazzband/django-widget-tweaks/blob/master/LICENSE"),
+        ("djangorestframework", "https://www.django-rest-framework.org/", LICENSE_BSD_3,
+         "https://www.django-rest-framework.org/#license"),
+        ("fpdf (PyFPDF)", "https://github.com/reingart/pyfpdf", "GNU Lesser General Public License v3.0",
+         "https://github.com/reingart/pyfpdf/blob/master/LICENSE"),
+
+    ]
+    components.sort(key=lambda elem: elem[0].lower())
+    return render(request, "ui/license.html", context={"components": components})

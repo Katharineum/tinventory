@@ -1,9 +1,26 @@
+#  Copyright (c) 2019 Jonathan Weth, Lübeck.
+#
+#  This file is part of TInventory.
+#
+#  TInventory is free software: you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License as published by
+#  the Free Software Foundation, either version 3 of the License.
+#
+#  TInventory is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU General Public License for more details.
+#
+#  You should have received a copy of the GNU General Public License
+#  along with TInventory.  If not, see <http://www.gnu.org/licenses/>.
+
 from django.urls import path, include
 
 from ui import views
 
 urlpatterns = [
     path("", views.index, name="ui_index"),
+    path("license/", views.license, name="ui_license"),
     path("categories/", views.categories, name="ui_categories"),
     path("categories/<int:id>/edit", views.category_edit, name="ui_categories_edit"),
     path("categories/<int:id>/delete", views.category_delete, name="ui_category_delete"),
