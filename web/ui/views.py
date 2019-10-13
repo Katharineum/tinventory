@@ -177,7 +177,7 @@ def preset_edit(request, id):
     if request.method == 'GET':
         form = PresetForm(instance=preset)
     else:
-        form = PresetForm(request.POST, instance=preset)
+        form = PresetForm(request.POST, request.FILES, instance=preset)
         if form.is_valid():
             form.save()
             request.session["msg"] = "Das Preset wurde erfolgreich aktualisiert."

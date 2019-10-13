@@ -81,7 +81,6 @@ class Item(models.Model):
                                  related_name="items")
     last_time_seen_at = models.DateTimeField(auto_now=True, verbose_name="Letztes Mal gesehen am")
 
-
     def gen_barcode(self):
         if self.id:
             id = self.id
@@ -138,6 +137,9 @@ class Person(models.Model):
         print(checks)
         return checks
 
+    def __str__(self):
+        return self.name
+
     class Meta:
         verbose_name = "Person"
         verbose_name_plural = "Personen"
@@ -161,6 +163,9 @@ class CheckOutProcess(models.Model):
         else:
             return True
 
+    def __str__(self):
+        return "{} ({})".format(self.borrowing_person, self.checked_out_at)
+
     class Meta:
         verbose_name = "Check-Out-Vorgang"
         verbose_name_plural = "Check-Out-Vorgänge"
@@ -175,6 +180,9 @@ class Check(models.Model):
     checked_in_at = models.DateTimeField(verbose_name="Check-In-Zeitpunkt", blank=True, null=True)
     checked_in_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name="check_ins",
                                       verbose_name="Check-In durchgeführt von", blank=True, null=True)
+
+    def __str__(self):
+        return "{} [{}]".format(self.item, self.check_out)
 
     class Meta:
         verbose_name = "Check"
