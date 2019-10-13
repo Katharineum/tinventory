@@ -24,12 +24,16 @@
         <div class="card mb-2">
             <div class="card-body">
                 <div class="btn-group" role="group" aria-label="Aktionen">
-                    <a role="button" class="btn btn-primary"
-                       href="{% url "ui_persons_edit" person.id %}">Bearbeiten
-                    </a>
-                    <a role="button" class="btn btn-danger delete-button"
-                       href="{% url "ui_person_delete" person.id %}">Löschen
-                    </a>
+                    {% if perms.api.change_person %}
+                        <a role="button" class="btn btn-primary"
+                           href="{% url "ui_persons_edit" person.id %}">Bearbeiten
+                        </a>
+                    {% endif %}
+                    {% if perms.api.delete_person %}
+                        <a role="button" class="btn btn-danger delete-button"
+                           href="{% url "ui_person_delete" person.id %}">Löschen
+                        </a>
+                    {% endif %}
                 </div>
             </div>
         </div>

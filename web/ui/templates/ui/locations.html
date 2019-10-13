@@ -13,11 +13,13 @@
 
 {% include "parts/msg.html" %}
 
-<div class="card mb-2">
-    <div class="card-body">
-        <a role="button" class="btn btn-success" href="{% url "ui_location_new" %}">Neuen Ort erstellen</a>
+{% if perms.api.add_location %}
+    <div class="card mb-2">
+        <div class="card-body">
+            <a role="button" class="btn btn-success" href="{% url "ui_location_new" %}">Neuen Ort erstellen</a>
+        </div>
     </div>
-</div>
+{% endif %}
 
 <div class="card">
     <div class="card-body">
@@ -38,12 +40,17 @@
                     <td>{{ location.number }}</td>
                     <td>
                         <div class="btn-group" role="group" aria-label="Aktionen">
-                            <a role="button" class="btn btn-primary" href="{% url "ui_locations_edit" location.id %}">
-                                Bearbeiten
-                            </a>
-                            <a role="button" class="btn btn-danger delete-button"
-                               href="{% url "ui_location_delete" location.id %}">Löschen
-                            </a>
+                            {% if perms.api.change_location %}
+                                <a role="button" class="btn btn-primary"
+                                   href="{% url "ui_locations_edit" location.id %}">
+                                    Bearbeiten
+                                </a>
+                            {% endif %}
+                            {% if perms.api.delete_location %}
+                                <a role="button" class="btn btn-danger delete-button"
+                                   href="{% url "ui_location_delete" location.id %}">Löschen
+                                </a>
+                            {% endif %}
                         </div>
                     </td>
                 </tr>

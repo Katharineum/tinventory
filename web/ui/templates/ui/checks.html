@@ -15,8 +15,12 @@
 
 <div class="card mb-2">
     <div class="card-body">
-        <a role="button" class="btn btn-primary" href="{% url "ui_check_out" %}">Check-Out</a>
-        <a role="button" class="btn btn-primary" href="{% url "ui_check_in" %}">Check-In</a>
+        {% if perms.api.check_out %}
+            <a role="button" class="btn btn-primary" href="{% url "ui_check_out" %}">Check-Out</a>
+        {% endif %}
+        {% if perms.api.check_in %}
+            <a role="button" class="btn btn-primary" href="{% url "ui_check_in" %}">Check-In</a>
+        {% endif %}
     </div>
 </div>
 

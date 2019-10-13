@@ -148,6 +148,7 @@ class CheckOutProcess(models.Model):
     class Meta:
         verbose_name = "Check-Out-Vorgang"
         verbose_name_plural = "Check-Out-Vorgänge"
+        permissions = [("check_out", "Can check out things"), ("check_in", "Can check in things")]
 
 
 class Check(models.Model):

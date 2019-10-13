@@ -1,4 +1,4 @@
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from django.http import FileResponse
 from django.shortcuts import render, get_object_or_404, redirect
 
@@ -16,6 +16,7 @@ def index(request):
 
 
 @login_required
+@permission_required("api.view_category")
 def categories(request):
     categories = Category.objects.all()
     context = {
@@ -29,6 +30,7 @@ def categories(request):
 
 
 @login_required
+@permission_required("api.change_category")
 def category_edit(request, id):
     category = get_object_or_404(Category, pk=id)
 
@@ -47,6 +49,7 @@ def category_edit(request, id):
 
 
 @login_required
+@permission_required("api.add_category")
 def category_new(request):
     if request.method == 'GET':
         form = CategoryForm()
@@ -63,6 +66,7 @@ def category_new(request):
 
 
 @login_required
+@permission_required("api.delete_category")
 def category_delete(request, id):
     category = get_object_or_404(Category, pk=id)
     category.delete()
@@ -71,6 +75,7 @@ def category_delete(request, id):
 
 
 @login_required
+@permission_required("api.view_location")
 def locations(request):
     locations = Location.objects.all()
     context = {
@@ -84,6 +89,7 @@ def locations(request):
 
 
 @login_required
+@permission_required("api.change_location")
 def location_edit(request, id):
     location = get_object_or_404(Location, pk=id)
 
@@ -93,9 +99,6 @@ def location_edit(request, id):
         form = LocationForm(request.POST, instance=location)
         if form.is_valid():
             form.save()
-            # name = form.cleaned_data['name']
-            # number = form.cleaned_data["number"]
-            # Location.objects.filter(id=id).update(name=name, number=number)
             request.session["msg"] = "Der Ort wurde erfolgreich aktualisiert."
             return redirect('ui_locations')
 
@@ -103,15 +106,13 @@ def location_edit(request, id):
 
 
 @login_required
+@permission_required("api.add_location")
 def location_new(request):
     if request.method == 'GET':
         form = LocationForm()
     else:
         form = LocationForm(request.POST)
         if form.is_valid():
-            # name = form.cleaned_data['name']
-            # number = form.cleaned_data["number"]
-            # Location.objects.create(name=name, number=number)
             form.save()
             request.session["msg"] = "Der Ort wurde erfolgreich erstellt."
             return redirect('ui_locations')
@@ -120,6 +121,7 @@ def location_new(request):
 
 
 @login_required
+@permission_required("api.delete_location")
 def location_delete(request, id):
     location = get_object_or_404(Location, pk=id)
     location.delete()
@@ -128,6 +130,7 @@ def location_delete(request, id):
 
 
 @login_required
+@permission_required("api.view_preset")
 def presets(request):
     presets = Preset.objects.all()
     context = {
@@ -141,6 +144,7 @@ def presets(request):
 
 
 @login_required
+@permission_required("api.view_preset")
 def preset_view(request, id):
     preset = get_object_or_404(Preset, pk=id)
     context = {
@@ -150,6 +154,7 @@ def preset_view(request, id):
 
 
 @login_required
+@permission_required("api.change_preset")
 def preset_edit(request, id):
     preset = get_object_or_404(Preset, pk=id)
 
@@ -166,6 +171,7 @@ def preset_edit(request, id):
 
 
 @login_required
+@permission_required("api.add_preset")
 def preset_new(request):
     if request.method == 'GET':
         form = PresetForm()
@@ -180,6 +186,7 @@ def preset_new(request):
 
 
 @login_required
+@permission_required("api.delete_preset")
 def preset_delete(request, id):
     preset = get_object_or_404(Preset, pk=id)
     preset.delete()
@@ -188,6 +195,7 @@ def preset_delete(request, id):
 
 
 @login_required
+@permission_required("api.view_item")
 def items(request):
     items = Item.objects.all()
     context = {
@@ -201,6 +209,7 @@ def items(request):
 
 
 @login_required
+@permission_required("api.view_item")
 def item_view(request, id):
     item = get_object_or_404(Item, pk=id)
     context = {
@@ -210,6 +219,7 @@ def item_view(request, id):
 
 
 @login_required
+@permission_required("api.change_item")
 def item_edit(request, id):
     item = get_object_or_404(Item, pk=id)
 
@@ -226,6 +236,7 @@ def item_edit(request, id):
 
 
 @login_required
+@permission_required("api.add_item")
 def item_new(request):
     if request.method == 'GET':
         form = ItemForm()
@@ -240,6 +251,7 @@ def item_new(request):
 
 
 @login_required
+@permission_required("api.delete_item")
 def item_delete(request, id):
     item = get_object_or_404(Item, pk=id)
     item.delete()
@@ -248,6 +260,7 @@ def item_delete(request, id):
 
 
 @login_required
+@permission_required("api.view_item")
 def item_barcode(request, id):
     item = get_object_or_404(Item, pk=id)
     filename = barcode_pdf(item)
@@ -256,6 +269,7 @@ def item_barcode(request, id):
 
 
 @login_required
+@permission_required("api.add_item")
 def inventory(request):
     context = {}
     if request.method == 'GET':
@@ -276,6 +290,7 @@ def inventory(request):
 
 
 @login_required
+@permission_required("api.view_person")
 def persons(request):
     persons = Person.objects.all()
     context = {
@@ -289,6 +304,7 @@ def persons(request):
 
 
 @login_required
+@permission_required("api.view_person")
 def person_view(request, id):
     person = get_object_or_404(Person, pk=id)
     context = {
@@ -298,6 +314,7 @@ def person_view(request, id):
 
 
 @login_required
+@permission_required("api.change_person")
 def person_edit(request, id):
     person = get_object_or_404(Person, pk=id)
 
@@ -314,6 +331,7 @@ def person_edit(request, id):
 
 
 @login_required
+@permission_required("api.add_person")
 def person_new(request):
     if request.method == 'GET':
         form = PersonForm()
@@ -328,6 +346,7 @@ def person_new(request):
 
 
 @login_required
+@permission_required("api.delete_person")
 def person_delete(request, id):
     person = get_object_or_404(Person, pk=id)
     person.delete()
@@ -336,6 +355,7 @@ def person_delete(request, id):
 
 
 @login_required
+@permission_required("api.check_out")
 def check_out(request):
     msg = False
     msg_type = "success"
@@ -347,7 +367,6 @@ def check_out(request):
 
         # Cancel checkout
         if request.POST.get("cancel", False):
-            print("Cancelling")
             # Delete process object
             if step > 1:
                 process.delete()
@@ -361,7 +380,6 @@ def check_out(request):
 
         if step == 1 and request.POST.get("select-person", False):
             # Select person
-            print("Suche Person")
             try:
                 person = Person.objects.get(id=int(request.POST["select-person"]))
             except (Person.DoesNotExist, ValueError):
@@ -420,8 +438,6 @@ def check_out(request):
             del request.session["process"]
             step = 4
 
-    print(step)
-
     if step == 1:
         technicians = Person.objects.all().filter(is_technician=True).order_by("name")
         persons = Person.objects.all().filter(is_technician=False).order_by("name")
@@ -435,6 +451,7 @@ def check_out(request):
 
 
 @login_required
+@permission_required("api.check_out")
 def loan_form(request, id):
     process = get_object_or_404(CheckOutProcess, pk=id)
     filename = loan_form_pdf(process)
@@ -443,6 +460,7 @@ def loan_form(request, id):
 
 
 @login_required
+@permission_required("api.check_out")
 def checks(request):
     checks = CheckOutProcess.objects.all().filter(is_check_out_in_process=False)
     context = {
@@ -456,6 +474,7 @@ def checks(request):
 
 
 @login_required
+@permission_required("api.check_out")
 def check_view(request, id):
     check = get_object_or_404(CheckOutProcess, pk=id, is_check_out_in_process=False)
     context = {
@@ -465,13 +484,14 @@ def check_view(request, id):
 
 
 @login_required
+@permission_required("api.check_in")
 def check_in(request):
     context = {}
     msg = False
     if request.method == "POST" and request.POST.get("scan", False):
         scan = request.POST["scan"]
         check = None
-        print(scan)
+
         try:
             id = int(scan)
             check = Check.objects.get(item_id=id, checked_in=False)
@@ -482,7 +502,6 @@ def check_in(request):
                 msg = "not_found"
 
         if not msg:
-            print("Go on")
             check.checked_in = True
             check.checked_in_at = timezone.now()
             check.checked_in_by = request.user
@@ -495,6 +514,7 @@ def check_in(request):
 
 
 @login_required
+@permission_required("api.check_in")
 def check_in_confirmation(request, id):
     process = get_object_or_404(CheckOutProcess, pk=id)
     filename = check_in_confirmation_pdf(process)

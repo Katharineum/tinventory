@@ -36,36 +36,56 @@
                     <li class="nav-item active">
                         <a class="nav-link" href="{% url "ui_index" %}">Startseite</a>
                     </li>
-                    <li class="nav-item active">
-                        <a class="nav-link" href="{% url "ui_categories" %}">Kategorien</a>
-                    </li>
-                    <li class="nav-item active">
-                        <a class="nav-link" href="{% url "ui_locations" %}">Orte</a>
-                    </li>
-                    <li class="nav-item active">
-                        <a class="nav-link" href="{% url "ui_presets" %}">Presets</a>
-                    </li>
-                    <li class="nav-item active">
-                        <a class="nav-link" href="{% url "ui_items" %}">Objekte</a>
-                    </li>
-                    <li class="nav-item active">
-                        <a class="nav-link" href="{% url "ui_inventory" %}">Inventarisierung</a>
-                    </li>
-                    <li class="nav-item active">
-                        <a class="nav-link" href="{% url "ui_persons" %}">Personen</a>
-                    </li>
-                    <li class="nav-item active">
-                        <a class="nav-link" href="{% url "ui_check_out" %}">Check-Out</a>
-                    </li>
-                    <li class="nav-item active">
-                        <a class="nav-link" href="{% url "ui_check_in" %}">Check-In</a>
-                    </li>
-                    <li class="nav-item active">
-                        <a class="nav-link" href="{% url "ui_checks" %}">Checks</a>
-                    </li>
-                    <li class="nav-item active">
-                        <a class="nav-link" href="/admin/">Administration</a>
-                    </li>
+                    {% if perms.api.view_category %}
+                        <li class="nav-item active">
+                            <a class="nav-link" href="{% url "ui_categories" %}">Kategorien</a>
+                        </li>
+                    {% endif %}
+                    {% if perms.api.view_location %}
+                        <li class="nav-item active">
+                            <a class="nav-link" href="{% url "ui_locations" %}">Orte</a>
+                        </li>
+                    {% endif %}
+                    {% if perms.api.view_preset %}
+                        <li class="nav-item active">
+                            <a class="nav-link" href="{% url "ui_presets" %}">Presets</a>
+                        </li>
+                    {% endif %}
+                    {% if perms.api.view_item %}
+                        <li class="nav-item active">
+                            <a class="nav-link" href="{% url "ui_items" %}">Objekte</a>
+                        </li>
+                    {% endif %}
+                    {% if perms.api.view_item %}
+                        <li class="nav-item active">
+                            <a class="nav-link" href="{% url "ui_inventory" %}">Inventarisierung</a>
+                        </li>
+                    {% endif %}
+                    {% if perms.api.view_person %}
+                        <li class="nav-item active">
+                            <a class="nav-link" href="{% url "ui_persons" %}">Personen</a>
+                        </li>
+                    {% endif %}
+                    {% if perms.api.check_out %}
+                        <li class="nav-item active">
+                            <a class="nav-link" href="{% url "ui_check_out" %}">Check-Out</a>
+                        </li>
+                    {% endif %}
+                    {% if perms.api.check_in %}
+                        <li class="nav-item active">
+                            <a class="nav-link" href="{% url "ui_check_in" %}">Check-In</a>
+                        </li>
+                    {% endif %}
+                    {% if perms.api.check_out %}
+                        <li class="nav-item active">
+                            <a class="nav-link" href="{% url "ui_checks" %}">Checks</a>
+                        </li>
+                    {% endif %}
+                    {% if user.is_staff %}
+                        <li class="nav-item active">
+                            <a class="nav-link" href="{% url "admin:index" %}">Administration</a>
+                        </li>
+                    {% endif %}
                 </ul>
                 <ul class="navbar-nav align-right">
                     <li class="navbar-text">
