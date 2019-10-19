@@ -50,6 +50,7 @@ urlpatterns = [
     path("checks/<int:id>/loan-form.pdf", views.loan_form, name="ui_loan_form"),
     path("checks/", views.checks, name="ui_checks"),
     path("checks/<int:id>", views.check_view, name="ui_checks_view"),
+    path("checks/<int:id>/continue", views.check_continue, name="ui_check_continue"),
     path("checks/<int:id>/check-in.pdf", views.check_in_confirmation, name="ui_check_in_confirmation"),
     path("checks/in/", views.check_in, name="ui_check_in"),
     path('accounts/', include('django.contrib.auth.urls')),

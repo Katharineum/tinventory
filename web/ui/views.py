@@ -500,6 +500,15 @@ def check_view(request, id):
 
 
 @login_required
+@permission_required("api.check_out")
+def check_continue(request, id):
+    process = get_object_or_404(CheckOutProcess, pk=id)
+    request.session["process"] = process.id
+    request.session["step"] = 2
+    return redirect("ui_check_out")
+
+
+@login_required
 @permission_required("api.check_in")
 def check_in(request):
     context = {}
