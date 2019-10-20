@@ -28,7 +28,27 @@ from ui.forms import CategoryForm, LocationForm, PresetForm, ItemForm, Inventory
 
 @login_required
 def index(request):
-    return render(request, "ui/index.html")
+    context = {
+        "count_items": Item.objects.all().count(),
+        "count_presets": Preset.objects.all().count(),
+
+    }
+    available = 0
+    checked_out = 0
+    not_in_time = 0
+    for item in Item.objects.all():
+        if item.is_available():
+            available += 1
+        else:
+            checked_out += 1
+            check = item.checks.filter(checked_in=False)[0]
+            if not check.check_out.is_in_time():
+                not_in_time += 1
+    context["count_available_items"] = available
+    context["count_checked_out_items"] = checked_out
+    context["count_not_in_time"] = not_in_time
+
+    return render(request, "ui/index.html", context=context)
 
 
 @login_required
