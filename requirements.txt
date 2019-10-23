@@ -7,3 +7,4 @@ django-oauth-toolkit
 django-widget-tweaks
 djangorestframework
 fpdf
+Pillow
