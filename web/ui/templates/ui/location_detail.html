@@ -65,12 +65,13 @@
             <div class="card-body">
                 <ul class="list-group list-group-flush">
                     {% for item in location.items.all %}
-                    <li class="list-group-item">
-                        <div class="row">
-                            <div class="col-sm-9"><a href="{% url "ui_items_view" item.pk %}">{{ item.name }}</a> </div>
-                            <div class="col-sm-3">{% include "ui/item_status.html" %}</div>
-                        </div>
-                    </li>
+                        <li class="list-group-item">
+                            <div class="row">
+                                <div class="col-sm-9"><a href="{% url "ui_items_view" item.pk %}">{{ item.name }}</a>
+                                </div>
+                                <div class="col-sm-3">{% include "ui/item_status.html" %}</div>
+                            </div>
+                        </li>
                     {% endfor %}
                 </ul>
             </div>
