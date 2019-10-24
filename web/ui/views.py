@@ -17,7 +17,7 @@
 from django.contrib.auth.decorators import login_required, permission_required
 from django.utils.decorators import method_decorator
 from django.views.generic.detail import DetailView
-from django.http import FileResponse
+from django.http import FileResponse, JsonResponse
 from django.shortcuts import render, get_object_or_404, redirect
 
 # Create your views here.
@@ -154,6 +154,46 @@ def location_edit(request, id):
 class LocationDetailView(DetailView):
     model = Location
     template_name = "ui/location_detail.html"
+
+
+@login_required
+@permission_required("api.change_item")
+def location_add_item(request, pk):
+    if request.method == "GET":
+        if "item_id" in request.GET.keys():
+            try:
+                item_id = int(request.GET["item_id"])
+
+                location = Location.objects.get(pk=pk)
+                item = Item.objects.get(pk=item_id)
+
+                item.location = location
+
+                item.save()
+                location.save()
+
+                status = 200
+                data = {"status": "Success"}
+
+            except ValueError:
+                status, data = give_location_error(400, "item_id is not an integer")  # 400 - bad request
+        else:
+            status, data = give_location_error(400, "item_id isn set")  # 400 - bad request
+    else:
+        status, data = give_location_error(405, "request method has to be GET")  # 405 - method not allowed
+    return JsonResponse(data=data, status=status)
+
+
+def give_location_error(code: int, msg=""):
+    status = code
+    data = {
+        "status": "Error",
+        "error_code": code,
+    }
+    if msg:
+        data["message"] = msg
+
+    return status, data
 
 
 @login_required
