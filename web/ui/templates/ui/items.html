@@ -38,7 +38,6 @@
             {% for item in items %}
                 <tr>
                     <th scope="row">{{ item.id }} (<code>{{ item.barcode }}</code>)</th>
-                    {#                    TODO Verlinkung zur Kategorie #}
                     <td>
                         <a href="{% url "ui_categories_edit" item.category.pk %}">{{ item.category }}</a>
                     </td>

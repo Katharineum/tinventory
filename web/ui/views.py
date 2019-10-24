@@ -15,6 +15,8 @@
 #  along with TInventory.  If not, see <http://www.gnu.org/licenses/>.
 
 from django.contrib.auth.decorators import login_required, permission_required
+from django.utils.decorators import method_decorator
+from django.views.generic.detail import DetailView
 from django.http import FileResponse
 from django.shortcuts import render, get_object_or_404, redirect
 
@@ -110,6 +112,13 @@ def category_delete(request, id):
     return redirect("ui_categories")
 
 
+#############
+# LOCATIONS #
+#############
+
+location_decorators = [login_required, permission_required("api.change_location")]
+
+
 @login_required
 @permission_required("api.view_location")
 def locations(request):
@@ -139,6 +148,12 @@ def location_edit(request, id):
             return redirect('ui_locations')
 
     return render(request, "ui/location_form.html", {"location": location, "form": form, "mode": "edit"})
+
+
+@method_decorator(location_decorators, name='get')
+class LocationDetailView(DetailView):
+    model = Location
+    template_name = "ui/location_detail.html"
 
 
 @login_required

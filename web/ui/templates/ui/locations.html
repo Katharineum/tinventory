@@ -36,7 +36,7 @@
             {% for location in locations %}
                 <tr>
                     <th scope="row">{{ location.id }}</th>
-                    <td>{{ location.name }}</td>
+                    <td><a href="{% url "ui_locations_detail" location.pk %}">{{ location.name }}</a></td>
                     <td>{{ location.number }}</td>
                     <td>
                         <div class="btn-group" role="group" aria-label="Aktionen">

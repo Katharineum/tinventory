@@ -1,0 +1,83 @@
+{% include "header.html" %}
+
+<nav aria-label="breadcrumb" class="m-1">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a href="{% url "ui_index" %}">Startseite</a>
+        </li>
+        <li class="breadcrumb-item" aria-current="page">
+            <a href="{% url "ui_locations" %}">Orte</a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">{{ location.name }}</li>
+    </ol>
+</nav>
+
+<h1 class="display-5 m-1">
+    <a role="button" class="btn btn-link" href="{% url "ui_locations" %}"><i
+            class="fas fa-chevron-left"></i></a>{{ location.name }}
+    <span class="text-muted">#{{ location.id }}</span>
+</h1>
+
+{% include "parts/msg.html" %}
+
+
+<div class="row">
+    <div class="col-sm">
+        <div class="card mb-2">
+            <div class="card-body">
+                <div class="btn-group" role="group" aria-label="Aktionen">
+                    {% if perms.api.change_location %}
+                        <a role="button" class="btn btn-primary"
+                           href="{% url "ui_locations_edit" location.id %}">Bearbeiten
+                        </a>
+                    {% endif %}
+                    {% if perms.api.delete_location %}
+                        <a role="button" class="btn btn-danger delete-button"
+                           href="{% url "ui_location_delete" location.id %}">Löschen
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm">
+        <div class="card mb-2">
+            <div class="card-body">
+                <form class="form-inline">
+                    <label class="sr-only" for="item">Objekt</label>
+                    <div class="input-group mb-2 mr-sm-2">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text"><i class="fas fa-barcode"></i></div>
+                        </div>
+                        <input type="text" class="form-control" id="item" name="item"
+                               placeholder="Objektbarcode">
+                    </div>
+
+                    <button type="submit" class="btn btn-primary mb-2">Einsortieren</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm">
+        <div class="card mb-2">
+            <div class="card-body">
+                <ul class="list-group list-group-flush">
+                    {% for item in location.items.all %}
+                    <li class="list-group-item">
+                        <div class="row">
+                            <div class="col-sm-9"><a href="{% url "ui_items_view" item.pk %}">{{ item.name }}</a> </div>
+                            <div class="col-sm-3">{% include "ui/item_status.html" %}</div>
+                        </div>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% include "parts/table_js.html" %}
+{% include "footer.html" %}
