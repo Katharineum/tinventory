@@ -29,6 +29,7 @@
                 <th scope="col">ID</th>
                 <th scope="col">Name</th>
                 <th scope="col">Schranknummer <em class="text-muted">(optional)</em></th>
+                <th scope="col">Anzahl an Gegenständen</th>
                 <th scope="col" class="table-actions">Aktionen</th>
             </tr>
             </thead>
@@ -38,6 +39,7 @@
                     <th scope="row">{{ location.id }}</th>
                     <td><a href="{% url "ui_locations_detail" location.pk %}">{{ location.name }}</a></td>
                     <td>{{ location.number }}</td>
+                    <td>{{ location.items.all|length }}</td>
                     <td>
                         <div class="btn-group" role="group" aria-label="Aktionen">
                             {% if perms.api.change_location %}
