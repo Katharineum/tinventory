@@ -177,7 +177,7 @@ def location_add_item(request, pk):
                     status = 200
                     data = {"status": "Success", "status_code": 200}
                 else:
-                    data, status = give_location_error(400, "item is already at this location")
+                    status, data = give_location_error(400, "item is already at this location")
 
             except Item.DoesNotExist:
                 status, data = give_location_error(400, "Barcode is not valid")  # 400 - bad request

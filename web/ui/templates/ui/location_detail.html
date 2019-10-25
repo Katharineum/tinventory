@@ -49,7 +49,8 @@
                         <div class="input-group-prepend">
                             <div class="input-group-text"><i class="fas fa-barcode"></i></div>
                         </div>
-                        <input type="number" class="form-control" id="item" name="item"
+                        <input type="text" required aria-required="true" autofocus class="form-control" id="item"
+                               name="item" value=""
                                placeholder="Objektbarcode">
                     </div>
 
@@ -57,14 +58,16 @@
                 </form>
             </div>
         </div>
-        <div aria-live="polite" aria-atomic="true" style="position: absolute; min-height: 200px; top: -100px; right:20px; z-index: 5; min-width: 300px;">
-            <div class="toast" style="position: absolute; top: 0; right: 0;" id="item-toast" data-delay="3000">
+        <div aria-live="polite" aria-atomic="true"
+             style="position: absolute; min-height: 200px; top: -100px; right:20px; z-index: 5; min-width: 300px;">
+            <div class="toast" style="position: absolute; top: 0; right: 0;" id="item-toast" data-delay="2000">
                 <div class="toast-header" id="toast-header">
                     <strong class="mr-auto" id="toast-title">Message-Title</strong>
                     <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
+                <div class="toast-body" id="toast-message"></div>
             </div>
         </div>
     </div>
@@ -77,7 +80,8 @@
                     {% for item in location.items.all %}
                         <li class="list-group-item">
                             <div class="row">
-                                <div class="col-sm-9"><a href="{% url "ui_items_view" item.pk %}">{{ item.name }}</a>
+                                <div class="col-sm-1">{{ item.id }} (<code>{{ item.barcode }}</code>)</div>
+                                <div class="col-sm-8"><a href="{% url "ui_items_view" item.pk %}">{{ item.name }}</a>
                                 </div>
                                 <div class="col-sm-3">{% include "ui/item_status.html" %}</div>
                             </div>
@@ -90,6 +94,10 @@
 </div>
 
 <script type="text/javascript">
+    $(document).ready(function () {
+        $("#item").val("");
+    });
+
     $("#item-form").submit(function (e) {
         e.preventDefault();
         let barcode = $("#item").val();
@@ -105,10 +113,11 @@
             $("#item-toast").toast("show");
             setTimeout(function () {
                 window.location.reload()
-            }, 3000);
+            }, 2000);
         } else {
             $("#toast-header").addClass("text-danger");
             $("#toast-title").text("Bitte überprüfen Sie ihre Eingabe");
+            $("#toast-message").text("Fehlermeldung: " + data["message"]);
             $("#item-toast").toast("show");
         }
     }
