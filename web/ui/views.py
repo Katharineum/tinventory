@@ -160,38 +160,37 @@ class LocationDetailView(DetailView):
 @permission_required("api.change_item")
 def location_add_item(request, pk):
     if request.method == "GET":
-        if "item_id" in request.GET.keys():
+        if "barcode" in request.GET.keys():
             try:
-                item_id = int(request.GET["item_id"])
+                barcode = request.GET["barcode"]
 
                 location = Location.objects.get(pk=pk)
-                item = Item.objects.get(pk=item_id)
+                item = Item.objects.get(barcode=barcode)
 
-                item.location = location
+                if item.location != location:
 
-                item.save()
-                location.save()
+                    item.location = location
 
-                status = 200
-                data = {"status": "Success"}
+                    item.save()
+                    location.save()
 
-            except ValueError:
-                status, data = give_location_error(400, "item_id is not an integer")  # 400 - bad request
+                    status = 200
+                    data = {"status": "Success", "status_code": 200}
+                else:
+                    data, status = give_location_error(400, "item is already at this location")
+
+            except Item.DoesNotExist:
+                status, data = give_location_error(400, "Barcode is not valid")  # 400 - bad request
         else:
-            status, data = give_location_error(400, "item_id isn set")  # 400 - bad request
+            status, data = give_location_error(400, "Barcode isn set")  # 400 - bad request
     else:
         status, data = give_location_error(405, "request method has to be GET")  # 405 - method not allowed
     return JsonResponse(data=data, status=status)
 
 
-def give_location_error(code: int, msg=""):
-    status = code
-    data = {
-        "status": "Error",
-        "error_code": code,
-    }
-    if msg:
-        data["message"] = msg
+def give_location_error(code: int, msg: str):
+    status = 200
+    data = {"status": "Error", "status_code": code, "message": msg}
 
     return status, data
 

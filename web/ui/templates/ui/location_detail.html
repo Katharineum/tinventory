@@ -43,18 +43,28 @@
     <div class="col-sm">
         <div class="card mb-2">
             <div class="card-body">
-                <form class="form-inline">
+                <form class="form-inline" id="item-form">
                     <label class="sr-only" for="item">Objekt</label>
                     <div class="input-group mb-2 mr-sm-2">
                         <div class="input-group-prepend">
                             <div class="input-group-text"><i class="fas fa-barcode"></i></div>
                         </div>
-                        <input type="text" class="form-control" id="item" name="item"
+                        <input type="number" class="form-control" id="item" name="item"
                                placeholder="Objektbarcode">
                     </div>
 
-                    <button type="submit" class="btn btn-primary mb-2">Einsortieren</button>
+                    <button type="submit" class="btn btn-primary mb-2" id="submit-button">Einsortieren</button>
                 </form>
+            </div>
+        </div>
+        <div aria-live="polite" aria-atomic="true" style="position: absolute; min-height: 200px; top: -100px; right:20px; z-index: 5; min-width: 300px;">
+            <div class="toast" style="position: absolute; top: 0; right: 0;" id="item-toast" data-delay="3000">
+                <div class="toast-header" id="toast-header">
+                    <strong class="mr-auto" id="toast-title">Message-Title</strong>
+                    <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
             </div>
         </div>
     </div>
@@ -78,6 +88,31 @@
         </div>
     </div>
 </div>
+
+<script type="text/javascript">
+    $("#item-form").submit(function (e) {
+        e.preventDefault();
+        let barcode = $("#item").val();
+        jQuery.getJSON("{% url "ui_location_add_item" location.pk %}?barcode=" + barcode, callBack);
+    });
+
+    function callBack(data) {
+        console.log(data);
+
+        if (data["status_code"] === 200) {
+            $("#toast-header").addClass("text-success");
+            $("#toast-title").text("Der Gegenstand wurde erfolgreich verschoben!");
+            $("#item-toast").toast("show");
+            setTimeout(function () {
+                window.location.reload()
+            }, 3000);
+        } else {
+            $("#toast-header").addClass("text-danger");
+            $("#toast-title").text("Bitte überprüfen Sie ihre Eingabe");
+            $("#item-toast").toast("show");
+        }
+    }
+</script>
 
 
 {% include "parts/table_js.html" %}
