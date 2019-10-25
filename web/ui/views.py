@@ -164,8 +164,17 @@ def location_add_item(request, pk):
             try:
                 barcode = request.GET["barcode"]
 
+                try:
+                    id = int(barcode)
+                    item = Item.objects.get(id=id)
+                except (Item.DoesNotExist, ValueError):
+                    try:
+                        item = Item.objects.get(barcode=barcode)
+                    except Item.DoesNotExist:
+                        give_location_error(400, "No item found")
+                        return
+
                 location = Location.objects.get(pk=pk)
-                item = Item.objects.get(barcode=barcode)
 
                 if item.location != location:
 

@@ -14,7 +14,8 @@
 
 <h1 class="display-5 m-1">
     <a role="button" class="btn btn-link" href="{% url "ui_locations" %}"><i
-            class="fas fa-chevron-left"></i></a>{{ location.name }}
+            class="fas fa-chevron-left"></i></a>
+    {{ location.name }}
     <span class="text-muted">#{{ location.id }}</span>
 </h1>
 
@@ -49,9 +50,10 @@
                         <div class="input-group-prepend">
                             <div class="input-group-text"><i class="fas fa-barcode"></i></div>
                         </div>
-                        <input type="text" required aria-required="true" autofocus class="form-control" id="item"
+                        <input type="text" required aria-required="true" autofocus class="form-control no-check"
+                               id="item"
                                name="item" value=""
-                               placeholder="Objektbarcode">
+                               placeholder="Barcode/ID">
                     </div>
 
                     <button type="submit" class="btn btn-primary mb-2" id="submit-button">Einsortieren</button>
@@ -81,7 +83,8 @@
                         <li class="list-group-item">
                             <div class="row">
                                 <div class="col-sm-1">{{ item.id }} (<code>{{ item.barcode }}</code>)</div>
-                                <div class="col-sm-8"><a href="{% url "ui_items_view" item.pk %}">{{ item.name }}</a>
+                                <div class="col-sm-8">
+                                    <a href="{% url "ui_items_view" item.pk %}">{{ item.name }}</a>
                                 </div>
                                 <div class="col-sm-3">{% include "ui/item_status.html" %}</div>
                             </div>
