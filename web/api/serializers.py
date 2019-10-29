@@ -20,22 +20,32 @@ from rest_framework import serializers
 from api.models import *
 
 
+# TODO: Create serializers for all models, resolving location, category, preset, etc.
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = User
-        fields = ("id", 'username', "first_name", "last_name")
+        fields = ("url", "id", 'username', "first_name", "last_name")
 
 
 class PersonSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Person
-        fields = ("id", "name")
+        fields = ("url", "id", "name")
 
 
 class CategorySerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Category
-        fields = ("id", "name",)
+        fields = ("url", "id", "name",)
+
+
+class LocationSerializer(serializers.HyperlinkedModelSerializer):
+    # preset = PresetSerializer(many=False, read_only=True)
+
+    class Meta:
+        model = Location
+        # fields = "__all__"
+        exclude = ["url"]
 
 
 class CheckProcessSerializer(serializers.HyperlinkedModelSerializer):
@@ -52,10 +62,12 @@ class PresetSerializer(serializers.HyperlinkedModelSerializer):
 
 class ItemSerializer(serializers.HyperlinkedModelSerializer):
     preset = PresetSerializer(many=False, read_only=True)
+    location = LocationSerializer(many=False, read_only=True)
 
     class Meta:
         model = Item
-        fields = "__all__"
+        # fields = "__all__"
+        exclude = ["url"]
 
 
 class CheckSerializer(serializers.HyperlinkedModelSerializer):

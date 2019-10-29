@@ -91,7 +91,7 @@ class CheckProcessViewSet(viewsets.ModelViewSet):
     def checks(self, request, pk=None):
         process = self.get_object()
         checks = process.checks
-        serializer = CheckSerializer(checks, many=True)
+        serializer = CheckSerializer(checks, many=True, context={'request': request})
         return Response(serializer.data)
 
 
