@@ -16,6 +16,7 @@
 
 from django.contrib.auth.models import User, Group
 from rest_framework import serializers
+from rest_framework.relations import HyperlinkedIdentityField
 
 from api.models import *
 
@@ -49,9 +50,12 @@ class LocationSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class CheckProcessSerializer(serializers.HyperlinkedModelSerializer):
+    # loan_form = HyperlinkedIdentityField(view_name="ui_loan_form")
+
     class Meta:
         model = CheckOutProcess
-        fields = "__all__"
+        fields = ["url", "id", "checked_out_at", "is_check_out_in_process", "check_in_until", "borrowing_person",
+                  "lending_user"]
 
 
 class PresetSerializer(serializers.HyperlinkedModelSerializer):
@@ -68,6 +72,7 @@ class ItemSerializer(serializers.HyperlinkedModelSerializer):
         model = Item
         # fields = "__all__"
         exclude = ["url"]
+        # fields = ["id", "url", "preset", "location", "name", "barcode", "notes", "last_time_seen_at", "category"]
 
 
 class CheckSerializer(serializers.HyperlinkedModelSerializer):
@@ -75,4 +80,4 @@ class CheckSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Check
-        fields = "__all__"
+        fields = ("id", "url", "item", "checked_in", "checked_in_at", "check_out", "checked_in_by")
