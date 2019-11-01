@@ -583,6 +583,8 @@ def check_view(request, id):
 
 
 @login_required
+
+<
 @permission_required("api.check_out")
 def check_continue(request, id):
     process = get_object_or_404(CheckOutProcess, pk=id)

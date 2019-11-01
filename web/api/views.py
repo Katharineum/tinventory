@@ -63,15 +63,16 @@ class CheckProcessViewSet(viewsets.ModelViewSet):
         scan = request.data["scan"]
         item = None
 
-        try:
-            id = int(scan)
-            item = Item.objects.get(id=id)
-        except (Item.DoesNotExist, ValueError):
+        if msg_type == "success":
             try:
-                item = Item.objects.get(barcode=scan)
-            except Item.DoesNotExist:
-                msg = "Es gibt kein Objekt mit dieser ID oder diesem Barcode: {}".format(scan)
-                msg_type = "bad"
+                id = int(scan)
+                item = Item.objects.get(id=id)
+            except (Item.DoesNotExist, ValueError):
+                try:
+                    item = Item.objects.get(barcode=scan)
+                except Item.DoesNotExist:
+                    msg = "Es gibt kein Objekt mit dieser ID oder diesem Barcode: {}".format(scan)
+                    msg_type = "bad"
 
         if msg_type == "success":
             if not item.is_available():
@@ -93,6 +94,54 @@ class CheckProcessViewSet(viewsets.ModelViewSet):
         checks = process.checks
         serializer = CheckSerializer(checks, many=True, context={'request': request})
         return Response(serializer.data)
+
+    @action(detail=False, methods=["post"])
+    def check_in(self, request):
+        context = {}
+        user = None
+        msg = ""
+        msg_type = "success"
+
+        if not request.data.get("scan", False) or not request.data.get("user", False):
+            msg = "Fehlendes Argument."
+            msg_type = "bad"
+        if msg_type == "success":
+            try:
+                user_id = int(request.data["user"])
+                user = User.objects.get(id=user_id)
+            except (User.DoesNotExist, ValueError):
+                msg = "Es wird ein korrekter Nutzer benötigt."
+                msg_type = "bad"
+
+        if msg_type == "success":
+            scan = request.data["scan"]
+            print(scan)
+            check = None
+
+            try:
+                id = int(scan)
+                check = Check.objects.get(item_id=id, checked_in=False)
+            except (Check.DoesNotExist, ValueError):
+                try:
+                    check = Check.objects.get(item__barcode=scan, checked_in=False)
+                except Check.DoesNotExist:
+                    msg = "Es wurde kein ausgeliehenes Objekt mit diesem Barcode oder dieser ID gefunden."
+                    msg_type = "bad"
+
+            if msg_type == "success":
+                check.checked_in = True
+                check.checked_in_at = timezone.now()
+                check.checked_in_by = user
+                check.save()
+
+                serializer = CheckSerializer(check, many=False, context={'request': request})
+                context["check"] = serializer.data
+                msg = "Das Objekt {} {}wurde erfolgreich eingecheckt.".format(check.item.name, "({}) ".format(
+                    check.item.preset.name) if check.item.preset else "")
+        context["msg"] = msg
+        context["msg_type"] = msg_type
+
+        return Response(context)
 
 
 class CheckViewSet(viewsets.ModelViewSet):

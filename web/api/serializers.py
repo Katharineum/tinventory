@@ -77,6 +77,7 @@ class ItemSerializer(serializers.HyperlinkedModelSerializer):
 
 class CheckSerializer(serializers.HyperlinkedModelSerializer):
     item = ItemSerializer(many=False, read_only=True)
+    check_out = CheckProcessSerializer(many=False, read_only=True)
 
     class Meta:
         model = Check
