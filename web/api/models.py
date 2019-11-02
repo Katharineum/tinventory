@@ -145,6 +145,30 @@ class Person(models.Model):
         verbose_name_plural = "Personen"
 
 
+class CheckOutCondition(models.Model):
+    default = models.BooleanField(verbose_name="Standard")
+    text = models.TextField(verbose_name="Text")
+
+    def __str__(self):
+        return self.text
+
+    class Meta:
+        verbose_name = "Check-Out-Bedingung"
+        verbose_name_plural = "Check-Out-Bedingungen"
+
+    def save(self, *args, **kwargs):
+        if self.default:
+            # select all other active items
+            qs = CheckOutCondition.objects.filter(default=True)
+            # except self (if self already exists)
+            if self.pk:
+                qs = qs.exclude(pk=self.pk)
+            # and deactive them
+            qs.update(default=False)
+
+        super(CheckOutCondition, self).save(*args, **kwargs)
+
+
 class CheckOutProcess(models.Model):
     borrowing_person = models.ForeignKey(Person, on_delete=models.CASCADE, related_name="check_outs",
                                          verbose_name="Ausleihende Person")
@@ -153,6 +177,8 @@ class CheckOutProcess(models.Model):
     checked_out_at = models.DateTimeField(auto_now_add=True, verbose_name="Check-Out-Zeitpunkt")
     is_check_out_in_process = models.BooleanField(default=True, verbose_name="Check-Out im Prozess?")
     check_in_until = models.DateField(verbose_name="Check-In bis", blank=True, null=True)
+    condition = models.ForeignKey(CheckOutCondition, on_delete=models.SET_NULL, verbose_name="Check-Out-Bedingung",
+                                  blank=True, null=True)
 
     def is_everything_checked_in(self):
         return self.checks.filter(checked_in=False).count() <= 0
@@ -165,6 +191,14 @@ class CheckOutProcess(models.Model):
 
     def __str__(self):
         return "{} ({})".format(self.borrowing_person, self.checked_out_at)
+
+    def save(self, *args, **kwargs):
+        if self.condition is None:
+            obj = CheckOutCondition.objects.all().filter(default=True)
+            if obj.count() >= 1:
+                self.condition = obj[0]
+
+        super(CheckOutProcess, self).save(*args, **kwargs)
 
     class Meta:
         verbose_name = "Check-Out-Vorgang"

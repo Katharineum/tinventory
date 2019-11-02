@@ -14,10 +14,10 @@
 #  You should have received a copy of the GNU General Public License
 #  along with TInventory.  If not, see <http://www.gnu.org/licenses/>.
 
-from django.contrib import admin
+from django.contrib import admin, messages
 
 # Register your models here.
-from api.models import Category, Location, Preset, Item, Person, CheckOutProcess, Check
+from api.models import Category, Location, Preset, Item, Person, CheckOutProcess, Check, CheckOutCondition
 
 
 class ItemAdmin(admin.ModelAdmin):
@@ -31,3 +31,22 @@ admin.site.register(Item, ItemAdmin)
 admin.site.register(Person)
 admin.site.register(CheckOutProcess)
 admin.site.register(Check)
+
+
+class CheckOutConditionAdmin(admin.ModelAdmin):
+    actions = ['make_default']
+
+    def make_default(self, request, queryset):
+        if queryset.count() > 1:
+            self.message_user(request, "Es kann nur eine Bedingung als Standard festgelegt werden.",
+                              level=messages.ERROR)
+            return
+        cond = queryset[0]
+        cond.default = True
+        cond.save()
+
+    make_default.short_description = "Als Standard festlegen"
+    list_display = ("text", "default")
+
+
+admin.site.register(CheckOutCondition, CheckOutConditionAdmin)

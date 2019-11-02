@@ -20,7 +20,7 @@ from django.utils import formats
 import fpdf
 # from treepoem import generate_barcode
 
-from api.models import Item
+from api.models import Item, CheckOutProcess
 from tinventory.settings import BASE_DIR
 
 TEMP_DIR = "tmp"
@@ -107,7 +107,7 @@ def barcode_pdf(item: Item):
     return pdf.save_in_tmp("barcode-{}.pdf".format(item.id))
 
 
-def loan_form_pdf(process):
+def loan_form_pdf(process: CheckOutProcess):
     pdf = Report(orientation='P', unit='mm', format="A4")
 
     for i in range(2):
@@ -160,16 +160,24 @@ def loan_form_pdf(process):
         for check in process.checks.all():
 
             if check.item.preset:
-                txt = "- {} ({}, #{})".format(check.item.name, check.item.preset.name, check.item.id)
+                txt = "- {} ({}, {})".format(check.item.name, check.item.preset.name, check.item.barcode)
             else:
-                txt = "- {} (#{})".format(check.item.name, check.item.id)
+                txt = "- {} ({})".format(check.item.name, check.item.barcode)
             pdf.mono_font()
             pdf.cell(w=0, h=8, txt=txt, ln=1)
 
             # pdf.barcode_font_small(size=15)
             # pdf.cell(w=10, h=8, txt="*{}*".format(check.item.barcode), ln=1)
 
+        pdf.cell(w=0, h=5, ln=1)
+        pdf.normal_font()
+        pdf.multi_cell(w=0, h=7, txt=process.condition.text)
 
+        if process.check_in_until is not None:
+            pdf.cell(w=0, h=2, ln=1)
+            pdf.cell(w=60, h=7, txt="Vereinbartes Rückgabedatum: ")
+            pdf.mono_font()
+            pdf.cell(w=35, h=7, txt=formats.date_format(process.check_in_until, "d.m.Y"), ln=1)
         pdf.cell(w=0, h=20, ln=1)
 
         pdf.set_font("line", size=12)
@@ -232,9 +240,9 @@ def check_in_confirmation_pdf(process):
             pdf.cell(w=3, txt="-")
             pdf.mono_font()
             if check.item.preset:
-                txt = "{} ({}, #{})".format(check.item.name, check.item.preset.name, check.item.id)
+                txt = "{} ({}, {})".format(check.item.name, check.item.preset.name, check.item.barcode)
             else:
-                txt = "{} (#{})".format(check.item.name, check.item.id)
+                txt = "{} ({})".format(check.item.name, check.item.barcode)
             print(len(txt))
             if len(txt) > 30:
                 pdf.cell(w=0, txt=txt, ln=1)

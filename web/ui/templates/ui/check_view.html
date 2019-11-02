@@ -24,6 +24,10 @@
         <div class="card mb-2">
             <div class="card-body">
                 <div class="btn-group" role="group" aria-label="Aktionen">
+                    <a class="btn btn-primary" href="{% url "ui_checks_edit" check.id %}">
+                        <i class="fas fa-edit mr-2"></i>
+                        Rückgabebedingungen bearbeiten
+                    </a>
                     <a role="button" class="btn btn-primary" href="{% url "ui_loan_form" check.id %}" target="_blank">
                         <i class="fas fa-file-pdf mr-2"></i>
                         Ausleihformular ausdrucken
@@ -79,7 +83,15 @@
                             </div>
                         </div>
                     </li>
-
+                    <li class="list-group-item">
+                        <div class="row">
+                            <div class="col-sm-3"><strong>Ausleihbedingung</strong></div>
+                            <div class="col-sm-9">
+                                {{ check.condition }} {% if check.condition.default %}
+                                <span class="badge badge-secondary">Standardbedingung</span>{% endif %}
+                            </div>
+                        </div>
+                    </li>
 
                 </ul>
             </div>

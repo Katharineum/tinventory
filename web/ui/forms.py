@@ -18,7 +18,7 @@ from django.core.exceptions import ValidationError
 from django.forms import ModelForm, Form
 from django import forms
 
-from api.models import Category, Location, Preset, Item, Person
+from api.models import Category, Location, Preset, Item, Person, CheckOutProcess
 
 
 class CategoryForm(ModelForm):
@@ -90,3 +90,9 @@ class PersonForm(ModelForm):
     class Meta:
         model = Person
         fields = ("name", "email", "is_within_school", "is_technician", "notes")
+
+
+class CheckForm(ModelForm):
+    class Meta:
+        model = CheckOutProcess
+        fields = ("check_in_until", "condition")

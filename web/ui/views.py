@@ -25,7 +25,7 @@ from django.utils import timezone
 
 from api.models import Category, Location, Preset, Item, Person, CheckOutProcess, Check
 from api.reports import barcode_pdf, loan_form_pdf, check_in_confirmation_pdf
-from ui.forms import CategoryForm, LocationForm, PresetForm, ItemForm, InventoryForm, PersonForm
+from ui.forms import CategoryForm, LocationForm, PresetForm, ItemForm, InventoryForm, PersonForm, CheckForm
 
 
 @login_required
@@ -145,7 +145,7 @@ def location_edit(request, id):
         if form.is_valid():
             form.save()
             request.session["msg"] = "Der Ort wurde erfolgreich aktualisiert."
-            return redirect('ui_locations')
+            return redirect('ui_locations_detail', location.id)
 
     return render(request, "ui/location_form.html", {"location": location, "form": form, "mode": "edit"})
 
@@ -212,9 +212,9 @@ def location_new(request):
     else:
         form = LocationForm(request.POST)
         if form.is_valid():
-            form.save()
+            location = form.save()
             request.session["msg"] = "Der Ort wurde erfolgreich erstellt."
-            return redirect('ui_locations')
+            return redirect('ui_locations_detail', location.id)
 
     return render(request, "ui/location_form.html", {"form": form, "mode": "new"})
 
@@ -264,7 +264,7 @@ def preset_edit(request, id):
         if form.is_valid():
             form.save()
             request.session["msg"] = "Das Preset wurde erfolgreich aktualisiert."
-            return redirect('ui_presets')
+            return redirect('ui_presets_view', preset.id)
 
     return render(request, "ui/preset_form.html", {"preset": preset, "form": form, "mode": "edit"})
 
@@ -277,9 +277,9 @@ def preset_new(request):
     else:
         form = PresetForm(request.POST)
         if form.is_valid():
-            form.save()
+            preset = form.save()
             request.session["msg"] = "Das Preset wurde erfolgreich erstellt."
-            return redirect('ui_presets')
+            return redirect('ui_presets_view', preset.id)
 
     return render(request, "ui/preset_form.html", {"form": form, "mode": "new"})
 
@@ -329,7 +329,7 @@ def item_edit(request, id):
         if form.is_valid():
             form.save()
             request.session["msg"] = "Das Objekt wurde erfolgreich aktualisiert."
-            return redirect('ui_items')
+            return redirect('ui_items_view', item.id)
 
     return render(request, "ui/item_form.html", {"item": item, "form": form, "mode": "edit"})
 
@@ -342,9 +342,9 @@ def item_new(request):
     else:
         form = ItemForm(request.POST)
         if form.is_valid():
-            form.save()
+            item = form.save()
             request.session["msg"] = "Das Objekt wurde erfolgreich erstellt."
-            return redirect('ui_items')
+            return redirect('ui_items_view', item.id)
 
     return render(request, "ui/item_form.html", {"form": form, "mode": "new"})
 
@@ -424,7 +424,7 @@ def person_edit(request, id):
         if form.is_valid():
             form.save()
             request.session["msg"] = "Die Person wurde erfolgreich aktualisiert."
-            return redirect('ui_persons')
+            return redirect('ui_persons_view', person.id)
 
     return render(request, "ui/person_form.html", {"person": person, "form": form, "mode": "edit"})
 
@@ -437,9 +437,9 @@ def person_new(request):
     else:
         form = PersonForm(request.POST)
         if form.is_valid():
-            form.save()
+            person = form.save()
             request.session["msg"] = "Die Person wurde erfolgreich erstellt."
-            return redirect('ui_persons')
+            return redirect('ui_persons_view', person.id)
 
     return render(request, "ui/person_form.html", {"form": form, "mode": "new"})
 
@@ -579,7 +579,27 @@ def check_view(request, id):
     context = {
         "check": check
     }
+    if request.session.get("msg", False):
+        context["msg"] = request.session["msg"]
+        request.session["msg"] = None
     return render(request, "ui/check_view.html", context)
+
+
+@login_required
+@permission_required("api.check_out")
+def check_edit(request, id):
+    check = get_object_or_404(CheckOutProcess, pk=id)
+
+    if request.method == 'GET':
+        form = CheckForm(instance=check)
+    else:
+        form = CheckForm(request.POST, instance=check)
+        if form.is_valid():
+            form.save()
+            request.session["msg"] = "Die Rückgabebedingungen wurden erfolgreich aktualisiert."
+            return redirect('ui_checks_view', check.id)
+
+    return render(request, "ui/person_form.html", {"check": check, "form": form})
 
 
 @login_required

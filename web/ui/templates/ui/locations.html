@@ -16,7 +16,10 @@
 {% if perms.api.add_location %}
     <div class="card mb-2">
         <div class="card-body">
-            <a role="button" class="btn btn-success" href="{% url "ui_location_new" %}">Neuen Ort erstellen</a>
+            <a role="button" class="btn btn-success" href="{% url "ui_location_new" %}">
+                <i class="fas fa-plus mr-2"></i>
+                Neuen Ort erstellen
+            </a>
         </div>
     </div>
 {% endif %}
@@ -37,7 +40,9 @@
             {% for location in locations %}
                 <tr>
                     <th scope="row">{{ location.id }}</th>
-                    <td><a href="{% url "ui_locations_detail" location.pk %}">{{ location.name }}</a></td>
+                    <td>
+                        <a href="{% url "ui_locations_detail" location.pk %}">{{ location.name }}</a>
+                    </td>
                     <td>{{ location.number }}</td>
                     <td>{{ location.items.all|length }}</td>
                     <td>

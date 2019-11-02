@@ -1,0 +1,32 @@
+{% load bootstrap %}
+{% include "header.html" %}
+
+<nav aria-label="breadcrumb" class="m-1">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a href="{% url "ui_index" %}">Startseite</a>
+        </li>
+        <li class="breadcrumb-item active">
+            <a href="{% url "ui_checks" %}">Checks</a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">{{ check.name }}</li>
+
+    </ol>
+</nav>
+
+<h1 class="display-5 m-1">
+    Rückgabebedingungen bearbeiten
+</h1>
+
+<div class="card">
+    <div class="card-body">
+        <form action="" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form|bootstrap }}
+
+            <button type="submit" class="btn btn-success">Speichern</button>
+            <a role="button" class="btn btn-danger" href="{% url "ui_checks" %}">Abbrechen</a>
+        </form>
+    </div>
+</div>
+{% include "footer.html" %}
