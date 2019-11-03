@@ -61,13 +61,30 @@
                     {% endfor %}
                     </tbody>
                 </table>
+                <form action="" method="post">
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="col">
+                            <input type="text" class="form-control" placeholder="Name" required name="create-person">
+                        </div>
+                        <div class="col">
+                            <button class="btn btn-success w-100">
+                                <i class="fas fa-plus mr-2"></i>
+                                Neue Person erstellen und auswählen
+                            </button>
+                        </div>
+                    </div>
+                </form>
+
+                {% include "parts/table_js_locale.html" %}
 
                 <script>
                     $(document).ready(function () {
                         $('#persons-table').DataTable({
-                            "paging": false,
-                            "ordering": false,
-                            "info": false
+                            paging: false,
+                            ordering: false,
+                            info: false,
+                            language: dataTableLocale
                         });
                         focusIt($("input[aria-controls=persons-table]"));
                     });

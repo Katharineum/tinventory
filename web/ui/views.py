@@ -488,6 +488,17 @@ def check_out(request):
             request.session["step"] = 2
             step = 2
 
+        if step == 1 and request.POST.get("create-person", False):
+            # Create person
+            if request.POST["create-person"] != "":
+                person = Person.objects.create(name=request.POST["create-person"])
+            else:
+                return redirect("ui_check_out")
+            process = CheckOutProcess.objects.create(borrowing_person=person, lending_user=request.user)
+            request.session["process"] = process.id
+            request.session["step"] = 2
+            step = 2
+
         if (step == 2 or step == 3) and request.POST.get("delete", False):
             if step == 3 and process.checks.count() < 2:
                 return redirect("ui_check_out")
