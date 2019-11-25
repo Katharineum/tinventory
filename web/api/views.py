@@ -33,7 +33,7 @@ class TechniciansList(viewsets.ReadOnlyModelViewSet):
     serializer_class = PersonSerializer
 
 
-class NormalPersonsList(viewsets.ReadOnlyModelViewSet):
+class NormalPersonsList(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
     queryset = Person.objects.all().filter(is_technician=False)
     serializer_class = PersonSerializer
