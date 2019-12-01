@@ -24,8 +24,8 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import timezone
 
 from api.models import Category, Location, Preset, Item, Person, CheckOutProcess, Check
-from api.reports import barcode_pdf, loan_form_pdf, check_in_confirmation_pdf
-from ui.forms import CategoryForm, LocationForm, PresetForm, ItemForm, InventoryForm, PersonForm, CheckForm
+from api.reports import barcode_pdf, loan_form_pdf, check_in_confirmation_pdf, excuse_form_pdf
+from ui.forms import CategoryForm, LocationForm, PresetForm, ItemForm, InventoryForm, PersonForm, CheckForm, ExcuseForm
 
 
 @login_required
@@ -659,6 +659,24 @@ def check_in_confirmation(request, id):
     filename = check_in_confirmation_pdf(process)
     f = open(filename, "rb")
     return FileResponse(f, content_type="application/pdf")
+
+
+@login_required
+def excuse(request):
+    if request.method == 'GET':
+        form = ExcuseForm()
+    else:
+        form = ExcuseForm(request.POST)
+        if form.is_valid():
+            print("Hi")
+            filename = excuse_form_pdf(form.cleaned_data["technician"], form.cleaned_data["date"],
+                                       form.cleaned_data["start"],
+                                       form.cleaned_data["stop"], form.cleaned_data["reason"])
+
+            f = open(filename, "rb")
+            return FileResponse(f, content_type="application/pdf")
+
+    return render(request, "ui/excuse.html", context={"form": form})
 
 
 def license(request):

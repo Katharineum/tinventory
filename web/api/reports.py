@@ -293,3 +293,43 @@ def check_in_confirmation_pdf(process):
         pdf.text(x=150, y=287, txt="*{}*".format(process.id))
 
     return pdf.save_in_tmp("check-in-{}.pdf".format(process.id))
+
+
+def excuse_form_pdf(technician, date, start, stop, reason):
+    pdf = Report(orientation='P', unit='mm', format="A4")
+
+    pdf.add_page()
+    pdf.heading()
+
+    pdf.set_font('Roboto Condensed Bold', size=20)
+    pdf.normal_color()
+    pdf.cell(w=0, h=30, txt="Entschuldigungsformular der Technik-AG", align="C", ln=1)
+
+    pdf.normal_font()
+    pdf.multi_cell(w=0, h=7,
+                   txt="Der/die Schüler*in {} hat am {} von der {}. Stunde bis zur {}. Stunde folgende Aufgaben für "
+                       "die Technik-AG zu erledigen:".format(technician.name, formats.date_format(date), start, stop))
+
+    pdf.cell(w=0, h=3, ln=1)
+
+    pdf.mono_font()
+    pdf.multi_cell(w=0, h=7, txt=reason)
+
+    pdf.cell(w=0, h=3, ln=1)
+
+    pdf.normal_font()
+    pdf.multi_cell(w=0, h=7, txt="Deshalb bitte ich darum, sein/ihr Fehlen zu entschuldigen.")
+
+    pdf.cell(w=0, h=20, ln=1)
+    pdf.set_font("line", size=12)
+    pdf.cell(w=40, txt="___________________")
+    pdf.cell(w=30)
+    pdf.cell(w=50, txt="________________________________", ln=1)
+    pdf.cell(w=0, h=5, ln=1)
+
+    pdf.small_font()
+    pdf.cell(w=40, txt="Datum")
+    pdf.cell(w=30)
+    pdf.cell(w=50, txt="Belaya/Sievers", ln=1)
+
+    return pdf.save_in_tmp("excuse-form-{}-{}.pdf".format(technician, date))

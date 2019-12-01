@@ -1,0 +1,31 @@
+{% load bootstrap %}
+
+{% include "header.html" %}
+
+<nav aria-label="breadcrumb" class="m-1">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a href="{% url "ui_index" %}">Startseite</a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">Entschuldigungsformular</li>
+    </ol>
+</nav>
+
+<h1 class="display-5 m-1">Entschuldigungsformular</h1>
+
+{% include "parts/msg.html" %}
+
+<div class="card">
+    <div class="card-body">
+        <form action="" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form|bootstrap }}
+
+            <button type="submit" class="btn btn-success"><i class="fas fa-print"></i> PDF erzeugen</button>
+            <a role="button" class="btn btn-danger" href="{% url "ui_persons" %}">Abbrechen</a>
+        </form>
+    </div>
+</div>
+
+{% include "parts/table_js.html" %}
+{% include "footer.html" %}

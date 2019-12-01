@@ -96,3 +96,14 @@ class CheckForm(ModelForm):
     class Meta:
         model = CheckOutProcess
         fields = ("check_in_until", "condition")
+
+
+HOURS = [(i, "{}. Stunde".format(i)) for i in range(1, 10)]
+
+
+class ExcuseForm(Form):
+    technician = forms.ModelChoiceField(Person.objects.filter(is_technician=True), label="Techniker", required=True)
+    date = forms.DateField(label="Datum", required=True)
+    start = forms.ChoiceField(choices=HOURS, label="Von", required=True)
+    stop = forms.ChoiceField(choices=HOURS, label="Bis", required=True)
+    reason = forms.CharField(widget=forms.Textarea, label="Aufgaben", required=True)
