@@ -1,4 +1,4 @@
-name: Docker Image CI
+name: Deploy
 
 on:
   push:
@@ -17,14 +17,14 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
       - name: Update Docker Hub Description
-          uses: peter-evans/dockerhub-description@v2.1.0
-          env:
-            DOCKERHUB_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-            DOCKERHUB_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-            DOCKERHUB_REPOSITORY: hansegucker/tinventory
+        uses: peter-evans/dockerhub-description@v2.1.0
+        env:
+          DOCKERHUB_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKERHUB_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+          DOCKERHUB_REPOSITORY: hansegucker/tinventory
       - name: Slack notification
-          env:
-            SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
-          uses: Ilshidur/action-slack@master
-          with:
-            args: 'A new image has been build.'
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+        uses: Ilshidur/action-slack@master
+        with:
+          args: 'A new image has been build.'
