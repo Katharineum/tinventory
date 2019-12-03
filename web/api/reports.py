@@ -18,7 +18,6 @@ import os
 
 from django.utils import formats
 import fpdf
-# from treepoem import generate_barcode
 
 from api.models import Item, CheckOutProcess
 from tinventory.settings import BASE_DIR
@@ -30,17 +29,6 @@ fpdf.FPDF_FONT_DIR = os.path.join(BASE_DIR, FONTS_DIR)
 fpdf.set_global("FPDF_FONT_DIR", os.path.join(BASE_DIR, FONTS_DIR))
 print(fpdf.FPDF_FONT_DIR)
 FPDF_FONT_DIR = os.path.join(BASE_DIR, FONTS_DIR)
-
-
-# def barcode(code):
-#     filename = os.path.join(BASE_DIR, TEMP_DIR, "barcode.png")
-#     i = generate_barcode(
-#         barcode_type="code128",
-#         data=code
-#     )
-#     i = i.resize((i.width * 10, i.height * 10))
-#     i.save(filename)
-#     return filename
 
 
 class Report(fpdf.FPDF):

@@ -6,13 +6,13 @@ LABEL org.label-schema.vcs-url="https://github.com/Katharineum/tinventory"
 
 ENV LANG C.UTF-8
 ENV PYTHONUNBUFFERED 1
-ENV HTTP_PROXY http://webcache:3128
-ENV HTTPS_PROXY https://webcache:3128
-ENV FTP_PROXY http://webcache:3128
-ENV http_proxy http://webcache:3128
-ENV https_proxy https://webcache:3128
-ENV ftp_proxy http://webcache:3128
-COPY docker-setup/proxies.conf /etc/apt/apt.conf.d/99proxies.conf
+#ENV HTTP_PROXY http://webcache:3128
+#ENV HTTPS_PROXY https://webcache:3128
+#ENV FTP_PROXY http://webcache:3128
+#ENV http_proxy http://webcache:3128
+#ENV https_proxy https://webcache:3128
+#ENV ftp_proxy http://webcache:3128
+#COPY docker-setup/proxies.conf /etc/apt/apt.conf.d/99proxies.conf
 RUN apt-get update && \
     apt-get upgrade -y && \
     apt-get install -y \
