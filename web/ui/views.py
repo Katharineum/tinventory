@@ -15,12 +15,17 @@
 #  along with TInventory.  If not, see <http://www.gnu.org/licenses/>.
 
 from django.contrib.auth.decorators import login_required, permission_required
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.db.models import Model
+from django.forms import Form
 from django.utils.decorators import method_decorator
+from django.views import View
+from django.views.generic import ListView
 from django.views.generic.detail import DetailView
 from django.http import FileResponse, JsonResponse
 from django.shortcuts import render, get_object_or_404, redirect
 
-# Create your views here.
+from django.utils.translation import gettext as _
 from django.utils import timezone
 
 from api.models import Category, Location, Preset, Item, Person, CheckOutProcess, Check
@@ -53,63 +58,106 @@ def index(request):
     return render(request, "ui/index.html", context=context)
 
 
-@login_required
-@permission_required("api.view_category")
-def categories(request):
-    categories = Category.objects.all()
-    context = {
-        "categories": categories
-    }
-    if request.session.get("msg", False):
-        context["msg"] = request.session["msg"]
-        request.session["msg"] = None
+class StandardListView(ListView, LoginRequiredMixin, PermissionRequiredMixin):
 
-    return render(request, "ui/categories.html", context)
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        if self.request.session.get("msg", False):
+            context["msg"] = self.request.session["msg"]
+            self.request.session["msg"] = None
+        return context
 
 
-@login_required
-@permission_required("api.change_category")
-def category_edit(request, id):
-    category = get_object_or_404(Category, pk=id)
+class InstanceMixin(object):
+    @property
+    def pk(self):
+        return self.kwargs["id"]
 
-    if request.method == 'GET':
-        form = CategoryForm(instance=category)
-    else:
-        form = CategoryForm(request.POST, instance=category)
+    @property
+    def instance(self):
+        return get_object_or_404(self.model_class, pk=self.pk)
+
+
+class StandardNewView(View, LoginRequiredMixin, PermissionRequiredMixin):
+    form_class: Form = Form
+    template_name: str = "form.html"
+    redirect_url: str = "ui_index"
+    success_message: str = _("Die Erstellung war erfolgreich.")
+
+    def get(self, request, *args, **kwargs):
+        form = self.form_class()
+        return render(request, self.template_name, {"form": form, "mode": "new"})
+
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(request.POST)
         if form.is_valid():
-            # name = form.cleaned_data['name']
-            # Category.objects.filter(id=id).update(name=name)
             form.save()
-            request.session["msg"] = "Die Kategorie wurde erfolgreich aktualisiert."
-            return redirect('ui_categories')
+            request.session["msg"] = self.success_message
+            return redirect(self.redirect_url)
 
-    return render(request, "ui/category_form.html", {"category": category, "form": form, "mode": "edit"})
+        return render(request, self.template_name, {"form": form, "mode": "new"})
 
 
-@login_required
-@permission_required("api.add_category")
-def category_new(request):
-    if request.method == 'GET':
-        form = CategoryForm()
-    else:
-        form = CategoryForm(request.POST)
+class StandardEditView(View, LoginRequiredMixin, PermissionRequiredMixin, InstanceMixin):
+    form_class: Form = Form
+    model_class: Model = Model
+    template_name: str = "form.html"
+    redirect_url: str = "ui_index"
+    success_message: str = _("Die Aktualisierung war erfolgreich.")
+
+    def get(self, request, *args, **kwargs):
+        form = self.form_class(instance=self.instance)
+        return render(request, self.template_name, {"form": form, "mode": "edit", "instance": self.instance})
+
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(request.POST, instance=self.instance)
         if form.is_valid():
-            # name = form.cleaned_data['name']
-            # Category.objects.create(name=name)
             form.save()
-            request.session["msg"] = "Die Kategorie wurde erfolgreich erstellt."
-            return redirect('ui_categories')
+            request.session["msg"] = self.success_message
+            return redirect(self.redirect_url)
 
-    return render(request, "ui/category_form.html", {"form": form, "mode": "new"})
+        return render(request, self.template_name, {"form": form, "mode": "edit", "instance": self.instance})
 
 
-@login_required
-@permission_required("api.delete_category")
-def category_delete(request, id):
-    category = get_object_or_404(Category, pk=id)
-    category.delete()
-    request.session["msg"] = "Die Kategorie wurde erfolgreich gelöscht."
-    return redirect("ui_categories")
+class StandardDeleteView(View, LoginRequiredMixin, PermissionRequiredMixin, InstanceMixin):
+    model_class: Model = Model
+    redirect_url: str = "ui_index"
+    success_message: str = _("Das Löschen war erfolgreich.")
+
+    def get(self, request, *args, **kwargs):
+        self.instance.delete()
+        request.session["msg"] = self.success_message
+        return redirect(self.redirect_url)
+
+
+class CategoryList(StandardListView):
+    model = Category
+    template_name = "ui/category_list.html"
+    permission_required = "api.view_category"
+
+
+class CategoryNewView(StandardNewView):
+    form_class = CategoryForm
+    template_name = "ui/category_form.html"
+    redirect_url = "ui_categories"
+    success_message = _("Die Kategorie wurde erfolgreich erstellt.")
+    permission_required = "api.add_category"
+
+
+class CategoryEditView(StandardEditView):
+    form_class = CategoryForm
+    model_class = Category
+    template_name = "ui/category_form.html"
+    redirect_url = "ui_categories"
+    success_message = _("Die Kategorie wurde erfolgreich aktualisiert.")
+    permission_required = "api.change_category"
+
+
+class CategoryDeleteView(StandardDeleteView):
+    model_class = Category
+    redirect_url = "ui_categories"
+    success_message = _("Die Kategorie wurde erfolgreich gelöscht.")
+    permission_required = "api.delete_category"
 
 
 #############
@@ -119,18 +167,12 @@ def category_delete(request, id):
 location_decorators = [login_required, permission_required("api.change_location")]
 
 
-@login_required
-@permission_required("api.view_location")
-def locations(request):
-    locations = Location.objects.all()
-    context = {
-        "locations": locations
-    }
-    if request.session.get("msg", False):
-        context["msg"] = request.session["msg"]
-        request.session["msg"] = None
+class LocationListView(StandardListView):
+    model = Location
+    template_name = "ui/locations.html"
+    permission_required = "api.view_location"
 
-    return render(request, "ui/locations.html", context)
+
 
 
 @login_required
@@ -465,7 +507,7 @@ def check_out(request):
     if request.method == "POST":
 
         # Cancel checkout
-        if request.POST.get("cancel", False):
+        if request.POST.get():
             # Delete process object
             if step > 1:
                 process.delete()
@@ -477,7 +519,7 @@ def check_out(request):
             # Redirect to base url
             return redirect("ui_check_out")
 
-        if step == 1 and request.POST.get("select-person", False):
+        if step == 1 and request.POST.get():
             # Select person
             try:
                 person = Person.objects.get(id=int(request.POST["select-person"]))
@@ -488,7 +530,7 @@ def check_out(request):
             request.session["step"] = 2
             step = 2
 
-        if step == 1 and request.POST.get("create-person", False):
+        if step == 1 and request.POST.get():
             # Create person
             if request.POST["create-person"] != "":
                 person = Person.objects.create(name=request.POST["create-person"])
@@ -499,18 +541,18 @@ def check_out(request):
             request.session["step"] = 2
             step = 2
 
-        if (step == 2 or step == 3) and request.POST.get("delete", False):
+        if (step == 2 or step == 3) and request.POST.get():
             if step == 3 and process.checks.count() < 2:
                 return redirect("ui_check_out")
             try:
                 id = int(request.POST["delete"])
-                check = process.checks.get(id=id)
+                check = process.checks.get()
                 check.delete()
                 msg = "Das Objekt wurde erfolgreich von der Check-Out-Liste entfernt."
             except (Check.DoesNotExist, ValueError):
                 return redirect("ui_check_out")
 
-        if step == 2 and request.POST.get("scan", False):
+        if step == 2 and request.POST.get():
             scan = request.POST["scan"]
             item = None
 
@@ -536,11 +578,11 @@ def check_out(request):
                 check = process.checks.create(item=item)
                 msg = "Das Objekt wurde erfolgreich zur Check-Out-Liste hinzugefügt."
 
-        if step == 2 and request.POST.get("confirm", False) and process.checks.count() > 0:
+        if step == 2 and request.POST.get() and process.checks.count() > 0:
             request.session["step"] = 3
             step = 3
 
-        elif step == 3 and request.POST.get("confirm", False) and process.checks.count() > 0:
+        elif step == 3 and request.POST.get() and process.checks.count() > 0:
             process.is_check_out_in_process = False
             process.checked_out_at = timezone.now()
             process.save()
@@ -627,7 +669,7 @@ def check_continue(request, id):
 def check_in(request):
     context = {}
     msg = False
-    if request.method == "POST" and request.POST.get("scan", False):
+    if request.method == "POST" and request.POST.get():
         scan = request.POST["scan"]
         check = None
 

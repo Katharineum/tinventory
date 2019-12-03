@@ -8,3 +8,4 @@ django-widget-tweaks
 djangorestframework
 fpdf
 Pillow
+django-debug-toolbar

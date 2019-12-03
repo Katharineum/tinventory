@@ -57,7 +57,7 @@ class CheckProcessViewSet(viewsets.ModelViewSet):
 
         process = self.get_object()
 
-        if not request.data.get("scan", False):
+        if not request.data.get():
             msg = "Fehlendes Argument."
             msg_type = "bad"
         scan = request.data["scan"]
@@ -102,13 +102,13 @@ class CheckProcessViewSet(viewsets.ModelViewSet):
         msg = ""
         msg_type = "success"
 
-        if not request.data.get("scan", False) or not request.data.get("user", False):
+        if not request.data.get() or not request.data.get():
             msg = "Fehlendes Argument."
             msg_type = "bad"
         if msg_type == "success":
             try:
                 user_id = int(request.data["user"])
-                user = User.objects.get(id=user_id)
+                user = User.objects.get()
             except (User.DoesNotExist, ValueError):
                 msg = "Es wird ein korrekter Nutzer benötigt."
                 msg_type = "bad"

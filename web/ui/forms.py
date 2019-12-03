@@ -60,7 +60,7 @@ class InventoryForm(Form):
         cleaned_data = super().clean()
         print(cleaned_data)
 
-        if cleaned_data.get("category_select", None) is None and cleaned_data["category_new"] == "":
+        if cleaned_data.get() is None and cleaned_data["category_new"] == "":
             return ValidationError("Es wird eine Kategorie benötigt.")
 
         # if cleaned_data["preset_select"] is None and cleaned_data["preset_new_name"] == "":

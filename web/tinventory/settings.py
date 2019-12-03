@@ -42,6 +42,10 @@ DEBUG = os.getenv("TINVENTORY_DEBUG", True)
 
 ALLOWED_HOSTS = []
 
+INTERNAL_IPS = [
+    '127.0.0.1',
+]
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -56,6 +60,7 @@ INSTALLED_APPS = [
     'rest_framework',
     "bootstrapform",
     'widget_tweaks',
+    'debug_toolbar',
     'api',
     "ui"
 ]
@@ -68,6 +73,7 @@ MIDDLEWARE = [
     'django.contrib.sessions.middleware.SessionMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'oauth2_provider.middleware.OAuth2TokenMiddleware',
@@ -81,7 +87,6 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [os.path.join(BASE_DIR, "templates")],
-        # "DIRS": [],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
