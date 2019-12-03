@@ -1,0 +1,26 @@
+version: "3.7"
+services:
+  maria:
+    volumes:
+      - /srv/tinventory/mysql:/var/lib/mysql
+    environment:
+
+  tinventory:
+    image: hansegucker/tinventory
+    volumes:
+      - /srv/tinventory/static:/var/www/staticcollect
+      - /srv/tinventory/media:/var/www/media
+    environment:
+      - TINVENTORY_DEBUG_MODE=False
+  web:
+    volumes:
+      - ./docker-setup/nginx-app.conf:/etc/nginx/conf.d/default.conf:ro
+      - /srv/tinventory/static:/var/www/static:ro
+      - /srv/tinventory/media:/var/www/media:ro
+
+  portainer:
+    ports:
+      - 9000:9000
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /srv/portainer/data:/data

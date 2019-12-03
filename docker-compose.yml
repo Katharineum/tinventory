@@ -7,26 +7,20 @@ services:
     environment:
       - MYSQL_DATABASE=tinventory
       - MYSQL_USER=tinventory
-      - MYSQL_PASSWORD=zbakhKStr543mT_OB/r}actiTSNHOT
       - MYSQL_RANDOM_ROOT_PASSWORD=yes
     restart: always
   tinventory:
-    build: .
+#    build: .
     volumes:
       - /srv/tinventory/static:/var/www/staticcollect
       - /srv/tinventory/media:/var/www/media
     environment:
-      - TINVENTORY_SECRET_KEY=tirnotaeronuadtirnDTNTORSOEDR78745289756Nrtiansetirnae
       - TINVENTORY_DEBUG_MODE=True
       - TINVENTORY_DB_ENGINE=django.db.backends.mysql
       - TINVENTORY_DB_NAME=tinventory
       - TINVENTORY_DB_USER=tinventory
-      - TINVENTORY_DB_PASSWORD=zbakhKStr543mT_OB/r}actiTSNHOT
       - TINVENTORY_DB_HOST=maria
       - TINVENTORY_DB_PORT=3306
-    #      - TINVENTORY_SUPERUSER=admin
-    #      - TINVENTORY_SUPERUSER_MAIL=admin@admin.com
-    #      - TINVENTORY_SUPERUSER_PASSWORD=1234Geheim
     depends_on:
       - maria
     restart: always

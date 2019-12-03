@@ -21,9 +21,18 @@ Inventory toolkit in order not to lose technology stuff anymore
 1. Install Docker
 2. Install docker-compose
 3. Go to project directory
-4. Customize settings from `docker-compose.yml` via creating `docker-compose.override.yml`
+4. Copy `example.env` to `.env`
+4. Customize settings via editing `.env`
+5. Run docker container 
+    - `$ docker-compose up -f docker-compose.yml -f docker-compose.prod.yml` (foreground)
+    - `$ docker-compose up -f docker-compose.yml -f docker-compose.prod.yml -d` (background)
+    
+### Testing docker system
+Replace step 6 with following:
 5. Run docker container 
     - `$ docker-compose up` (foreground)
     - `$ docker-compose up -d` (background)
-
+    
+The difference is that the env vars for testing are predefined in docker-compose.override.yml and the `tinventory` image is going to be build live.
+    
 More information about Docker could be found on https://docker.com
