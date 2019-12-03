@@ -16,7 +16,7 @@ jobs:
       env:
         SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
         #SLACK_USERNAME: ThisIsMyUsername # Optional.
-        SLACK_CHANNEL: tinventory # Optional.
+#        SLACK_CHANNEL: tinventory # Optional.
         #SLACK_OVERRIDE_MESSAGE: 'Custom message' # Optional.
       uses: Ilshidur/action-slack@master
       with:
