@@ -1,0 +1,87 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-12-04 21:04+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: tinventory/settings.py:154
+msgid "German"
+msgstr ""
+
+#: tinventory/settings.py:155
+msgid "English"
+msgstr ""
+
+#: ui/views.py:96
+msgid "Creating was successfully."
+msgstr ""
+
+#: ui/views.py:120
+msgid "Updating was successfully."
+msgstr ""
+
+#: ui/views.py:143
+msgid "Deleting was successfully."
+msgstr ""
+
+#: ui/views.py:161
+msgid "Category was created successfully."
+msgstr ""
+
+#: ui/views.py:170
+msgid "Category was updated successfully."
+msgstr ""
+
+#: ui/views.py:177
+msgid "Category was deleted successfully."
+msgstr ""
+
+#: ui/views.py:198
+msgid "Location was updated successfully."
+msgstr ""
+
+#: ui/views.py:223
+msgid "No item with this barcode was found."
+msgstr ""
+
+#: ui/views.py:238
+msgid "Item is already at this location."
+msgstr ""
+
+#: ui/views.py:241
+msgid "Barcode is not valid."
+msgstr ""
+
+#: ui/views.py:261
+msgid "Location was created successfully."
+msgstr ""
+
+#: ui/views.py:268
+msgid "Location was deleted successfully."
+msgstr ""
+
+#: ui/views.py:294
+msgid "Preset was updated successfully."
+msgstr ""
+
+#: ui/views.py:303
+msgid "Preset was created successfully."
+msgstr ""
+
+#: ui/views.py:310
+msgid "Preset was deleted successfully."
+msgstr ""
