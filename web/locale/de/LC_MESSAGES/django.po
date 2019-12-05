@@ -19,8 +19,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-12-04 21:05+0100\n"
-"PO-Revision-Date: 2019-12-04 21:07+0100\n"
+"POT-Creation-Date: 2019-12-05 14:04+0100\n"
+"PO-Revision-Date: 2019-12-05 14:05+0100\n"
 "Last-Translator: Jonathan Weth <trans@jonathanweth.de>\n"
 "Language-Team: German <trans@jonathanweth.de>\n"
 "Language: de\n"
@@ -79,29 +79,54 @@ msgid "Barcode is not valid."
 msgstr "Der Barcode ist nicht gültig."
 
 #: ui/views.py:261
-#| msgid "Location was updated successfully."
 msgid "Location was created successfully."
 msgstr "Der Ort wurde erfolgreich erstellt."
 
 #: ui/views.py:268
-#| msgid "Location was updated successfully."
 msgid "Location was deleted successfully."
 msgstr "Der Ort wurde erfolgreich gelöscht."
 
 #: ui/views.py:294
-#| msgid "Category was updated successfully."
 msgid "Preset was updated successfully."
 msgstr "Das Preset wurde erfolgreich aktualisiert."
 
 #: ui/views.py:303
-#| msgid "Category was created successfully."
 msgid "Preset was created successfully."
 msgstr "Das Preset wurde erfolgreich erstellt."
 
 #: ui/views.py:310
-#| msgid "Category was deleted successfully."
 msgid "Preset was deleted successfully."
 msgstr "Das Preset wurde erfolgreich gelöscht."
+
+#: ui/views.py:332
+#| msgid "Category was updated successfully."
+msgid "Item was updated successfully."
+msgstr "Das Objekt wurde erfolgreich aktualisiert."
+
+#: ui/views.py:341
+#| msgid "Category was created successfully."
+msgid "Item was created successfully."
+msgstr "Das Objekt wurde erfolgreich erstellt."
+
+#: ui/views.py:348
+#| msgid "Category was deleted successfully."
+msgid "Item was deleted successfully. "
+msgstr "Das Objekt wurde erfolgreich gelöscht."
+
+#: ui/views.py:404
+#| msgid "Preset was updated successfully."
+msgid "Person was updated successfully."
+msgstr "Die Person wurde erfolgreich aktualisiert."
+
+#: ui/views.py:413
+#| msgid "Preset was created successfully."
+msgid "Person was created successfully."
+msgstr "Die Person wurde erfolgreich erstellt."
+
+#: ui/views.py:420
+#| msgid "Preset was deleted successfully."
+msgid "Person was deleted successfully."
+msgstr "Die Person wurde erfolgreich gelöscht."
 
 #~ msgid "Only POST requests allowed."
 #~ msgstr "Es sind nur POST-Anfragen erlaubt."

@@ -311,69 +311,47 @@ class PresetDeleteView(StandardDeleteView):
     permission_required = "api.delete_preset"
 
 
-@login_required
-@permission_required("api.view_item")
-def items(request):
-    items = Item.objects.all()
-    context = {
-        "items": items
-    }
-    if request.session.get("msg", False):
-        context["msg"] = request.session["msg"]
-        request.session["msg"] = None
-
-    return render(request, "ui/items.html", context)
+class ItemListView(StandardListView):
+    model = Item
+    template_name = "ui/item/list.html"
+    permission_required = "api.view_item"
 
 
-@login_required
-@permission_required("api.view_item")
-def item_view(request, id):
-    item = get_object_or_404(Item, pk=id)
-    context = {
-        "item": item
-    }
-    return render(request, "ui/item_view.html", context)
+class ItemDetailView(StandardDetailView):
+    model = Item
+    template_name = "ui/item/view.html"
+    permission_required = "api.view_item"
 
 
-@login_required
-@permission_required("api.change_item")
-def item_edit(request, id):
-    item = get_object_or_404(Item, pk=id)
-
-    if request.method == 'GET':
-        form = ItemForm(instance=item)
-    else:
-        form = ItemForm(request.POST, instance=item)
-        if form.is_valid():
-            form.save()
-            request.session["msg"] = "Das Objekt wurde erfolgreich aktualisiert."
-            return redirect('ui_items_view', item.id)
-
-    return render(request, "ui/item_form.html", {"item": item, "form": form, "mode": "edit"})
+class ItemEditView(StandardEditView):
+    form_class = ItemForm
+    model_class = Item
+    template_name = "ui/item/form.html"
+    redirect_with_id = True
+    redirect_url = "ui_items_view"
+    success_message = _("Item was updated successfully.")
+    permission_required = "api.change_item"
 
 
-@login_required
-@permission_required("api.add_item")
-def item_new(request):
-    if request.method == 'GET':
-        form = ItemForm()
-    else:
-        form = ItemForm(request.POST)
-        if form.is_valid():
-            item = form.save()
-            request.session["msg"] = "Das Objekt wurde erfolgreich erstellt."
-            return redirect('ui_items_view', item.id)
-
-    return render(request, "ui/item_form.html", {"form": form, "mode": "new"})
+class ItemNewView(StandardNewView):
+    form_class = ItemForm
+    template_name = "ui/item/form.html"
+    redirect_url = "ui/item/view.html"
+    redirect_with_id = True
+    success_message = _("Item was created successfully.")
+    permission_required = "api.add_item"
 
 
-@login_required
-@permission_required("api.delete_item")
-def item_delete(request, id):
-    item = get_object_or_404(Item, pk=id)
-    item.delete()
-    request.session["msg"] = "Das Objekt wurde erfolgreich gelöscht."
-    return redirect("ui_items")
+class ItemDeleteView(StandardDeleteView):
+    model_class = Item
+    redirect_url = "ui_items"
+    success_message = _("Item was deleted successfully. ")
+
+
+class PDFResponse(FileResponse):
+    def __init__(self, filename: str, **kwargs):
+        f = open(filename, "rb")
+        FileResponse.__init__(self, f, content_type="application/pdf", **kwargs)
 
 
 @login_required
@@ -381,8 +359,7 @@ def item_delete(request, id):
 def item_barcode(request, id):
     item = get_object_or_404(Item, pk=id)
     filename = barcode_pdf(item)
-    f = open(filename, "rb")
-    return FileResponse(f, content_type="application/pdf")
+    return PDFResponse(filename)
 
 
 @login_required
@@ -406,69 +383,42 @@ def inventory(request):
     return render(request, "ui/inventory.html", context)
 
 
-@login_required
-@permission_required("api.view_person")
-def persons(request):
-    persons = Person.objects.all()
-    context = {
-        "persons": persons
-    }
-    if request.session.get("msg", False):
-        context["msg"] = request.session["msg"]
-        request.session["msg"] = None
-
-    return render(request, "ui/persons.html", context)
+class PersonListView(StandardListView):
+    model = Person
+    template_name = "ui/person/list.html"
+    permission_required = "api.view_person"
 
 
-@login_required
-@permission_required("api.view_person")
-def person_view(request, id):
-    person = get_object_or_404(Person, pk=id)
-    context = {
-        "person": person
-    }
-    return render(request, "ui/person_view.html", context)
+class PersonDetailView(StandardDetailView):
+    model = Person
+    template_name = "ui/person/detail.html"
+    permission_required = "api.view_person"
 
 
-@login_required
-@permission_required("api.change_person")
-def person_edit(request, id):
-    person = get_object_or_404(Person, pk=id)
-
-    if request.method == 'GET':
-        form = PersonForm(instance=person)
-    else:
-        form = PersonForm(request.POST, instance=person)
-        if form.is_valid():
-            form.save()
-            request.session["msg"] = "Die Person wurde erfolgreich aktualisiert."
-            return redirect('ui_persons_view', person.id)
-
-    return render(request, "ui/person_form.html", {"person": person, "form": form, "mode": "edit"})
+class PersonEditView(StandardEditView):
+    form_class = PersonForm
+    model_class = Person
+    template_name = "ui/person/form.html"
+    redirect_url = "ui_persons_view"
+    redirect_with_id = True
+    success_message = _("Person was updated successfully.")
+    permission_required = "api.change_person"
 
 
-@login_required
-@permission_required("api.add_person")
-def person_new(request):
-    if request.method == 'GET':
-        form = PersonForm()
-    else:
-        form = PersonForm(request.POST)
-        if form.is_valid():
-            person = form.save()
-            request.session["msg"] = "Die Person wurde erfolgreich erstellt."
-            return redirect('ui_persons_view', person.id)
-
-    return render(request, "ui/person_form.html", {"form": form, "mode": "new"})
+class PersonNewView(StandardNewView):
+    form_class = PersonForm
+    template_name = "ui/person/form.html"
+    redirect_with_id = True
+    redirect_url = "ui_persons_view"
+    success_message = _("Person was created successfully.")
+    permission_required = "api.add_person"
 
 
-@login_required
-@permission_required("api.delete_person")
-def person_delete(request, id):
-    person = get_object_or_404(Person, pk=id)
-    person.delete()
-    request.session["msg"] = "Die Person wurde erfolgreich gelöscht."
-    return redirect("ui_persons")
+class PersonDeleteView(StandardDeleteView):
+    model_class = Person
+    redirect_url = "ui_persons"
+    success_message = _("Person was deleted successfully.")
+    permission_required = "api.delete_person"
 
 
 @login_required
@@ -583,8 +533,7 @@ def check_out(request):
 def loan_form(request, id):
     process = get_object_or_404(CheckOutProcess, pk=id)
     filename = loan_form_pdf(process)
-    f = open(filename, "rb")
-    return FileResponse(f, content_type="application/pdf")
+    return PDFResponse(filename)
 
 
 @login_required
@@ -628,7 +577,7 @@ def check_edit(request, id):
             request.session["msg"] = "Die Rückgabebedingungen wurden erfolgreich aktualisiert."
             return redirect('ui_checks_view', check.id)
 
-    return render(request, "ui/person_form.html", {"check": check, "form": form})
+    return render(request, "ui/person/form.html", {"check": check, "form": form})
 
 
 @login_required
@@ -675,8 +624,7 @@ def check_in(request):
 def check_in_confirmation(request, id):
     process = get_object_or_404(CheckOutProcess, pk=id)
     filename = check_in_confirmation_pdf(process)
-    f = open(filename, "rb")
-    return FileResponse(f, content_type="application/pdf")
+    return PDFResponse(filename)
 
 
 @login_required
@@ -691,8 +639,7 @@ def excuse(request):
                                        form.cleaned_data["start"],
                                        form.cleaned_data["stop"], form.cleaned_data["reason"])
 
-            f = open(filename, "rb")
-            return FileResponse(f, content_type="application/pdf")
+            return PDFResponse(filename)
 
     return render(request, "ui/excuse.html", context={"form": form})
 

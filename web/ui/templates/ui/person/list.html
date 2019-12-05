@@ -35,7 +35,7 @@
             </tr>
             </thead>
             <tbody>
-            {% for person in persons %}
+            {% for person in person_list %}
                 <tr>
                     <th scope="row">{{ person.id }}</th>
                     <td>
@@ -47,7 +47,7 @@
                         {% endif %}
                     </td>
                     <td>
-                        {% include "ui/person_status.html" %}
+                        {% include "ui/person/status.html" %}
                     </td>
                     <td>
                         <div class="btn-group" role="group" aria-label="Aktionen">

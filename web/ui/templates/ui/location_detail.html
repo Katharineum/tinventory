@@ -92,7 +92,7 @@
                                 <div class="col-sm-8">
                                     <a href="{% url "ui_items_view" item.pk %}">{{ item.name }}</a>
                                 </div>
-                                <div class="col-sm-3">{% include "ui/item_status.html" %}</div>
+                                <div class="col-sm-3">{% include "ui/item/status.html" %}</div>
                             </div>
                         </li>
                     {% endfor %}

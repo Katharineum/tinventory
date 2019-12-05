@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-12-04 21:04+0100\n"
+"POT-Creation-Date: 2019-12-05 14:04+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -84,4 +84,28 @@ msgstr ""
 
 #: ui/views.py:310
 msgid "Preset was deleted successfully."
+msgstr ""
+
+#: ui/views.py:332
+msgid "Item was updated successfully."
+msgstr ""
+
+#: ui/views.py:341
+msgid "Item was created successfully."
+msgstr ""
+
+#: ui/views.py:348
+msgid "Item was deleted successfully. "
+msgstr ""
+
+#: ui/views.py:404
+msgid "Person was updated successfully."
+msgstr ""
+
+#: ui/views.py:413
+msgid "Person was created successfully."
+msgstr ""
+
+#: ui/views.py:420
+msgid "Person was deleted successfully."
 msgstr ""
