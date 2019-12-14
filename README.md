@@ -36,3 +36,4 @@ Replace step 6 with following:
 The difference is that the env vars for testing are predefined in docker-compose.override.yml and the `tinventory` image is going to be build live.
     
 More information about Docker could be found on https://docker.com
+ 
