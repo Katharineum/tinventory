@@ -38,7 +38,7 @@
             </tr>
             </thead>
             <tbody>
-            {% for item in items %}
+            {% for item in item_list %}
                 <tr>
                     <th scope="row">{{ item.id }} (<code>{{ item.barcode }}</code>)</th>
                     <td>
@@ -53,7 +53,7 @@
                         <a href="{% url "ui_items_view"  item.id %}">{{ item.name }}</a>
                     </td>
                     <td>
-                        {% include "ui/item_status.html" %}
+                        {% include "ui/item/status.html" %}
                     </td>
                     <td>
                         <div class="btn-group" role="group" aria-label="Aktionen">

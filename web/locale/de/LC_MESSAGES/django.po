@@ -1,0 +1,135 @@
+#  Copyright (c) 2019 Jonathan Weth, Lübeck.
+#
+#  This file is part of TInventory.
+#
+#  TInventory is free software: you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License as published by
+#  the Free Software Foundation, either version 3 of the License.
+#
+#  TInventory is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU General Public License for more details.
+#
+#  You should have received a copy of the GNU General Public License
+#  along with TInventory.  If not, see <http://www.gnu.org/licenses/>.
+# Jonathan Weth <trans@jonathanweth.de>, 2019.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-12-05 14:04+0100\n"
+"PO-Revision-Date: 2019-12-05 18:05+0000\n"
+"Last-Translator: Jonathan Weth <teckids@jonathanweth.de>\n"
+"Language-Team: German <https://translate.edugit.org/projects/tinventory/"
+"tinventory/de/>\n"
+"Language: de\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 3.8\n"
+
+#: tinventory/settings.py:154
+msgid "German"
+msgstr "Deutsch"
+
+#: tinventory/settings.py:155
+msgid "English"
+msgstr "Englisch"
+
+#: ui/views.py:96
+msgid "Creating was successfully."
+msgstr "Die Erstellung war erfolgreich."
+
+#: ui/views.py:120
+msgid "Updating was successfully."
+msgstr "Die Aktualisierung war erfolgreich."
+
+#: ui/views.py:143
+msgid "Deleting was successfully."
+msgstr "Das Löschen war erfolgreich."
+
+#: ui/views.py:161
+msgid "Category was created successfully."
+msgstr "Die Kategorie wurde erfolgreich erstellt."
+
+#: ui/views.py:170
+msgid "Category was updated successfully."
+msgstr "Die Kategorie wurde erfolgreich aktualisiert."
+
+#: ui/views.py:177
+msgid "Category was deleted successfully."
+msgstr "Die Kategorie wurde erfolgreich gelöscht."
+
+#: ui/views.py:198
+msgid "Location was updated successfully."
+msgstr "Der Ort wurde erfolgreich aktualisiert."
+
+#: ui/views.py:223
+msgid "No item with this barcode was found."
+msgstr "Es wurde kein Objekt mit diesem Barcode gefunden."
+
+#: ui/views.py:238
+msgid "Item is already at this location."
+msgstr "Das Objekt ist bereits an diesem Ort."
+
+#: ui/views.py:241
+msgid "Barcode is not valid."
+msgstr "Der Barcode ist nicht gültig."
+
+#: ui/views.py:261
+msgid "Location was created successfully."
+msgstr "Der Ort wurde erfolgreich erstellt."
+
+#: ui/views.py:268
+msgid "Location was deleted successfully."
+msgstr "Der Ort wurde erfolgreich gelöscht."
+
+#: ui/views.py:294
+msgid "Preset was updated successfully."
+msgstr "Das Preset wurde erfolgreich aktualisiert."
+
+#: ui/views.py:303
+msgid "Preset was created successfully."
+msgstr "Das Preset wurde erfolgreich erstellt."
+
+#: ui/views.py:310
+msgid "Preset was deleted successfully."
+msgstr "Das Preset wurde erfolgreich gelöscht."
+
+#: ui/views.py:332
+#| msgid "Category was updated successfully."
+msgid "Item was updated successfully."
+msgstr "Das Objekt wurde erfolgreich aktualisiert."
+
+#: ui/views.py:341
+#| msgid "Category was created successfully."
+msgid "Item was created successfully."
+msgstr "Das Objekt wurde erfolgreich erstellt."
+
+#: ui/views.py:348
+msgid "Item was deleted successfully. "
+msgstr "Das Objekt wurde erfolgreich gelöscht. "
+
+#: ui/views.py:404
+#| msgid "Preset was updated successfully."
+msgid "Person was updated successfully."
+msgstr "Die Person wurde erfolgreich aktualisiert."
+
+#: ui/views.py:413
+#| msgid "Preset was created successfully."
+msgid "Person was created successfully."
+msgstr "Die Person wurde erfolgreich erstellt."
+
+#: ui/views.py:420
+#| msgid "Preset was deleted successfully."
+msgid "Person was deleted successfully."
+msgstr "Die Person wurde erfolgreich gelöscht."
+
+#~ msgid "Only POST requests allowed."
+#~ msgstr "Es sind nur POST-Anfragen erlaubt."
+
+#~ msgid "No 'grant_type' included in the request."
+#~ msgstr "Es wurde kein 'grant_type' in der Anfrage gefunden."

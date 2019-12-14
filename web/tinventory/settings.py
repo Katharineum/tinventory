@@ -27,6 +27,7 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 #  along with TInventory.  If not, see <http://www.gnu.org/licenses/>.
 
 import os
+from django.utils.translation import gettext_lazy as _
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -147,8 +148,13 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # Internationalization
 # https://docs.djangoproject.com/en/2.1/topics/i18n/
+LOCALE_PATHS = (os.path.join(BASE_DIR, 'locale'),)
 
-LANGUAGE_CODE = 'de-de'
+LANGUAGES = [
+    ("de", _("German")),
+    ("en", _("English"))
+]
+LANGUAGE_CODE = 'de'
 
 TIME_ZONE = 'Europe/Berlin'
 
