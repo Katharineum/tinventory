@@ -474,7 +474,8 @@ def check_out(request):
                 id = int(request.POST["delete"])
                 check = process.checks.get()
                 check.delete()
-                msg = "Das Objekt wurde erfolgreich von der Check-Out-Liste entfernt."
+                msg = _(
+                    "Object was removed from check out list successfully.")  # "Das Objekt wurde erfolgreich von der Check-Out-Liste entfernt."
             except (Check.DoesNotExist, ValueError):
                 return redirect("ui_check_out")
 
@@ -489,7 +490,7 @@ def check_out(request):
                 try:
                     item = Item.objects.get(barcode=scan)
                 except Item.DoesNotExist:
-                    msg = "Es gibt kein Objekt mit dieser ID oder diesem Barcode: {}".format(scan)
+                    msg = "Es gibt kein Objekt mit der ID oder dem Barcode {}.".format(scan)
                     msg_type = "bad"
 
             if msg_type == "success":
@@ -634,7 +635,6 @@ def excuse(request):
     else:
         form = ExcuseForm(request.POST)
         if form.is_valid():
-            print("Hi")
             filename = excuse_form_pdf(form.cleaned_data["technician"], form.cleaned_data["date"],
                                        form.cleaned_data["start"],
                                        form.cleaned_data["stop"], form.cleaned_data["reason"])
