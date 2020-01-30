@@ -271,4 +271,7 @@ TSWLatexianTemp*
 # standalone packages
 *.sta
 
+# Docker env
+.env
+
 *.pkl
