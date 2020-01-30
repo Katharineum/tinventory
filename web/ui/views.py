@@ -433,7 +433,7 @@ def check_out(request):
     if request.method == "POST":
 
         # Cancel checkout
-        if request.POST.get():
+        if request.POST.get("cancel", False):
             # Delete process object
             if step > 1:
                 process.delete()
@@ -445,7 +445,7 @@ def check_out(request):
             # Redirect to base url
             return redirect("ui_check_out")
 
-        if step == 1 and request.POST.get():
+        if step == 1 and request.POST.get("select-person", False):
             # Select person
             try:
                 person = Person.objects.get(id=int(request.POST["select-person"]))
@@ -456,7 +456,7 @@ def check_out(request):
             request.session["step"] = 2
             step = 2
 
-        if step == 1 and request.POST.get():
+        if step == 1 and request.POST.get("create-person", False):
             # Create person
             if request.POST["create-person"] != "":
                 person = Person.objects.create(name=request.POST["create-person"])
@@ -467,19 +467,19 @@ def check_out(request):
             request.session["step"] = 2
             step = 2
 
-        if (step == 2 or step == 3) and request.POST.get():
+        if (step == 2 or step == 3) and request.POST.get("delete", False):
             if step == 3 and process.checks.count() < 2:
                 return redirect("ui_check_out")
             try:
                 id = int(request.POST["delete"])
-                check = process.checks.get()
+                check = process.checks.get(id=id)
                 check.delete()
                 msg = _(
                     "Object was removed from check out list successfully.")  # "Das Objekt wurde erfolgreich von der Check-Out-Liste entfernt."
             except (Check.DoesNotExist, ValueError):
                 return redirect("ui_check_out")
 
-        if step == 2 and request.POST.get():
+        if step == 2 and request.POST.get("scan", False):
             scan = request.POST["scan"]
             item = None
 
@@ -505,11 +505,11 @@ def check_out(request):
                 check = process.checks.create(item=item)
                 msg = "Das Objekt wurde erfolgreich zur Check-Out-Liste hinzugefügt."
 
-        if step == 2 and request.POST.get() and process.checks.count() > 0:
+        if step == 2 and request.POST.get("confirm", False) and process.checks.count() > 0:
             request.session["step"] = 3
             step = 3
 
-        elif step == 3 and request.POST.get() and process.checks.count() > 0:
+        elif step == 3 and request.POST.get("confirm", False) and process.checks.count() > 0:
             process.is_check_out_in_process = False
             process.checked_out_at = timezone.now()
             process.save()
@@ -595,7 +595,7 @@ def check_continue(request, id):
 def check_in(request):
     context = {}
     msg = False
-    if request.method == "POST" and request.POST.get():
+    if request.method == "POST" and request.POST.get("scan", False):
         scan = request.POST["scan"]
         check = None
 
