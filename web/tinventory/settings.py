@@ -206,4 +206,9 @@ LOGIN_REDIRECT_URL = "/"
 
 YARN_INSTALLED_APPS = [
     "bootstrap-datepicker",
+    "jquery",
+    "popper.js",
+    "bootstrap",
+    "@fortawesome/fontawesome-free",
+    "datatables.net-bs4",
 ]
