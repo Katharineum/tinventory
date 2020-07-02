@@ -28,9 +28,15 @@
 <script src="{% static "js/popper.min.js" %}"></script>
 <script src="{% static "js/bootstrap.min.js" %}"></script>
 <script src="{% static "js/datatables.min.js" %}"></script>
+<script src="{% static "bootstrap-datepicker/dist/js/bootstrap-datepicker.js" %}"></script>
+<script src="{% static "bootstrap-datepicker/dist/locales/bootstrap-datepicker."|add:LANGUAGE_CODE|add:".min.js" %}"></script>
+
 <script>
     $(document).ready(function () {
         $('[data-toggle="tooltip"]').tooltip();
+        $('.datepicker-field').datepicker({
+            language: '{{ LANGUAGE_CODE }}'
+        });
     })
 </script>
 </body>

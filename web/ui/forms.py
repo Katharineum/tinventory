@@ -15,7 +15,7 @@
 #  along with TInventory.  If not, see <http://www.gnu.org/licenses/>.
 
 from django.core.exceptions import ValidationError
-from django.forms import ModelForm, Form
+from django.forms import ModelForm, Form, TextInput, DateInput
 from django import forms
 
 from api.models import Category, Location, Preset, Item, Person, CheckOutProcess
@@ -96,6 +96,9 @@ class CheckForm(ModelForm):
     class Meta:
         model = CheckOutProcess
         fields = ("check_in_until", "condition")
+        widgets = {
+            "check_in_until": DateInput(attrs={"class": "datepicker-field"})
+        }
 
 
 HOURS = [(i, "{}. Stunde".format(i)) for i in range(1, 10)]

@@ -62,6 +62,7 @@ INSTALLED_APPS = [
     "bootstrapform",
     'widget_tweaks',
     'debug_toolbar',
+    'django_yarnpkg',
     'api',
     "ui"
 ]
@@ -171,8 +172,14 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
 ]
+STATICFILES_FINDERS = [
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    'django_yarnpkg.finders.NodeModulesFinder',
+]
 
 STATIC_ROOT = os.path.join(BASE_DIR, "staticcollect")
+NODE_MODULES_ROOT = os.path.join(BASE_DIR, 'node_modules')
 
 REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
@@ -196,3 +203,7 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 LOGIN_REDIRECT_URL = "/"
+
+YARN_INSTALLED_APPS = [
+    "bootstrap-datepicker",
+]

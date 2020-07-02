@@ -275,3 +275,5 @@ TSWLatexianTemp*
 .env
 
 *.pkl
+
+node_modules/

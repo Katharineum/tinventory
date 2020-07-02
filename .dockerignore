@@ -271,3 +271,5 @@ TSWLatexianTemp*
 
 # standalone packages
 *.sta
+
+node_modules/

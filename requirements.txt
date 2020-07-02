@@ -9,3 +9,4 @@ djangorestframework
 fpdf
 Pillow
 django-debug-toolbar
+django-yarnpkg
