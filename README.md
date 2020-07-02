@@ -12,6 +12,8 @@ Inventory toolkit in order not to lose technology stuff anymore
 2. Install needed pip libraries by `(env) $ pip install -r requirements.txt`
 3. Do migrations
 `(env) $ python manage.py makemigrations && python manage.py migrate`
+4. Install yarn packages (ensure `yarnpkg` is installed)
+`(env) $ python manage.py yarn install`
 5. Create first user
 `(env) $ python manage.py createsuperuser`
 4. Run development server
