@@ -1,7 +1,8 @@
-{% load static %}
+{% load static i18n %}
+{% get_current_language as LANGUAGE_CODE %}
 
 <!doctype html>
-<html lang="de">
+<html lang="{{ LANGUAGE_CODE }}">
 <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
@@ -21,7 +22,7 @@
         }
 
     </script>
-    <title>TInventory</title>
+    <title>{% trans "TInventory" %}</title>
 
     {% block extra_head %}{% endblock %}
 </head>
@@ -29,7 +30,8 @@
 {% if user.is_authenticated %}
     <header>
         <nav class="navbar navbar-expand-lg">
-            <a class="navbar-brand" href="{% url "ui_index" %}"><i class="fas fa-search-location"></i> TInventory</a>
+            <a class="navbar-brand" href="{% url "ui_index" %}"><i
+                    class="fas fa-search-location"></i> {% trans "TInventory" %}</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
                     aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -38,68 +40,68 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item active">
-                        <a class="nav-link" href="{% url "ui_index" %}">Startseite</a>
+                        <a class="nav-link" href="{% url "ui_index" %}">{% trans "Home" %}</a>
                     </li>
                     {% if perms.api.view_category %}
                         <li class="nav-item active">
-                            <a class="nav-link" href="{% url "ui_categories" %}">Kategorien</a>
+                            <a class="nav-link" href="{% url "ui_categories" %}">{% trans "Categories" %}</a>
                         </li>
                     {% endif %}
                     {% if perms.api.view_location %}
                         <li class="nav-item active">
-                            <a class="nav-link" href="{% url "ui_locations" %}">Orte</a>
+                            <a class="nav-link" href="{% url "ui_locations" %}">{% trans "Locations" %}</a>
                         </li>
                     {% endif %}
                     {% if perms.api.view_preset %}
                         <li class="nav-item active">
-                            <a class="nav-link" href="{% url "ui_presets" %}">Presets</a>
+                            <a class="nav-link" href="{% url "ui_presets" %}">{% trans "Presets" %}</a>
                         </li>
                     {% endif %}
                     {% if perms.api.view_item %}
                         <li class="nav-item active">
-                            <a class="nav-link" href="{% url "ui_items" %}">Objekte</a>
+                            <a class="nav-link" href="{% url "ui_items" %}">{% trans "Items" %}</a>
                         </li>
                     {% endif %}
                     {% if perms.api.view_item %}
                         <li class="nav-item active">
-                            <a class="nav-link" href="{% url "ui_inventory" %}">Inventarisierung</a>
+                            <a class="nav-link" href="{% url "ui_inventory" %}">{% trans "Inventory" %}</a>
                         </li>
                     {% endif %}
                     {% if perms.api.view_person %}
                         <li class="nav-item active">
-                            <a class="nav-link" href="{% url "ui_persons" %}">Personen</a>
+                            <a class="nav-link" href="{% url "ui_persons" %}">{% trans "Persons" %}</a>
                         </li>
                     {% endif %}
                     {% if perms.api.check_out %}
                         <li class="nav-item active">
-                            <a class="nav-link" href="{% url "ui_check_out" %}">Check-Out</a>
+                            <a class="nav-link" href="{% url "ui_check_out" %}">{% trans "Check out" %}</a>
                         </li>
                     {% endif %}
                     {% if perms.api.check_in %}
                         <li class="nav-item active">
-                            <a class="nav-link" href="{% url "ui_check_in" %}">Check-In</a>
+                            <a class="nav-link" href="{% url "ui_check_in" %}">{% trans "Check in" %}</a>
                         </li>
                     {% endif %}
                     {% if perms.api.check_out %}
                         <li class="nav-item active">
-                            <a class="nav-link" href="{% url "ui_checks" %}">Checks</a>
+                            <a class="nav-link" href="{% url "ui_checks" %}">{% trans "Checks" %}</a>
                         </li>
                     {% endif %}
                     <li class="nav-item active">
-                        <a class="nav-link" href="{% url "ui_excuse" %}">Entschuldigung</a>
+                        <a class="nav-link" href="{% url "ui_excuse" %}">{% trans "Excuse form" %}</a>
                     </li>
                     {% if user.is_staff %}
                         <li class="nav-item active">
-                            <a class="nav-link" href="{% url "admin:index" %}">Administration</a>
+                            <a class="nav-link" href="{% url "admin:index" %}">{% trans "Administration" %}</a>
                         </li>
                     {% endif %}
                 </ul>
                 <ul class="navbar-nav align-right">
                     <li class="navbar-text">
-                        Angemeldet als {{ user }}
+                        {% blocktrans with user=user %}Logged in as {{ user }}{% endblocktrans %}
                     </li>
                     <li>
-                        <a class="nav-link" href="{% url "logout" %}">Abmelden</a>
+                        <a class="nav-link" href="{% url "logout" %}">{% trans "Logout" %}</a>
                     </li>
                 </ul>
             </div>
@@ -114,7 +116,6 @@
 
 <footer class="fixed-bottom p-3 text-muted bg-light">
     <div class="float-right">
-        {% load i18n %}
 
         <form action="{% url 'set_language' %}" method="post">{% csrf_token %}
             <input name="next" type="hidden" value="{{ redirect_to }}">
@@ -134,7 +135,7 @@
     </div>
 
     Copyright &copy; 2019–2020 Jonathan Weth, Lübeck. ·
-    <a href="{% url "ui_license" %}">Copyright, Lizenz und Credits</a>
+    <a href="{% url "ui_license" %}">{% trans "Copyright, license and credits" %}</a>
 </footer>
 
 <script src="{% static "popper.js/dist/popper.min.js" %}"></script>

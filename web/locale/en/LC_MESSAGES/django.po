@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-12-05 14:04+0100\n"
+"POT-Creation-Date: 2020-07-02 22:54+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,11 +18,76 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: tinventory/settings.py:154
-msgid "German"
+#: templates/base.html:25 templates/base.html:33
+msgid "TInventory"
+msgstr ""
+
+#: templates/base.html:42
+msgid "Home"
+msgstr ""
+
+#: templates/base.html:46
+msgid "Categories"
+msgstr ""
+
+#: templates/base.html:51
+msgid "Locations"
+msgstr ""
+
+#: templates/base.html:56
+msgid "Presets"
+msgstr ""
+
+#: templates/base.html:61
+msgid "Items"
+msgstr ""
+
+#: templates/base.html:66
+msgid "Inventory"
+msgstr ""
+
+#: templates/base.html:71
+msgid "Persons"
+msgstr ""
+
+#: templates/base.html:76
+msgid "Check out"
+msgstr ""
+
+#: templates/base.html:81
+msgid "Check in"
+msgstr ""
+
+#: templates/base.html:86
+msgid "Checks"
+msgstr ""
+
+#: templates/base.html:90
+msgid "Excuse form"
+msgstr ""
+
+#: templates/base.html:94
+msgid "Administration"
+msgstr ""
+
+#: templates/base.html:100
+#, python-format
+msgid "Logged in as %(user)s"
+msgstr ""
+
+#: templates/base.html:103
+msgid "Logout"
+msgstr ""
+
+#: templates/base.html:137
+msgid "Copyright, license and credits"
 msgstr ""
 
 #: tinventory/settings.py:155
+msgid "German"
+msgstr ""
+
+#: tinventory/settings.py:156
 msgid "English"
 msgstr ""
 
@@ -108,4 +173,8 @@ msgstr ""
 
 #: ui/views.py:420
 msgid "Person was deleted successfully."
+msgstr ""
+
+#: ui/views.py:478
+msgid "Object was removed from check out list successfully."
 msgstr ""
