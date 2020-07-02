@@ -20,7 +20,7 @@ msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-07-02 22:54+0200\n"
-"PO-Revision-Date: 2019-12-05 18:05+0000\n"
+"PO-Revision-Date: 2020-07-03 15:46+0000\n"
 "Last-Translator: Jonathan Weth <teckids@jonathanweth.de>\n"
 "Language-Team: German <https://translate.edugit.org/projects/tinventory/"
 "tinventory/de/>\n"
@@ -29,72 +29,72 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 3.8\n"
+"X-Generator: Weblate 4.0.1\n"
 
 #: templates/base.html:25 templates/base.html:33
 msgid "TInventory"
-msgstr ""
+msgstr "TInventory"
 
 #: templates/base.html:42
 msgid "Home"
-msgstr ""
+msgstr "Startseite"
 
 #: templates/base.html:46
 msgid "Categories"
-msgstr ""
+msgstr "Kategorien"
 
 #: templates/base.html:51
 msgid "Locations"
-msgstr ""
+msgstr "Orte"
 
 #: templates/base.html:56
 msgid "Presets"
-msgstr ""
+msgstr "Presets"
 
 #: templates/base.html:61
 msgid "Items"
-msgstr ""
+msgstr "Objekte"
 
 #: templates/base.html:66
 msgid "Inventory"
-msgstr ""
+msgstr "Inventarisierung"
 
 #: templates/base.html:71
 msgid "Persons"
-msgstr ""
+msgstr "Personen"
 
 #: templates/base.html:76
 msgid "Check out"
-msgstr ""
+msgstr "Check-Out"
 
 #: templates/base.html:81
 msgid "Check in"
-msgstr ""
+msgstr "Check-In"
 
 #: templates/base.html:86
 msgid "Checks"
-msgstr ""
+msgstr "Checks"
 
 #: templates/base.html:90
 msgid "Excuse form"
-msgstr ""
+msgstr "Entschuldigung"
 
 #: templates/base.html:94
 msgid "Administration"
-msgstr ""
+msgstr "Administration"
 
 #: templates/base.html:100
 #, python-format
 msgid "Logged in as %(user)s"
-msgstr ""
+msgstr "Angemeldet als %(user)s"
 
 #: templates/base.html:103
 msgid "Logout"
-msgstr ""
+msgstr "Abmelden"
 
 #: templates/base.html:137
 msgid "Copyright, license and credits"
-msgstr ""
+msgstr "Copyright, Lizenz und Credits"
 
 #: tinventory/settings.py:155
 msgid "German"
