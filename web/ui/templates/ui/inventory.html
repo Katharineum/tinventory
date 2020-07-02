@@ -1,278 +1,279 @@
+{% extends "base.html" %}
 {% load widget_tweaks %}
-{% include "header.html" %}
 
-<nav aria-label="breadcrumb" class="m-1">
-    <ol class="breadcrumb">
-        <li class="breadcrumb-item">
-            <a href="{% url "ui_index" %}">Startseite</a>
-        </li>
-        <li class="breadcrumb-item">
-            <a href="{% url "ui_items" %}">Objekte</a>
-        </li>
-        <li class="breadcrumb-item active" aria-current="page">Inventarisierung</li>
+{% block content %}
+    <nav aria-label="breadcrumb" class="m-1">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="{% url "ui_index" %}">Startseite</a>
+            </li>
+            <li class="breadcrumb-item">
+                <a href="{% url "ui_items" %}">Objekte</a>
+            </li>
+            <li class="breadcrumb-item active" aria-current="page">Inventarisierung</li>
 
-    </ol>
-</nav>
+        </ol>
+    </nav>
 
-<h1 class="display-5 m-1">Inventarisierung</h1>
+    <h1 class="display-5 m-1">Inventarisierung</h1>
 
-{% include "parts/msg.html" %}
-{% if msg %}
-    <div class="card mb-2">
-        <div class="card-body">
-            <h5>Was soll nun passieren?</h5>
-            <a role="button" class="btn btn-success" href="#form">Weiteres Objekt erstellen</a>
-            <a role="button" class="btn btn-success" href="{% url "ui_items_view" created_item.id %}">
-                Objekt anzeigen
-            </a>
-            <a role="button" class="btn btn-success" href="{% url "ui_item_barcode" created_item.id %}">Barcode
-                drucken
-            </a>
-        </div>
-    </div>
-{% endif %}
-
-<form action="" method="post" id="form">
-    {% csrf_token %}
-    {% if form.non_field_errors %}
+    {% include "parts/msg.html" %}
+    {% if msg %}
         <div class="card mb-2">
             <div class="card-body">
-                <div class="alert alert-danger" role="alert">
-                    {{ form.non_field_errors }}
-                </div>
+                <h5>Was soll nun passieren?</h5>
+                <a role="button" class="btn btn-success" href="#form">Weiteres Objekt erstellen</a>
+                <a role="button" class="btn btn-success" href="{% url "ui_items_view" created_item.id %}">
+                    Objekt anzeigen
+                </a>
+                <a role="button" class="btn btn-success" href="{% url "ui_item_barcode" created_item.id %}">Barcode
+                    drucken
+                </a>
             </div>
         </div>
     {% endif %}
 
-    <div class="card mb-2">
-        <div class="card-body">
-            <h5>Barcode</h5>
-            <p class="alert alert-info">
-                <i class="fa fa-info mr-2"></i>
-                An dieser Stelle kann ein bereits bestehender, individueller Barcode eingescannt werden.
-            </p>
-            <div class="form-group ">
-                {% if form.barcode.errors %}
+    <form action="" method="post" id="form">
+        {% csrf_token %}
+        {% if form.non_field_errors %}
+            <div class="card mb-2">
+                <div class="card-body">
                     <div class="alert alert-danger" role="alert">
-                        {{ form.barcode.errors }}
-                    </div>
-                {% endif %}
-                <label for="{{ form.barcode.id_for_label }}">
-                    Barcode
-                </label>
-                {{ form.barcode|add_class:"form-control"|attr:"placeholder:Barcode"|attr:"autofocus:autofocus" }}
-                <small class="text-muted">Feld freilassen, um Barcode automatisch zu generieren</small>
-            </div>
-        </div>
-    </div>
-
-    <div class="card mb-2">
-        <div class="card-body">
-            <h5>Kategorie auswählen
-                <span class="text-danger">*</span>
-            </h5>
-            <div class="row">
-                <div class="col-sm">
-                    <div class="form-group">
-                        {% if form.category_select.errors %}
-                            <div class="alert alert-danger" role="alert">
-                                {{ form.category_select.errors }}
-                            </div>
-                        {% endif %}
-                        <label for="{{ form.category_select.id_for_label }}"><strong>Kategorie
-                            auswählen</strong></label>
-                        {{ form.category_select|add_class:"form-control" }}
-                    </div>
-                </div>
-                <div class="col-sm-1 text-center">
-                    <em>oder</em>
-                </div>
-                <div class="col-sm">
-                    <div class="form-group">
-                        {% if form.category_new.errors %}
-                            <div class="alert alert-danger" role="alert">
-                                {{ form.category_new.errors }}
-                            </div>
-                        {% endif %}
-                        <label for="{{ form.category_new.id_for_label }}"><strong>eine neue Kategorie
-                            erstellen</strong></label>
-                        {{ form.category_new|add_class:"form-control"|add_class:"no-check"|attr:"placeholder:Name der neuen Kategorie" }}
+                        {{ form.non_field_errors }}
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
+        {% endif %}
 
-
-    <div class="card mb-2">
-        <div class="card-body">
-            <div class="row">
-                <div class="col-sm">
-                    <h5>Soll für dieses Objekt ein Preset verwendet werden?</h5>
-                    <p>
-                        <span class="text-muted">Die Angabe eines Presets ist optional.</span>
-                    </p>
-                </div>
-                {#                <div class="col-sm d-flex flex-row-reverse align-items-start">#}
-                {#                    <div class="btn-group btn-group-toggle" data-toggle="buttons">#}
-                {#                        <label class="btn btn-success active">#}
-                {#                            <input type="radio" name="use-preset" id="preset_yes" autocomplete="off" checked#}
-                {#                                   value="yes">#}
-                {#                            Preset verwenden#}
-                {#                        </label>#}
-                {#                        <label class="btn btn-danger">#}
-                {#                            <input type="radio" name="use-preset" id="preset_no" autocomplete="off" value="no">#}
-                {#                            Kein Preset verwenden#}
-                {#                        </label>#}
-                {#                    </div>#}
-                {#                </div>#}
-            </div>
-
-
-            <div class="row">
-                <div class="col-sm">
-                    <div class="form-group preset">
-                        {% if form.preset_select.errors %}
-                            <div class="alert alert-danger" role="alert">
-                                {{ form.preset_select.errors }}
-                            </div>
-                        {% endif %}
-                        <label for="{{ form.preset_select.id_for_label }}"><strong>Preset auswählen</strong></label>
-                        {{ form.preset_select|add_class:"form-control"|add_class:"no-check" }}
-                    </div>
-
-
-                </div>
-                <div class="col-sm-1 text-center">
-                    <em>oder</em>
-                </div>
-                <div class="col-sm">
-                    <label for="{{ form.preset_new_name.id_for_label }}" class="preset">
-                        <strong>ein neues Preset erstellen</strong>
+        <div class="card mb-2">
+            <div class="card-body">
+                <h5>Barcode</h5>
+                <p class="alert alert-info">
+                    <i class="fa fa-info mr-2"></i>
+                    An dieser Stelle kann ein bereits bestehender, individueller Barcode eingescannt werden.
+                </p>
+                <div class="form-group ">
+                    {% if form.barcode.errors %}
+                        <div class="alert alert-danger" role="alert">
+                            {{ form.barcode.errors }}
+                        </div>
+                    {% endif %}
+                    <label for="{{ form.barcode.id_for_label }}">
+                        Barcode
                     </label>
-                    <div class="form-group preset">
-                        {% if form.preset_new_name.errors %}
-                            <div class="alert alert-danger" role="alert">
-                                {{ form.preset_new_name.errors }}
-                            </div>
-                        {% endif %}
-                        {{ form.preset_new_name|add_class:"form-control"|attr:"placeholder:Name des neuen Presets"|add_class:"no-check" }}
+                    {{ form.barcode|add_class:"form-control"|attr:"placeholder:Barcode"|attr:"autofocus:autofocus" }}
+                    <small class="text-muted">Feld freilassen, um Barcode automatisch zu generieren</small>
+                </div>
+            </div>
+        </div>
+
+        <div class="card mb-2">
+            <div class="card-body">
+                <h5>Kategorie auswählen
+                    <span class="text-danger">*</span>
+                </h5>
+                <div class="row">
+                    <div class="col-sm">
+                        <div class="form-group">
+                            {% if form.category_select.errors %}
+                                <div class="alert alert-danger" role="alert">
+                                    {{ form.category_select.errors }}
+                                </div>
+                            {% endif %}
+                            <label for="{{ form.category_select.id_for_label }}"><strong>Kategorie
+                                auswählen</strong></label>
+                            {{ form.category_select|add_class:"form-control" }}
+                        </div>
                     </div>
-                    <div class="form-group preset">
-                        {% if form.preset_new_manufacturer.errors %}
-                            <div class="alert alert-danger" role="alert">
-                                {{ form.preset_new_manufacturer.errors }}
-                            </div>
-                        {% endif %}
-                        {{ form.preset_new_manufacturer|add_class:"form-control"|attr:"placeholder:Hersteller des neuen Presets (optional)"|add_class:"no-check" }}
+                    <div class="col-sm-1 text-center">
+                        <em>oder</em>
+                    </div>
+                    <div class="col-sm">
+                        <div class="form-group">
+                            {% if form.category_new.errors %}
+                                <div class="alert alert-danger" role="alert">
+                                    {{ form.category_new.errors }}
+                                </div>
+                            {% endif %}
+                            <label for="{{ form.category_new.id_for_label }}"><strong>eine neue Kategorie
+                                erstellen</strong></label>
+                            {{ form.category_new|add_class:"form-control"|add_class:"no-check"|attr:"placeholder:Name der neuen Kategorie" }}
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <div class="card mb-2">
-        <div class="card-body">
-            <h5>Weitere Metadaten für dieses Objekt
-                <span class="text-danger">*</span>
-            </h5>
-            <div class="form-group ">
-                {% if form.name.errors %}
-                    <div class="alert alert-danger" role="alert">
-                        {{ form.name.errors }}
+
+        <div class="card mb-2">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-sm">
+                        <h5>Soll für dieses Objekt ein Preset verwendet werden?</h5>
+                        <p>
+                            <span class="text-muted">Die Angabe eines Presets ist optional.</span>
+                        </p>
                     </div>
-                {% endif %}
-                <label for="{{ form.name.id_for_label }}">Bezeichnung
-                    <span class="text-danger">*</span>
-                </label>
-                {{ form.name|add_class:"form-control"|attr:"placeholder:Bezeichnung" }}
-            </div>
-            <div class="form-group ">
-                {% if form.notes.errors %}
-                    <div class="alert alert-danger" role="alert">
-                        {{ form.notes.errors }}
+                    {#                <div class="col-sm d-flex flex-row-reverse align-items-start">#}
+                    {#                    <div class="btn-group btn-group-toggle" data-toggle="buttons">#}
+                    {#                        <label class="btn btn-success active">#}
+                    {#                            <input type="radio" name="use-preset" id="preset_yes" autocomplete="off" checked#}
+                    {#                                   value="yes">#}
+                    {#                            Preset verwenden#}
+                    {#                        </label>#}
+                    {#                        <label class="btn btn-danger">#}
+                    {#                            <input type="radio" name="use-preset" id="preset_no" autocomplete="off" value="no">#}
+                    {#                            Kein Preset verwenden#}
+                    {#                        </label>#}
+                    {#                    </div>#}
+                    {#                </div>#}
+                </div>
+
+
+                <div class="row">
+                    <div class="col-sm">
+                        <div class="form-group preset">
+                            {% if form.preset_select.errors %}
+                                <div class="alert alert-danger" role="alert">
+                                    {{ form.preset_select.errors }}
+                                </div>
+                            {% endif %}
+                            <label for="{{ form.preset_select.id_for_label }}"><strong>Preset auswählen</strong></label>
+                            {{ form.preset_select|add_class:"form-control"|add_class:"no-check" }}
+                        </div>
+
+
                     </div>
-                {% endif %}
-                <label for="{{ form.notes.id_for_label }}">Notizen</label>
-                {{ form.notes|add_class:"form-control"|attr:"placeholder:Notizen" }}
-            </div>
-            <div class="form-group ">
-                {% if form.location.errors %}
-                    <div class="alert alert-danger" role="alert">
-                        {{ form.location.errors }}
+                    <div class="col-sm-1 text-center">
+                        <em>oder</em>
                     </div>
-                {% endif %}
-                <label for="{{ form.location.id_for_label }}">Ort
-                    <span class="text-danger">*</span>
-                </label>
-                {{ form.location|add_class:"form-control" }}
+                    <div class="col-sm">
+                        <label for="{{ form.preset_new_name.id_for_label }}" class="preset">
+                            <strong>ein neues Preset erstellen</strong>
+                        </label>
+                        <div class="form-group preset">
+                            {% if form.preset_new_name.errors %}
+                                <div class="alert alert-danger" role="alert">
+                                    {{ form.preset_new_name.errors }}
+                                </div>
+                            {% endif %}
+                            {{ form.preset_new_name|add_class:"form-control"|attr:"placeholder:Name des neuen Presets"|add_class:"no-check" }}
+                        </div>
+                        <div class="form-group preset">
+                            {% if form.preset_new_manufacturer.errors %}
+                                <div class="alert alert-danger" role="alert">
+                                    {{ form.preset_new_manufacturer.errors }}
+                                </div>
+                            {% endif %}
+                            {{ form.preset_new_manufacturer|add_class:"form-control"|attr:"placeholder:Hersteller des neuen Presets (optional)"|add_class:"no-check" }}
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
 
-    <div class="card mb-2">
-        <div class="card-body">
-            <button type="submit" class="btn btn-success">
-                Objekt speichern
-            </button>
+        <div class="card mb-2">
+            <div class="card-body">
+                <h5>Weitere Metadaten für dieses Objekt
+                    <span class="text-danger">*</span>
+                </h5>
+                <div class="form-group ">
+                    {% if form.name.errors %}
+                        <div class="alert alert-danger" role="alert">
+                            {{ form.name.errors }}
+                        </div>
+                    {% endif %}
+                    <label for="{{ form.name.id_for_label }}">Bezeichnung
+                        <span class="text-danger">*</span>
+                    </label>
+                    {{ form.name|add_class:"form-control"|attr:"placeholder:Bezeichnung" }}
+                </div>
+                <div class="form-group ">
+                    {% if form.notes.errors %}
+                        <div class="alert alert-danger" role="alert">
+                            {{ form.notes.errors }}
+                        </div>
+                    {% endif %}
+                    <label for="{{ form.notes.id_for_label }}">Notizen</label>
+                    {{ form.notes|add_class:"form-control"|attr:"placeholder:Notizen" }}
+                </div>
+                <div class="form-group ">
+                    {% if form.location.errors %}
+                        <div class="alert alert-danger" role="alert">
+                            {{ form.location.errors }}
+                        </div>
+                    {% endif %}
+                    <label for="{{ form.location.id_for_label }}">Ort
+                        <span class="text-danger">*</span>
+                    </label>
+                    {{ form.location|add_class:"form-control" }}
+                </div>
+            </div>
         </div>
-    </div>
 
-</form>
-<script type="text/javascript">
-    function noRequired(sel) {
-        sel.removeAttr("required");
-        sel.addClass("no-check");
+        <div class="card mb-2">
+            <div class="card-body">
+                <button type="submit" class="btn btn-success">
+                    Objekt speichern
+                </button>
+            </div>
+        </div>
 
-    }
+    </form>
+    <script type="text/javascript">
+        function noRequired(sel) {
+            sel.removeAttr("required");
+            sel.addClass("no-check");
 
-    function required(sel) {
-        sel.attr("required", "required");
-        sel.removeClass("no-check");
-    }
+        }
 
-    $(document).ready(function () {
-        console.log("Ready");
-        $("#preset_yes").change(function () {
-            $(".preset").css("display", "inherit");
-        });
-        $("#preset_no").change(function () {
-            console.log("Hi");
-            $(".preset").css("display", "none");
-        });
+        function required(sel) {
+            sel.attr("required", "required");
+            sel.removeClass("no-check");
+        }
 
-        const selCategoryA = $("#id_category_select");
-        const selCategoryB = $("#id_category_new");
+        $(document).ready(function () {
+            console.log("Ready");
+            $("#preset_yes").change(function () {
+                $(".preset").css("display", "inherit");
+            });
+            $("#preset_no").change(function () {
+                console.log("Hi");
+                $(".preset").css("display", "none");
+            });
 
-        selCategoryA.change(function () {
-            console.log("select");
-            selCategoryB.val("");
-            noRequired(selCategoryB);
-            required(selCategoryA);
-        });
-        selCategoryB.on("input", function () {
-            selCategoryA.val("");
-            noRequired(selCategoryA);
-            required(selCategoryB);
-        });
+            const selCategoryA = $("#id_category_select");
+            const selCategoryB = $("#id_category_new");
 
-        const selPresetA = $("#id_preset_select");
-        const selPresetB = $("#id_preset_new_name");
-        const selPresetC = $("#id_preset_new_manufacturer");
-        selPresetA.change(function () {
-            selPresetB.val("");
-            selPresetC.val("");
-            {#noRequired(selPresetB);#}
-            {#required(selPresetA);#}
+            selCategoryA.change(function () {
+                console.log("select");
+                selCategoryB.val("");
+                noRequired(selCategoryB);
+                required(selCategoryA);
+            });
+            selCategoryB.on("input", function () {
+                selCategoryA.val("");
+                noRequired(selCategoryA);
+                required(selCategoryB);
+            });
+
+            const selPresetA = $("#id_preset_select");
+            const selPresetB = $("#id_preset_new_name");
+            const selPresetC = $("#id_preset_new_manufacturer");
+            selPresetA.change(function () {
+                selPresetB.val("");
+                selPresetC.val("");
+                {#noRequired(selPresetB);#}
+                {#required(selPresetA);#}
+            });
+            selPresetB.on("input", function () {
+                selPresetC.trigger("input");
+            });
+            selPresetC.on("input", function () {
+                selPresetA.val("");
+                {#noRequired(selPresetA);#}
+                {#required(selPresetB);#}
+            });
         });
-        selPresetB.on("input", function () {
-            selPresetC.trigger("input");
-        });
-        selPresetC.on("input", function () {
-            selPresetA.val("");
-            {#noRequired(selPresetA);#}
-            {#required(selPresetB);#}
-        });
-    });
-</script>
-{% include "footer.html" %}
+    </script>
+{% endblock %}

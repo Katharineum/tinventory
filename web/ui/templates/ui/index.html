@@ -1,94 +1,96 @@
-{% include "header.html" %}
-<div class="jumbotron home">
-    <h2 class="display-4">Inventur der Technik-AG</h2>
-    {##}
-    <h6>Inventarisierung</h6>
-    <p>
-        <a class="btn btn-outline-secondary btn-lg" href="{% url "ui_categories" %}">
-            <i class="fas fa-compass mr-2"></i>
-            Kategorien
-        </a>
-        <a class="btn btn-outline-secondary btn-lg" href="{% url "ui_locations" %}">
-            <i class="fas fa-map-marker-alt mr-2"></i>
-            Orte
-        </a>
-        <a class="btn btn-outline-secondary btn-lg" href="{% url "ui_presets" %}">
-            <i class="fas fa-industry mr-2"></i>
-            Presets
-        </a>
-        <a class="btn btn-outline-secondary btn-lg" href="{% url "ui_inventory" %}">
-            <i class="fas fa-boxes mr-2"></i>
-            Inventarisierung
-        </a>
-    </p>
+{% extends "base.html" %}
 
-    <h6>Check-In/Check-Out</h6>
-    <p>
-        <a class="btn btn-outline-secondary btn-lg" href="{% url "ui_persons" %}">
-            <i class="fas fa-users mr-2"></i>
-            Personen
-        </a>
-        <a class="btn btn-outline-secondary btn-lg" href="{% url "ui_check_out" %}">
-            <i class="fas fa-dolly mr-2"></i>
-            Check-Out
-        </a>
-        <a class="btn btn-outline-secondary btn-lg" href="{% url "ui_check_in" %}">
-            <i class="fas fa-undo mr-2"></i>
-            Check-In
-        </a>
-    </p>
-    <p class="lead">Im Folgenden findet sich eine Übersicht über den Status des Inventar der Technik-AG:</p>
-    <div class="row">
-        <div class="card col m-2 col-sm-12 col-md">
-            <div class="card-body text-center">
-                <h1 class="text-center">{{ count_items }}</h1>
-                <p class="text-center">Inventarisierte Objekte</p>
-                <a class="btn btn-outline-secondary float-right btn-sm w-100" href="{% url "ui_items" %}">
-                    <i class="fas fa-boxes mr-2"></i>
-                    Alle Objekte
-                </a>
+{% block content %}
+    <div class="jumbotron home">
+        <h2 class="display-4">Inventur der Technik-AG</h2>
+        {##}
+        <h6>Inventarisierung</h6>
+        <p>
+            <a class="btn btn-outline-secondary btn-lg" href="{% url "ui_categories" %}">
+                <i class="fas fa-compass mr-2"></i>
+                Kategorien
+            </a>
+            <a class="btn btn-outline-secondary btn-lg" href="{% url "ui_locations" %}">
+                <i class="fas fa-map-marker-alt mr-2"></i>
+                Orte
+            </a>
+            <a class="btn btn-outline-secondary btn-lg" href="{% url "ui_presets" %}">
+                <i class="fas fa-industry mr-2"></i>
+                Presets
+            </a>
+            <a class="btn btn-outline-secondary btn-lg" href="{% url "ui_inventory" %}">
+                <i class="fas fa-boxes mr-2"></i>
+                Inventarisierung
+            </a>
+        </p>
+
+        <h6>Check-In/Check-Out</h6>
+        <p>
+            <a class="btn btn-outline-secondary btn-lg" href="{% url "ui_persons" %}">
+                <i class="fas fa-users mr-2"></i>
+                Personen
+            </a>
+            <a class="btn btn-outline-secondary btn-lg" href="{% url "ui_check_out" %}">
+                <i class="fas fa-dolly mr-2"></i>
+                Check-Out
+            </a>
+            <a class="btn btn-outline-secondary btn-lg" href="{% url "ui_check_in" %}">
+                <i class="fas fa-undo mr-2"></i>
+                Check-In
+            </a>
+        </p>
+        <p class="lead">Im Folgenden findet sich eine Übersicht über den Status des Inventar der Technik-AG:</p>
+        <div class="row">
+            <div class="card col m-2 col-sm-12 col-md">
+                <div class="card-body text-center">
+                    <h1 class="text-center">{{ count_items }}</h1>
+                    <p class="text-center">Inventarisierte Objekte</p>
+                    <a class="btn btn-outline-secondary float-right btn-sm w-100" href="{% url "ui_items" %}">
+                        <i class="fas fa-boxes mr-2"></i>
+                        Alle Objekte
+                    </a>
+                </div>
             </div>
-        </div>
-        <div class="card col m-2 col-sm-12 col-md">
-            <div class="card-body text-center">
-                <h1 class="text-center">{{ count_presets }}</h1>
-                <p class="text-center">Presets</p>
-                <a class="btn btn-outline-secondary float-right btn-sm w-100" href="{% url "ui_presets" %}">
-                    <i class="fas fa-industry mr-2"></i>
-                    Alle Presets
-                </a>
+            <div class="card col m-2 col-sm-12 col-md">
+                <div class="card-body text-center">
+                    <h1 class="text-center">{{ count_presets }}</h1>
+                    <p class="text-center">Presets</p>
+                    <a class="btn btn-outline-secondary float-right btn-sm w-100" href="{% url "ui_presets" %}">
+                        <i class="fas fa-industry mr-2"></i>
+                        Alle Presets
+                    </a>
+                </div>
             </div>
-        </div>
-        <div class="card bg-success text-white col m-2 col-sm-12 col-md">
-            <div class="card-body text-center">
-                <h1 class="text-center">{{ count_available_items }}</h1>
-                <p class="text-center">Vorhandene Objekte</p>
-                <a class="btn btn-secondary float-right btn-sm w-100" href="{% url "ui_items" %}">
-                    <i class="fas fa-boxes mr-2"></i>
-                    Alle Objekte
-                </a>
+            <div class="card bg-success text-white col m-2 col-sm-12 col-md">
+                <div class="card-body text-center">
+                    <h1 class="text-center">{{ count_available_items }}</h1>
+                    <p class="text-center">Vorhandene Objekte</p>
+                    <a class="btn btn-secondary float-right btn-sm w-100" href="{% url "ui_items" %}">
+                        <i class="fas fa-boxes mr-2"></i>
+                        Alle Objekte
+                    </a>
+                </div>
             </div>
-        </div>
-        <div class="card bg-warning col m-2 col-sm-12 col-md">
-            <div class="card-body text-center">
-                <h1 class="text-center">{{ count_checked_out_items }}</h1>
-                <p class="text-center">Ausgecheckte Objekte</p>
-                <a class="btn  btn-secondary float-right btn-sm w-100" href="{% url "ui_checks" %}">
-                    <i class="fas fa-dolly mr-2"></i>
-                    Checks ansehen
-                </a>
+            <div class="card bg-warning col m-2 col-sm-12 col-md">
+                <div class="card-body text-center">
+                    <h1 class="text-center">{{ count_checked_out_items }}</h1>
+                    <p class="text-center">Ausgecheckte Objekte</p>
+                    <a class="btn  btn-secondary float-right btn-sm w-100" href="{% url "ui_checks" %}">
+                        <i class="fas fa-dolly mr-2"></i>
+                        Checks ansehen
+                    </a>
+                </div>
             </div>
-        </div>
-        <div class="card bg-danger text-white col m-2 col-sm-12 col-md">
-            <div class="card-body text-center">
-                <h1 class="text-center">{{ count_not_in_time }}</h1>
-                <p class="text-center">davon überfällig</p>
-                <a class="btn  btn-secondary float-right btn-sm w-100" href="{% url "ui_checks" %}">
-                    <i class="fas fa-calendar-alt mr-2"></i>
-                    Checks ansehen
-                </a>
+            <div class="card bg-danger text-white col m-2 col-sm-12 col-md">
+                <div class="card-body text-center">
+                    <h1 class="text-center">{{ count_not_in_time }}</h1>
+                    <p class="text-center">davon überfällig</p>
+                    <a class="btn  btn-secondary float-right btn-sm w-100" href="{% url "ui_checks" %}">
+                        <i class="fas fa-calendar-alt mr-2"></i>
+                        Checks ansehen
+                    </a>
+                </div>
             </div>
         </div>
     </div>
-</div>
-{% include "footer.html" %}
+{% endblock %}

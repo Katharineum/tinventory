@@ -1,93 +1,96 @@
-{% include "header.html" %}
+{% extends "base.html" %}
 
-<style>
-    body {
-        display: -ms-flexbox;
-        display: flex;
-        -ms-flex-align: center;
-        align-items: center;
-        justify-content: center;
-        padding-top: 40px;
-        padding-bottom: 40px;
-    }
+{% block extra_head %}
+    <style>
+        body {
+            display: -ms-flexbox;
+            display: flex;
+            -ms-flex-align: center;
+            align-items: center;
+            justify-content: center;
+            padding-top: 40px;
+            padding-bottom: 40px;
+        }
 
-    header {
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-    }
+        header {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+        }
 
-    .form-signin {
-        width: 100%;
-        max-width: 330px;
-        padding: 15px;
-        margin: auto;
-    }
+        .form-signin {
+            width: 100%;
+            max-width: 330px;
+            padding: 15px;
+            margin: auto;
+        }
 
-    .form-signin .form-control {
-        position: relative;
-        box-sizing: border-box;
-        height: auto;
-        padding: 10px;
-        font-size: 16px;
-    }
+        .form-signin .form-control {
+            position: relative;
+            box-sizing: border-box;
+            height: auto;
+            padding: 10px;
+            font-size: 16px;
+        }
 
-    .form-signin .form-control:focus {
-        z-index: 2;
-    }
+        .form-signin .form-control:focus {
+            z-index: 2;
+        }
 
-    .form-signin input[type="email"] {
-        margin-bottom: -1px;
-        border-bottom-right-radius: 0;
-        border-bottom-left-radius: 0;
-    }
+        .form-signin input[type="email"] {
+            margin-bottom: -1px;
+            border-bottom-right-radius: 0;
+            border-bottom-left-radius: 0;
+        }
 
-    .form-signin input[type="password"] {
-        margin-bottom: 10px;
-        border-top-left-radius: 0;
-        border-top-right-radius: 0;
-    }
-</style>
+        .form-signin input[type="password"] {
+            margin-bottom: 10px;
+            border-top-left-radius: 0;
+            border-top-right-radius: 0;
+        }
+    </style>
+{% endblock %}
 
-<body class="text-center">
-<form class="form-signin" action="{% url 'login' %}" method="post">
-    {% csrf_token %}
+{% block content2 %}
+    <main class="text-center">
+        <form class="form-signin" action="{% url 'login' %}" method="post">
+            {% csrf_token %}
 
-    <div class="mb-4"><i class="fas fa-search-location fa-4x"></i></div>
+            <div class="mb-4"><i class="fas fa-search-location fa-4x"></i></div>
 
-    <h1 class="h3 mb-3 font-weight-normal">Anmeldung</h1>
+            <h1 class="h3 mb-3 font-weight-normal">Anmeldung</h1>
 
-    {% if form.errors %}
-        <div class="alert alert-danger" role="alert">
-            Der Benutzername und/oder das Passwort ist falsch. Bitte probiere es nochmal.
-        </div>
-    {% endif %}
-
-    {% if next %}
-        <div class="alert alert-warning" role="alert">
-            {% if user.is_authenticated %}
-                Du hast keine Erlaubnis, diese Seite zu sehen.
-                Bitte probiere es mit einem anderen Benutzer.
-            {% else %}
-                Bitte melde dich an, um diese Seite zu sehen.
+            {% if form.errors %}
+                <div class="alert alert-danger" role="alert">
+                    Der Benutzername und/oder das Passwort ist falsch. Bitte probiere es nochmal.
+                </div>
             {% endif %}
-        </div>
-    {% endif %}
 
-    <label for="username" class="sr-only">Benutzername</label>
-    <input type="text" id="username" class="form-control" placeholder="Benutzername" required="" autofocus=""
-           name="username">
+            {% if next %}
+                <div class="alert alert-warning" role="alert">
+                    {% if user.is_authenticated %}
+                        Du hast keine Erlaubnis, diese Seite zu sehen.
+                        Bitte probiere es mit einem anderen Benutzer.
+                    {% else %}
+                        Bitte melde dich an, um diese Seite zu sehen.
+                    {% endif %}
+                </div>
+            {% endif %}
 
-    <label for="password" class="sr-only">Passwort</label>
-    <input type="password" id="password" class="form-control" placeholder="Passwort" required="" name="password">
+            <label for="username" class="sr-only">Benutzername</label>
+            <input type="text" id="username" class="form-control" placeholder="Benutzername" required="" autofocus=""
+                   name="username">
 
-    <button class="btn btn-lg btn-primary btn-block" type="submit">Anmelden</button>
+            <label for="password" class="sr-only">Passwort</label>
+            <input type="password" id="password" class="form-control" placeholder="Passwort" required=""
+                   name="password">
 
-    <p class="mt-5 mb-3 text-muted">© 2019 by Technik-AG, Katharineum zu Lübeck</p>
+            <button class="btn btn-lg btn-primary btn-block" type="submit">Anmelden</button>
 
-    <input type="hidden" name="next" value="{{ next }}">
-</form>
+            <p class="mt-5 mb-3 text-muted">© 2019 by Technik-AG, Katharineum zu Lübeck</p>
 
-
-{% include "footer.html" %}
+            <input type="hidden" name="next" value="{{ next }}">
+        </form>
+    </main>
+{% endblock %}

@@ -1,139 +1,140 @@
-{% include "header.html" %}
+{% extends "base.html" %}
 
-<nav aria-label="breadcrumb" class="m-1">
-    <ol class="breadcrumb">
-        <li class="breadcrumb-item">
-            <a href="{% url "ui_index" %}">Startseite</a>
-        </li>
-        <li class="breadcrumb-item" aria-current="page">
-            <a href="{% url "ui_locations" %}">Orte</a>
-        </li>
-        <li class="breadcrumb-item active" aria-current="page">{{ location.name }}</li>
-    </ol>
-</nav>
+{% block content %}
+    <nav aria-label="breadcrumb" class="m-1">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="{% url "ui_index" %}">Startseite</a>
+            </li>
+            <li class="breadcrumb-item" aria-current="page">
+                <a href="{% url "ui_locations" %}">Orte</a>
+            </li>
+            <li class="breadcrumb-item active" aria-current="page">{{ location.name }}</li>
+        </ol>
+    </nav>
 
-<h1 class="display-5 m-1">
-    <a role="button" class="btn btn-link" href="{% url "ui_locations" %}"><i
-            class="fas fa-chevron-left"></i></a>
-    {{ location.name }}
-    <span class="text-muted">#{{ location.id }}</span>
-</h1>
+    <h1 class="display-5 m-1">
+        <a role="button" class="btn btn-link" href="{% url "ui_locations" %}"><i
+                class="fas fa-chevron-left"></i></a>
+        {{ location.name }}
+        <span class="text-muted">#{{ location.id }}</span>
+    </h1>
 
-{% include "parts/msg.html" %}
+    {% include "parts/msg.html" %}
 
 
-<div class="row">
-    <div class="col-sm">
-        <div class="card mb-2">
-            <div class="card-body">
-                <div class="btn-group" role="group" aria-label="Aktionen">
-                    {% if perms.api.change_location %}
-                        <a role="button" class="btn btn-primary"
-                           href="{% url "ui_locations_edit" location.id %}">Bearbeiten
-                        </a>
-                    {% endif %}
-                    {% if perms.api.delete_location %}
-                        <a role="button" class="btn btn-danger delete-button"
-                           href="{% url "ui_location_delete" location.id %}">Löschen
-                        </a>
-                    {% endif %}
-                </div>
-            </div>
-        </div>
-    </div>
-
-    {# Change location of items via barcode scanning #}
-    <div class="col-sm">
-        {% if perms.api.change_item %}
+    <div class="row">
+        <div class="col-sm">
             <div class="card mb-2">
                 <div class="card-body">
-                    <form class="form-inline" id="item-form">
-                        <label class="sr-only" for="item">Objekt</label>
-                        <div class="input-group mb-2 mr-sm-2">
-                            <div class="input-group-prepend">
-                                <div class="input-group-text"><i class="fas fa-barcode"></i></div>
-                            </div>
-                            <input type="text" required aria-required="true" autofocus class="form-control no-check"
-                                   id="item"
-                                   name="item" value=""
-                                   placeholder="Barcode/ID">
-                        </div>
-
-                        <button type="submit" class="btn btn-primary mb-2" id="submit-button">Einsortieren</button>
-                    </form>
-                </div>
-            </div>
-            <div aria-live="polite" aria-atomic="true"
-                 style="position: absolute; min-height: 200px; top: -100px; right:20px; z-index: 5; min-width: 300px;">
-                <div class="toast" style="position: absolute; top: 0; right: 0;" id="item-toast" data-delay="2000">
-                    <div class="toast-header" id="toast-header">
-                        <strong class="mr-auto" id="toast-title">Message-Title</strong>
-                        <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
+                    <div class="btn-group" role="group" aria-label="Aktionen">
+                        {% if perms.api.change_location %}
+                            <a role="button" class="btn btn-primary"
+                               href="{% url "ui_locations_edit" location.id %}">Bearbeiten
+                            </a>
+                        {% endif %}
+                        {% if perms.api.delete_location %}
+                            <a role="button" class="btn btn-danger delete-button"
+                               href="{% url "ui_location_delete" location.id %}">Löschen
+                            </a>
+                        {% endif %}
                     </div>
-                    <div class="toast-body" id="toast-message"></div>
                 </div>
             </div>
-        {% endif %}
-    </div>
-</div>
+        </div>
 
-{# Items on this location #}
-<div class="row">
-    <div class="col-sm">
-        <div class="card mb-2">
-            <div class="card-body">
-                <ul class="list-group list-group-flush">
-                    {% for item in location.items.all %}
-                        <li class="list-group-item">
-                            <div class="row">
-                                <div class="col-sm-1">{{ item.id }} (<code>{{ item.barcode }}</code>)</div>
-                                <div class="col-sm-8">
-                                    <a href="{% url "ui_items_view" item.pk %}">{{ item.name }}</a>
+        {# Change location of items via barcode scanning #}
+        <div class="col-sm">
+            {% if perms.api.change_item %}
+                <div class="card mb-2">
+                    <div class="card-body">
+                        <form class="form-inline" id="item-form">
+                            <label class="sr-only" for="item">Objekt</label>
+                            <div class="input-group mb-2 mr-sm-2">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text"><i class="fas fa-barcode"></i></div>
                                 </div>
-                                <div class="col-sm-3">{% include "ui/item/status.html" %}</div>
+                                <input type="text" required aria-required="true" autofocus class="form-control no-check"
+                                       id="item"
+                                       name="item" value=""
+                                       placeholder="Barcode/ID">
                             </div>
-                        </li>
-                    {% endfor %}
-                </ul>
+
+                            <button type="submit" class="btn btn-primary mb-2" id="submit-button">Einsortieren</button>
+                        </form>
+                    </div>
+                </div>
+                <div aria-live="polite" aria-atomic="true"
+                     style="position: absolute; min-height: 200px; top: -100px; right:20px; z-index: 5; min-width: 300px;">
+                    <div class="toast" style="position: absolute; top: 0; right: 0;" id="item-toast" data-delay="2000">
+                        <div class="toast-header" id="toast-header">
+                            <strong class="mr-auto" id="toast-title">Message-Title</strong>
+                            <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="toast-body" id="toast-message"></div>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    {# Items on this location #}
+    <div class="row">
+        <div class="col-sm">
+            <div class="card mb-2">
+                <div class="card-body">
+                    <ul class="list-group list-group-flush">
+                        {% for item in location.items.all %}
+                            <li class="list-group-item">
+                                <div class="row">
+                                    <div class="col-sm-1">{{ item.id }} (<code>{{ item.barcode }}</code>)</div>
+                                    <div class="col-sm-8">
+                                        <a href="{% url "ui_items_view" item.pk %}">{{ item.name }}</a>
+                                    </div>
+                                    <div class="col-sm-3">{% include "ui/item/status.html" %}</div>
+                                </div>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
-{% if perms.api.change_item %}
-    <script type="text/javascript">
-        $(document).ready(function () {
-            $("#item").val("");
-        });
+    {% if perms.api.change_item %}
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $("#item").val("");
+            });
 
-        $("#item-form").submit(function (e) {
-            e.preventDefault();
-            let barcode = $("#item").val();
-            jQuery.getJSON("{% url "ui_location_add_item" location.pk %}?barcode=" + barcode, callBack);
-        });
+            $("#item-form").submit(function (e) {
+                e.preventDefault();
+                let barcode = $("#item").val();
+                jQuery.getJSON("{% url "ui_location_add_item" location.pk %}?barcode=" + barcode, callBack);
+            });
 
-        function callBack(data) {
-            console.log(data);
+            function callBack(data) {
+                console.log(data);
 
-            if (data["status_code"] === 200) {
-                $("#toast-header").addClass("text-success");
-                $("#toast-title").text("Der Gegenstand wurde erfolgreich verschoben!");
-                $("#item-toast").toast("show");
-                setTimeout(function () {
-                    window.location.reload()
-                }, 2000);
-            } else {
-                $("#toast-header").addClass("text-danger");
-                $("#toast-title").text("Bitte überprüfen Sie ihre Eingabe.");
-                $("#toast-message").text("Fehlermeldung: " + data["message"]);
-                $("#item-toast").toast("show");
+                if (data["status_code"] === 200) {
+                    $("#toast-header").addClass("text-success");
+                    $("#toast-title").text("Der Gegenstand wurde erfolgreich verschoben!");
+                    $("#item-toast").toast("show");
+                    setTimeout(function () {
+                        window.location.reload()
+                    }, 2000);
+                } else {
+                    $("#toast-header").addClass("text-danger");
+                    $("#toast-title").text("Bitte überprüfen Sie ihre Eingabe.");
+                    $("#toast-message").text("Fehlermeldung: " + data["message"]);
+                    $("#item-toast").toast("show");
+                }
             }
-        }
-    </script>
-{% endif %}
+        </script>
+    {% endif %}
 
 
-{% include "parts/table_js.html" %}
-{% include "footer.html" %}
+    {% include "parts/table_js.html" %}
+{% endblock %}

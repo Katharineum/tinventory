@@ -1,5 +1,6 @@
-{% include "header.html" %}
+{% extends "base.html" %}
 
+{% block content %}
 <nav aria-label="breadcrumb" class="m-1">
     <ol class="breadcrumb">
         <li class="breadcrumb-item">
@@ -113,4 +114,4 @@
 
 
 {#{% include "parts/table_js.html" %}#}
-{% include "footer.html" %}
+{% endblock %}

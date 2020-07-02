@@ -22,6 +22,8 @@
 
     </script>
     <title>TInventory</title>
+
+    {% block extra_head %}{% endblock %}
 </head>
 <body>
 {% if user.is_authenticated %}
@@ -104,5 +106,50 @@
         </nav>
     </header>
     <main class="p-1 mb-5">
+        {% block content %}{% endblock %}
+    </main>
+{% else %}
+    {% block content2 %}{% endblock %}
 {% endif %}
 
+<footer class="fixed-bottom p-3 text-muted bg-light">
+    <div class="float-right">
+        {% load i18n %}
+
+        <form action="{% url 'set_language' %}" method="post">{% csrf_token %}
+            <input name="next" type="hidden" value="{{ redirect_to }}">
+
+            {% get_current_language as LANGUAGE_CODE %}
+            {% get_available_languages as LANGUAGES %}
+            {% get_language_info_list for LANGUAGES as languages %}
+
+            {% for language in languages %}
+                <button value="{{ language.code }}"
+                        name="language" type="submit"
+                        class="btn btn-sm btn-outline-secondary {% if language.code == LANGUAGE_CODE %}active{% endif %}">
+                    {{ language.name_local }}
+                </button>
+            {% endfor %}
+        </form>
+    </div>
+
+    Copyright &copy; 2019–2020 Jonathan Weth, Lübeck. ·
+    <a href="{% url "ui_license" %}">Copyright, Lizenz und Credits</a>
+</footer>
+
+<script src="{% static "popper.js/dist/popper.min.js" %}"></script>
+<script src="{% static "bootstrap/dist/js/bootstrap.min.js" %}"></script>
+<script src="{% static "datatables.net-bs4/js/dataTables.bootstrap4.min.js" %}"></script>
+<script src="{% static "bootstrap-datepicker/dist/js/bootstrap-datepicker.js" %}"></script>
+<script src="{% static "bootstrap-datepicker/dist/locales/bootstrap-datepicker."|add:LANGUAGE_CODE|add:".min.js" %}"></script>
+
+<script>
+    $(document).ready(function () {
+        $('[data-toggle="tooltip"]').tooltip();
+        $('.datepicker-field').datepicker({
+            language: '{{ LANGUAGE_CODE }}'
+        });
+    })
+</script>
+</body>
+</html>

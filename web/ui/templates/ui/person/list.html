@@ -1,77 +1,78 @@
-{% include "header.html" %}
+{% extends "base.html" %}
 
-<nav aria-label="breadcrumb" class="m-1">
-    <ol class="breadcrumb">
-        <li class="breadcrumb-item">
-            <a href="{% url "ui_index" %}">Startseite</a>
-        </li>
-        <li class="breadcrumb-item active" aria-current="page">Personen</li>
-    </ol>
-</nav>
+{% block content %}
+    <nav aria-label="breadcrumb" class="m-1">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="{% url "ui_index" %}">Startseite</a>
+            </li>
+            <li class="breadcrumb-item active" aria-current="page">Personen</li>
+        </ol>
+    </nav>
 
-<h1 class="display-5 m-1">Personen</h1>
+    <h1 class="display-5 m-1">Personen</h1>
 
-{% include "parts/msg.html" %}
+    {% include "parts/msg.html" %}
 
-<div class="card mb-2">
-    <div class="card-body">
-        <a role="button" class="btn btn-success" href="{% url "ui_person_new" %}">
-            <i class="fas fa-plus mr-2"></i>
-            Neue Person erstellen
-        </a>
+    <div class="card mb-2">
+        <div class="card-body">
+            <a role="button" class="btn btn-success" href="{% url "ui_person_new" %}">
+                <i class="fas fa-plus mr-2"></i>
+                Neue Person erstellen
+            </a>
+        </div>
     </div>
-</div>
 
-<div class="card">
-    <div class="card-body">
-        <table class="table">
-            <thead>
-            <tr>
-                <th scope="col">ID</th>
-                <th scope="col">Name</th>
-                <th scope="col">E-Mail <em class="text-muted">(optional)</em></th>
-                <th scope="col">Status</th>
-                <th scope="col" class="table-actions">Aktionen</th>
-            </tr>
-            </thead>
-            <tbody>
-            {% for person in person_list %}
+    <div class="card">
+        <div class="card-body">
+            <table class="table">
+                <thead>
                 <tr>
-                    <th scope="row">{{ person.id }}</th>
-                    <td>
-                        <a href="{% url "ui_persons_view"  person.id %}">{{ person.name }}</a>
-                    </td>
-                    <td>
-                        {% if person.email %}
-                            <a href="mailto:{{ person.email }}">{{ person.email }}</a>
-                        {% endif %}
-                    </td>
-                    <td>
-                        {% include "ui/person/status.html" %}
-                    </td>
-                    <td>
-                        <div class="btn-group" role="group" aria-label="Aktionen">
-                            <a role="button" class="btn btn-success"
-                               href="{% url "ui_persons_view" person.id %}">Anzeigen
-                            </a>
-                            {% if perms.api.change_person %}
-                                <a role="button" class="btn btn-primary"
-                                   href="{% url "ui_persons_edit" person.id %}">Bearbeiten
-                                </a>
-                            {% endif %}
-                            {% if perms.api.delete_person %}
-                                <a role="button" class="btn btn-danger delete-button"
-                                   href="{% url "ui_person_delete" person.id %}">Löschen
-                                </a>
-                            {% endif %}
-                        </div>
-                    </td>
+                    <th scope="col">ID</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">E-Mail <em class="text-muted">(optional)</em></th>
+                    <th scope="col">Status</th>
+                    <th scope="col" class="table-actions">Aktionen</th>
                 </tr>
-            {% endfor %}
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                {% for person in person_list %}
+                    <tr>
+                        <th scope="row">{{ person.id }}</th>
+                        <td>
+                            <a href="{% url "ui_persons_view"  person.id %}">{{ person.name }}</a>
+                        </td>
+                        <td>
+                            {% if person.email %}
+                                <a href="mailto:{{ person.email }}">{{ person.email }}</a>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% include "ui/person/status.html" %}
+                        </td>
+                        <td>
+                            <div class="btn-group" role="group" aria-label="Aktionen">
+                                <a role="button" class="btn btn-success"
+                                   href="{% url "ui_persons_view" person.id %}">Anzeigen
+                                </a>
+                                {% if perms.api.change_person %}
+                                    <a role="button" class="btn btn-primary"
+                                       href="{% url "ui_persons_edit" person.id %}">Bearbeiten
+                                    </a>
+                                {% endif %}
+                                {% if perms.api.delete_person %}
+                                    <a role="button" class="btn btn-danger delete-button"
+                                       href="{% url "ui_person_delete" person.id %}">Löschen
+                                    </a>
+                                {% endif %}
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </div>
-</div>
 
-{% include "parts/table_js.html" %}
-{% include "footer.html" %}
+    {% include "parts/table_js.html" %}
+{% endblock %}

@@ -1,108 +1,110 @@
+{% extends "base.html" %}
 {% load widget_tweaks %}
-{% include "header.html" %}
 
-<nav aria-label="breadcrumb" class="m-1">
-    <ol class="breadcrumb">
-        <li class="breadcrumb-item">
-            <a href="{% url "ui_index" %}">Startseite</a>
-        </li>
-        <li class="breadcrumb-item active" aria-current="page">Check-Out</li>
+{% block content %}
+    <nav aria-label="breadcrumb" class="m-1">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="{% url "ui_index" %}">Startseite</a>
+            </li>
+            <li class="breadcrumb-item active" aria-current="page">Check-Out</li>
 
-    </ol>
-</nav>
+        </ol>
+    </nav>
 
-<h1 class="display-5 m-1">Check-Out</h1>
-<div class="card mb-2">
-    <div class="card-body">
-        <i class="fas fa-arrow-circle-right fa-3x mr-3 float-left"></i>
-        {#        <a role="button" class="btn btn-danger float-right">Check-Out abbrechen</a>#}
-        <h2>1. Schritt: Ausleihende Person auswählen</h2>
-        <div class="row">
-            <div class="col-sm">
-                <h5>Techniker auswählen</h5>
-                {% for tec in technicians %}
-                    <form action="" method="post" class="d-inline">
-                        {% csrf_token %}
-                        <input type="hidden" name="select-person" value="{{ tec.id }}">
-                        <button type="submit" class="btn btn-outline-secondary mb-2">
-                            {{ tec.name }}
-                        </button>
-                    </form>
-                {% endfor %}
-            </div>
-            <div class="col-sm-1 text-center">
-                <em>oder</em>
-            </div>
-            <div class="col-sm">
-                <h5>Person suchen</h5>
-                <table id="persons-table" class="table">
-                    <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th></th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {% for person in persons %}
-                        <tr>
-                            <td>
-                                {{ person.name }}
-                            </td>
-                            <td>
-                                <form action="" method="post">
-                                    {% csrf_token %}
-                                    <input type="hidden" name="select-person" value="{{ person.id }}">
-                                    <button type="submit" class="btn btn-outline-secondary float-right">
-                                        Auswählen
-                                    </button>
-                                </form>
-                            </td>
-                        </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
-                <form action="" method="post">
-                    {% csrf_token %}
-                    <div class="row">
-                        <div class="col">
-                            <input type="text" class="form-control" placeholder="Name" required name="create-person">
-                        </div>
-                        <div class="col">
-                            <button class="btn btn-success w-100">
-                                <i class="fas fa-plus mr-2"></i>
-                                Neue Person erstellen und auswählen
+    <h1 class="display-5 m-1">Check-Out</h1>
+    <div class="card mb-2">
+        <div class="card-body">
+            <i class="fas fa-arrow-circle-right fa-3x mr-3 float-left"></i>
+            {#        <a role="button" class="btn btn-danger float-right">Check-Out abbrechen</a>#}
+            <h2>1. Schritt: Ausleihende Person auswählen</h2>
+            <div class="row">
+                <div class="col-sm">
+                    <h5>Techniker auswählen</h5>
+                    {% for tec in technicians %}
+                        <form action="" method="post" class="d-inline">
+                            {% csrf_token %}
+                            <input type="hidden" name="select-person" value="{{ tec.id }}">
+                            <button type="submit" class="btn btn-outline-secondary mb-2">
+                                {{ tec.name }}
                             </button>
+                        </form>
+                    {% endfor %}
+                </div>
+                <div class="col-sm-1 text-center">
+                    <em>oder</em>
+                </div>
+                <div class="col-sm">
+                    <h5>Person suchen</h5>
+                    <table id="persons-table" class="table">
+                        <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for person in persons %}
+                            <tr>
+                                <td>
+                                    {{ person.name }}
+                                </td>
+                                <td>
+                                    <form action="" method="post">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="select-person" value="{{ person.id }}">
+                                        <button type="submit" class="btn btn-outline-secondary float-right">
+                                            Auswählen
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                    <form action="" method="post">
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class="col">
+                                <input type="text" class="form-control" placeholder="Name" required
+                                       name="create-person">
+                            </div>
+                            <div class="col">
+                                <button class="btn btn-success w-100">
+                                    <i class="fas fa-plus mr-2"></i>
+                                    Neue Person erstellen und auswählen
+                                </button>
+                            </div>
                         </div>
-                    </div>
-                </form>
+                    </form>
 
-                {% include "parts/table_js_locale.html" %}
+                    {% include "parts/table_js_locale.html" %}
 
-                <script>
-                    $(document).ready(function () {
-                        $('#persons-table').DataTable({
-                            paging: false,
-                            ordering: false,
-                            info: false,
-                            language: dataTableLocale
+                    <script>
+                        $(document).ready(function () {
+                            $('#persons-table').DataTable({
+                                paging: false,
+                                ordering: false,
+                                info: false,
+                                language: dataTableLocale
+                            });
+                            focusIt($("input[aria-controls=persons-table]"));
                         });
-                        focusIt($("input[aria-controls=persons-table]"));
-                    });
-                </script>
+                    </script>
+                </div>
             </div>
         </div>
     </div>
-</div>
-<div class="container">
-    <div class="card mb-2">
-        <div class="card-body">
-            <h3 class="text-muted">2. Schritt: Objekte scannen oder auswählen</h3>
+    <div class="container">
+        <div class="card mb-2">
+            <div class="card-body">
+                <h3 class="text-muted">2. Schritt: Objekte scannen oder auswählen</h3>
+            </div>
+        </div>
+        <div class="card mb-2">
+            <div class="card-body">
+                <h3 class="text-muted">3. Schritt: Vorgang bestätigen</h3>
+            </div>
         </div>
     </div>
-    <div class="card mb-2">
-        <div class="card-body">
-            <h3 class="text-muted">3. Schritt: Vorgang bestätigen</h3>
-        </div>
-    </div>
-</div>
-{% include "footer.html" %}
+{% endblock %}
