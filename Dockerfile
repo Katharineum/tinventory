@@ -29,5 +29,6 @@ WORKDIR /home/docker/
 RUN pip3 install -r requirements.txt
 WORKDIR /var/www/
 RUN python3 manage.py yarn install
+RUN python3 manage.py compilemessages
 EXPOSE 3031
 CMD ["/home/docker/init_and_run.sh"]
