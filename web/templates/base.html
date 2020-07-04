@@ -13,6 +13,9 @@
     <link rel="stylesheet" href="{% static "@fortawesome/fontawesome-free/css/all.min.css" %}"/>
     <link rel="stylesheet" href="{% static "datatables.net-bs4/css/dataTables.bootstrap4.min.css" %}"/>
     <link rel="stylesheet" href="{% static "bootstrap-datepicker/dist/css/bootstrap-datepicker.css" %}"/>
+    <link rel="stylesheet" href="{% static "select2/dist/css/select2.min.css" %}"/>
+    <link rel="stylesheet" href="{% static "@ttskch/select2-bootstrap4-theme/dist/select2-bootstrap4.min.css" %}"/>
+
     <link rel="stylesheet" href="{% static "style.css" %}">
 
     <script src="{% static "jquery/dist/jquery.min.js" %}"></script>
@@ -143,12 +146,21 @@
 <script src="{% static "datatables.net-bs4/js/dataTables.bootstrap4.min.js" %}"></script>
 <script src="{% static "bootstrap-datepicker/dist/js/bootstrap-datepicker.js" %}"></script>
 <script src="{% static "bootstrap-datepicker/dist/locales/bootstrap-datepicker."|add:LANGUAGE_CODE|add:".min.js" %}"></script>
-
+<script src="{% static "select2/dist/js/select2.min.js" %}"></script>
+<script src="{% static "select2/dist/js/i18n/"|add:LANGUAGE_CODE|add:".js" %}"></script>
+<script>
+    $(".django-select2").attr("data-minimum-input-length", "0");
+</script>
+<script src="{% static "django_select2/django_select2.js" %}"></script>
 <script>
     $(document).ready(function () {
         $('[data-toggle="tooltip"]').tooltip();
         $('.datepicker-field').datepicker({
             language: '{{ LANGUAGE_CODE }}'
+        });
+        $(".django-select2").djangoSelect2({
+            theme: "bootstrap4",
+            minimumInputLength: 0,
         });
     })
 </script>

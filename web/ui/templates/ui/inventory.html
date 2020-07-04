@@ -246,13 +246,14 @@
             const selCategoryB = $("#id_category_new");
 
             selCategoryA.change(function () {
-                console.log("select");
-                selCategoryB.val("");
-                noRequired(selCategoryB);
-                required(selCategoryA);
+                if (selCategoryA.val()) {
+                    selCategoryB.val("");
+                    noRequired(selCategoryB);
+                    required(selCategoryA);
+                }
             });
             selCategoryB.on("input", function () {
-                selCategoryA.val("");
+                selCategoryA.val("").trigger("change");
                 noRequired(selCategoryA);
                 required(selCategoryB);
             });
@@ -261,18 +262,16 @@
             const selPresetB = $("#id_preset_new_name");
             const selPresetC = $("#id_preset_new_manufacturer");
             selPresetA.change(function () {
-                selPresetB.val("");
-                selPresetC.val("");
-                {#noRequired(selPresetB);#}
-                {#required(selPresetA);#}
+                if (selPresetA.val()) {
+                    selPresetB.val("");
+                    selPresetC.val("");
+                }
             });
             selPresetB.on("input", function () {
                 selPresetC.trigger("input");
             });
             selPresetC.on("input", function () {
-                selPresetA.val("");
-                {#noRequired(selPresetA);#}
-                {#required(selPresetB);#}
+                selPresetA.val("").trigger("change");
             });
         });
     </script>

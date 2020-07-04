@@ -63,6 +63,7 @@ INSTALLED_APPS = [
     'widget_tweaks',
     'debug_toolbar',
     'django_yarnpkg',
+    "django_select2",
     'api',
     "ui"
 ]
@@ -212,4 +213,6 @@ YARN_INSTALLED_APPS = [
     "bootstrap",
     "@fortawesome/fontawesome-free",
     "datatables.net-bs4",
+    "select2",
+    "@ttskch/select2-bootstrap4-theme",
 ]

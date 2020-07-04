@@ -17,8 +17,37 @@
 from django.core.exceptions import ValidationError
 from django.forms import ModelForm, Form, TextInput, DateInput
 from django import forms
+from django_select2.forms import ModelSelect2Widget
 
 from api.models import Category, Location, Preset, Item, Person, CheckOutProcess
+
+
+class CategoryWidget(ModelSelect2Widget):
+    search_fields = [
+        "name__icontains",
+    ]
+
+
+class PresetWidget(ModelSelect2Widget):
+    search_fields = [
+        "name__icontains",
+        "manufacturer__icontains",
+        "description__icontains",
+    ]
+
+
+class LocationWidget(ModelSelect2Widget):
+    search_fields = [
+        "name__icontains",
+    ]
+
+
+class PersonWidget(ModelSelect2Widget):
+    search_fields = [
+        "name__icontains",
+        "email__icontains",
+        "notes__icontains",
+    ]
 
 
 class CategoryForm(ModelForm):
@@ -37,24 +66,34 @@ class PresetForm(ModelForm):
     class Meta:
         model = Preset
         fields = ("name", "category", "description", "manufacturer", "image")
+        widgets = {
+            "category": CategoryWidget,
+        }
 
 
 class ItemForm(ModelForm):
     class Meta:
         model = Item
         fields = ("barcode", "name", "category", "preset", "notes", "location")
+        widgets = {
+            "category": CategoryWidget,
+            "preset": PresetWidget,
+            "location": LocationWidget,
+        }
 
 
 class InventoryForm(Form):
     barcode = forms.CharField(label="Barcode", required=False)
-    category_select = forms.ModelChoiceField(Category.objects.all(), label="Kategorie auswählen", required=False)
+    category_select = forms.ModelChoiceField(Category.objects.order_by("name").all(), label="Kategorie auswählen",
+                                             required=False, widget=CategoryWidget)
     category_new = forms.CharField(label="neue Kategorie erstellen", required=False)
-    preset_select = forms.ModelChoiceField(Preset.objects.all(), label="Preset auswählen", required=False)
+    preset_select = forms.ModelChoiceField(Preset.objects.all(), label="Preset auswählen", required=False,
+                                           widget=PresetWidget)
     preset_new_name = forms.CharField(label="Name des Preset", required=False)
     preset_new_manufacturer = forms.CharField(label="Hersteller des Preset", required=False)
     name = forms.CharField(required=True, label="Bezeichnung")
     notes = forms.CharField(widget=forms.Textarea, label="Notizen", required=False)
-    location = forms.ModelChoiceField(Location.objects.all(), label="Ort", required=True)
+    location = forms.ModelChoiceField(Location.objects.all(), label="Ort", required=True, widget=LocationWidget)
 
     def clean(self):
         cleaned_data = super().clean()
@@ -105,8 +144,9 @@ HOURS = [(i, "{}. Stunde".format(i)) for i in range(1, 10)]
 
 
 class ExcuseForm(Form):
-    technician = forms.ModelChoiceField(Person.objects.filter(is_technician=True), label="Techniker", required=True)
-    date = forms.DateField(label="Datum", required=True)
+    technician = forms.ModelChoiceField(Person.objects.filter(is_technician=True), label="Techniker", required=True,
+                                        widget=PersonWidget)
+    date = forms.DateField(label="Datum", required=True, widget=DateInput(attrs={"class": "datepicker-field"}))
     start = forms.ChoiceField(choices=HOURS, label="Von", required=True)
     stop = forms.ChoiceField(choices=HOURS, label="Bis", required=True)
     reason = forms.CharField(widget=forms.Textarea, label="Aufgaben", required=True)
