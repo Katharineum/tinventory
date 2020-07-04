@@ -16,7 +16,7 @@ ENV PYTHONUNBUFFERED 1
 RUN apt-get update && \
     apt-get upgrade -y && \
     apt-get install -y \
-	libmariadbclient-dev yarnpkg && \
+	libmariadbclient-dev yarnpkg gettext && \
 	pip3 install --upgrade pip && \
 	pip3 install uwsgi mysqlclient && \
     rm -rf /var/lib/apt/lists/*
