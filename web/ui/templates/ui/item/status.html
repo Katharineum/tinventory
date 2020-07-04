@@ -1,5 +1,6 @@
 {% if item.is_available %}
-    <span class="badge badge-success">Am Lagerort/Verfügbar</span>(
+    <span class="badge badge-success">Am Lagerort/Verfügbar</span>
+    (
     <a href="{% url "ui_locations_detail" item.location.pk %}"></a>{{ item.location }})
 {% else %}
     <span class="badge badge-danger">Ausgecheckt</span>
