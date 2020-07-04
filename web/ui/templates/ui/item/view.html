@@ -106,6 +106,53 @@
             </div>
             <div class="card mb-2">
                 <div class="card-body">
+                    <h5>Ausleihhistorie</h5>
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th scope="col">
+                                ID
+                            </th>
+                            <th scope="col">
+                                Ausleihzeitpunkt
+                            </th>
+                            <th scope="col">
+                                Rückgabezeitpunkt
+                            </th>
+                            <th scope="col">
+                                Ausleihende Person
+                            </th>
+                            <th scope="col">
+                                Aktionen
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for check in item.checks.all %}
+                            <tr>
+                                <th scope="row">
+                                    <a href="{% url "ui_checks_view" check.check_out.id %}">{{ check.id }}</a>
+                                </th>
+                                <td>
+                                    {{ check.check_out.checked_out_at }}
+                                </td>
+                                <td>
+                                    {{ check.checked_in_at|default:"–" }}
+                                </td>
+                                <td>{{ check.check_out.borrowing_person }}</td>
+                                <td>
+                                    <a role="button" class="btn btn-success"
+                                       href="{% url "ui_checks_view" check.check_out.id %}">Mehr anzeigen
+                                    </a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="card mb-2">
+                <div class="card-body">
                     <a role="button" class="btn btn-primary" href="{% url "ui_items" %}">Zurück zur Übersicht</a>
                 </div>
             </div>
@@ -123,7 +170,4 @@
             </div>
         </div>
     </div>
-
-
-    {% include "parts/table_js.html" %}
 {% endblock %}
