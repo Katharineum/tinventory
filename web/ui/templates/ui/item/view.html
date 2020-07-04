@@ -91,16 +91,16 @@
                             <div class="row">
                                 <div class="col-sm-3"><strong>Status</strong></div>
                                 <div class="col-sm-9">
-                                    <span class="badge badge-success">Am Lagerort/Verfügbar</span>
+                                    {% include "ui/item/status.html" %}
                                 </div>
                             </div>
                         </li>
-                        <li class="list-group-item">
-                            <div class="row">
-                                <div class="col-sm-3"><strong>Zuletzt gesehen</strong></div>
-                                <div class="col-sm-9">{{ item.last_time_seen_at }} von xy</div>
-                            </div>
-                        </li>
+                        {#                        <li class="list-group-item">#}
+                        {#                            <div class="row">#}
+                        {#                                <div class="col-sm-3"><strong>Zuletzt gesehen</strong></div>#}
+                        {#                                <div class="col-sm-9">{{ item.last_time_seen_at }} von xy</div>#}
+                        {#                            </div>#}
+                        {#                        </li>#}
                     </ul>
                 </div>
             </div>
