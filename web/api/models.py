@@ -27,6 +27,7 @@ class Category(models.Model):
         return self.name
 
     class Meta:
+        ordering = ["name"]
         verbose_name = "Kategorie"
         verbose_name_plural = "Kategorien"
 
@@ -39,6 +40,7 @@ class Location(models.Model):
         return self.name
 
     class Meta:
+        ordering = ["name"]
         verbose_name = "Ort"
         verbose_name_plural = "Orte"
 
@@ -59,6 +61,7 @@ class Preset(models.Model):
         return self.name
 
     class Meta:
+        ordering = ["name"]
         verbose_name = "Preset"
         verbose_name_plural = "Presets"
 
@@ -116,6 +119,7 @@ class Item(models.Model):
             return self.name
 
     class Meta:
+        ordering = ["name", "preset__name"]
         verbose_name = "Objekt"
         verbose_name_plural = "Objekte"
 
@@ -139,6 +143,7 @@ class Person(models.Model):
         return self.name
 
     class Meta:
+        ordering = ["name"]
         verbose_name = "Person"
         verbose_name_plural = "Personen"
 
@@ -151,6 +156,7 @@ class CheckOutCondition(models.Model):
         return self.text
 
     class Meta:
+        ordering = ["text"]
         verbose_name = "Check-Out-Bedingung"
         verbose_name_plural = "Check-Out-Bedingungen"
 
@@ -199,6 +205,7 @@ class CheckOutProcess(models.Model):
         super(CheckOutProcess, self).save(*args, **kwargs)
 
     class Meta:
+        ordering = ["-check_in_until", "-checked_out_at"]
         verbose_name = "Check-Out-Vorgang"
         verbose_name_plural = "Check-Out-Vorgänge"
         permissions = [("check_out", "Can check out things"), ("check_in", "Can check in things")]
@@ -217,5 +224,6 @@ class Check(models.Model):
         return "{} [{}]".format(self.item, self.check_out)
 
     class Meta:
+        ordering = ["-check_out__check_in_until", "-check_out__checked_out_at", "item__name", "item__preset__name"]
         verbose_name = "Check"
         verbose_name_plural = "Checks"

@@ -1,9 +1,11 @@
 {% include "parts/table_js_locale.html" %}
 <script type="text/javascript">
     $(document).ready(function () {
-        $('.table').DataTable({
-            language: dataTableLocale
-        });
+        if (typeof dataTableOptions === 'undefined') {
+            dataTableOptions = {};
+        }
+        dataTableOptions.language = dataTableLocale;
+        $('.table').DataTable(dataTableOptions);
     });
 
     $(".delete-button").click(function (e) {
