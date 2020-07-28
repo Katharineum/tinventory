@@ -20,8 +20,8 @@ msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-07-02 22:54+0200\n"
-"PO-Revision-Date: 2020-07-03 15:46+0000\n"
-"Last-Translator: Jonathan Weth <teckids@jonathanweth.de>\n"
+"PO-Revision-Date: 2020-08-26 15:47+0000\n"
+"Last-Translator: magicfelix <felix@felix-zauberer.de>\n"
 "Language-Team: German <https://translate.edugit.org/projects/tinventory/"
 "tinventory/de/>\n"
 "Language: de\n"
@@ -29,7 +29,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.0.1\n"
+"X-Generator: Weblate 4.1.1\n"
 
 #: templates/base.html:25 templates/base.html:33
 msgid "TInventory"
@@ -190,7 +190,7 @@ msgstr "Die Person wurde erfolgreich gelöscht."
 
 #: ui/views.py:478
 msgid "Object was removed from check out list successfully."
-msgstr ""
+msgstr "Das Objekt wurde erfolgreich von der Check-Out-Liste entfernt."
 
 #~ msgid "Only POST requests allowed."
 #~ msgstr "Es sind nur POST-Anfragen erlaubt."
