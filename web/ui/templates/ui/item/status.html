@@ -1,15 +1,17 @@
 {% if item.is_available %}
-    <span class="badge badge-success">Am Lagerort/Verfügbar</span>
+  <span class="badge badge-success">Am Lagerort/Verfügbar</span>
+  {% if item.location %}
     (
     <a href="{% url "ui_locations_detail" item.location.pk %}"></a>{{ item.location }})
+  {% endif %}
 {% else %}
-    <span class="badge badge-danger">Ausgecheckt</span>
+  <span class="badge badge-danger">Ausgecheckt</span>
 
-    {% for check in item.get_checks %}
-        (an
-        <a href="{% url "ui_checks_view" check.check_out.id %}">
-            {{ check.check_out.borrowing_person.name }},
-            #{{ check.check_out.id }}</a>)
-    {% endfor %}
+  {% for check in item.get_checks %}
+    (an
+    <a href="{% url "ui_checks_view" check.check_out.id %}">
+      {{ check.check_out.borrowing_person.name }},
+      #{{ check.check_out.id }}</a>)
+  {% endfor %}
 
 {% endif %}

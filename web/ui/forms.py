@@ -67,7 +67,7 @@ class PresetForm(ModelForm):
         model = Preset
         fields = ("name", "category", "description", "manufacturer", "image")
         widgets = {
-            "category": CategoryWidget,
+            # "category": CategoryWidget,
         }
 
 
@@ -76,9 +76,9 @@ class ItemForm(ModelForm):
         model = Item
         fields = ("barcode", "name", "category", "preset", "notes", "location")
         widgets = {
-            "category": CategoryWidget,
-            "preset": PresetWidget,
-            "location": LocationWidget,
+            # "category": CategoryWidget(),
+            #     "preset": PresetWidget,
+            #     "location": LocationWidget,
         }
 
 
