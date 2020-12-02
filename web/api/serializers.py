@@ -14,18 +14,18 @@
 #  You should have received a copy of the GNU General Public License
 #  along with TInventory.  If not, see <http://www.gnu.org/licenses/>.
 
-from django.contrib.auth.models import User, Group
-from rest_framework import serializers
-from rest_framework.relations import HyperlinkedIdentityField
+from django.contrib.auth.models import Group, User
 
 from api.models import *
+from rest_framework import serializers
+from rest_framework.relations import HyperlinkedIdentityField
 
 
 # TODO: Create serializers for all models, resolving location, category, preset, etc.
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = User
-        fields = ("url", "id", 'username', "first_name", "last_name")
+        fields = ("url", "id", "username", "first_name", "last_name")
 
 
 class PersonSerializer(serializers.HyperlinkedModelSerializer):
@@ -37,7 +37,11 @@ class PersonSerializer(serializers.HyperlinkedModelSerializer):
 class CategorySerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Category
-        fields = ("url", "id", "name",)
+        fields = (
+            "url",
+            "id",
+            "name",
+        )
 
 
 class LocationSerializer(serializers.HyperlinkedModelSerializer):
@@ -54,8 +58,15 @@ class CheckProcessSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = CheckOutProcess
-        fields = ["url", "id", "checked_out_at", "is_check_out_in_process", "check_in_until", "borrowing_person",
-                  "lending_user"]
+        fields = [
+            "url",
+            "id",
+            "checked_out_at",
+            "is_check_out_in_process",
+            "check_in_until",
+            "borrowing_person",
+            "lending_user",
+        ]
 
 
 class PresetSerializer(serializers.HyperlinkedModelSerializer):
@@ -81,4 +92,12 @@ class CheckSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Check
-        fields = ("id", "url", "item", "checked_in", "checked_in_at", "check_out", "checked_in_by")
+        fields = (
+            "id",
+            "url",
+            "item",
+            "checked_in",
+            "checked_in_at",
+            "check_out",
+            "checked_in_by",
+        )

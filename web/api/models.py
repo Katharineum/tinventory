@@ -34,7 +34,9 @@ class Category(models.Model):
 
 class Location(models.Model):
     name = models.CharField(max_length=100, verbose_name="Name")
-    number = models.IntegerField(unique=True, blank=True, null=True, verbose_name="Schranknummer")
+    number = models.IntegerField(
+        unique=True, blank=True, null=True, verbose_name="Schranknummer"
+    )
 
     def __str__(self):
         return self.name
@@ -51,11 +53,20 @@ def default_category():
 
 class Preset(models.Model):
     name = models.CharField(max_length=200, verbose_name="Bezeichnung")
-    manufacturer = models.CharField(max_length=100, blank=True, verbose_name="Hersteller")
+    manufacturer = models.CharField(
+        max_length=100, blank=True, verbose_name="Hersteller"
+    )
     description = models.TextField(blank=True, verbose_name="Beschreibung")
-    category = models.ForeignKey(Category, models.SET_DEFAULT, default=default_category, verbose_name="Kategorie",
-                                 related_name="presets")
-    image = models.ImageField(upload_to="images/presets/", blank=True, verbose_name="Bild")
+    category = models.ForeignKey(
+        Category,
+        models.SET_DEFAULT,
+        default=default_category,
+        verbose_name="Kategorie",
+        related_name="presets",
+    )
+    image = models.ImageField(
+        upload_to="images/presets/", blank=True, verbose_name="Bild"
+    )
 
     def __str__(self):
         return self.name
@@ -68,19 +79,44 @@ class Preset(models.Model):
 
 class Item(models.Model):
     name = models.CharField(max_length=200, verbose_name="Bezeichnung")
-    barcode = models.CharField(max_length=15, verbose_name="Barcode", null=True, blank=True,
-                               help_text="Frei lassen, um Barcode automatisch zu generieren", unique=True)
+    barcode = models.CharField(
+        max_length=15,
+        verbose_name="Barcode",
+        null=True,
+        blank=True,
+        help_text="Frei lassen, um Barcode automatisch zu generieren",
+        unique=True,
+    )
 
-    category = models.ForeignKey(Category, models.SET_DEFAULT, default=default_category, verbose_name="Kategorie",
-                                 related_name="items")
-    preset = models.ForeignKey(Preset, models.SET_NULL, blank=True, null=True, verbose_name="Preset",
-                               related_name="items")
+    category = models.ForeignKey(
+        Category,
+        models.SET_DEFAULT,
+        default=default_category,
+        verbose_name="Kategorie",
+        related_name="items",
+    )
+    preset = models.ForeignKey(
+        Preset,
+        models.SET_NULL,
+        blank=True,
+        null=True,
+        verbose_name="Preset",
+        related_name="items",
+    )
 
     notes = models.TextField(blank=True, verbose_name="Notizen")
 
-    location = models.ForeignKey(Location, models.SET_NULL, blank=True, null=True, verbose_name="Ort",
-                                 related_name="items")
-    last_time_seen_at = models.DateTimeField(auto_now=True, verbose_name="Letztes Mal gesehen am")
+    location = models.ForeignKey(
+        Location,
+        models.SET_NULL,
+        blank=True,
+        null=True,
+        verbose_name="Ort",
+        related_name="items",
+    )
+    last_time_seen_at = models.DateTimeField(
+        auto_now=True, verbose_name="Letztes Mal gesehen am"
+    )
 
     def gen_barcode(self):
         if self.id:
@@ -91,7 +127,7 @@ class Item(models.Model):
 
     @staticmethod
     def get_next_item_id():
-        id_max = Item.objects.all().aggregate(Max('id'))['id__max']
+        id_max = Item.objects.all().aggregate(Max("id"))["id__max"]
         return id_max + 1 if id_max else 1
 
     def is_available(self):
@@ -130,7 +166,9 @@ class Person(models.Model):
 
     notes = models.TextField(blank=True, verbose_name="Notizen")
     is_within_school = models.BooleanField(verbose_name="Schulintern?", default=False)
-    is_technician = models.BooleanField(verbose_name="Aktiver Techniker?", default=False)
+    is_technician = models.BooleanField(
+        verbose_name="Aktiver Techniker?", default=False
+    )
 
     def get_checks(self):
         checks = []
@@ -174,15 +212,34 @@ class CheckOutCondition(models.Model):
 
 
 class CheckOutProcess(models.Model):
-    borrowing_person = models.ForeignKey(Person, on_delete=models.CASCADE, related_name="check_outs",
-                                         verbose_name="Ausleihende Person")
-    lending_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="check_outs",
-                                     verbose_name="Verleihender Nutzer")
-    checked_out_at = models.DateTimeField(auto_now_add=True, verbose_name="Check-Out-Zeitpunkt")
-    is_check_out_in_process = models.BooleanField(default=True, verbose_name="Check-Out im Prozess?")
-    check_in_until = models.DateField(verbose_name="Check-In bis", blank=True, null=True)
-    condition = models.ForeignKey(CheckOutCondition, on_delete=models.SET_NULL, verbose_name="Check-Out-Bedingung",
-                                  blank=True, null=True)
+    borrowing_person = models.ForeignKey(
+        Person,
+        on_delete=models.CASCADE,
+        related_name="check_outs",
+        verbose_name="Ausleihende Person",
+    )
+    lending_user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name="check_outs",
+        verbose_name="Verleihender Nutzer",
+    )
+    checked_out_at = models.DateTimeField(
+        auto_now_add=True, verbose_name="Check-Out-Zeitpunkt"
+    )
+    is_check_out_in_process = models.BooleanField(
+        default=True, verbose_name="Check-Out im Prozess?"
+    )
+    check_in_until = models.DateField(
+        verbose_name="Check-In bis", blank=True, null=True
+    )
+    condition = models.ForeignKey(
+        CheckOutCondition,
+        on_delete=models.SET_NULL,
+        verbose_name="Check-Out-Bedingung",
+        blank=True,
+        null=True,
+    )
 
     def is_everything_checked_in(self):
         return self.checks.filter(checked_in=False).count() <= 0
@@ -208,22 +265,46 @@ class CheckOutProcess(models.Model):
         ordering = ["-check_in_until", "-checked_out_at"]
         verbose_name = "Check-Out-Vorgang"
         verbose_name_plural = "Check-Out-Vorgänge"
-        permissions = [("check_out", "Can check out things"), ("check_in", "Can check in things")]
+        permissions = [
+            ("check_out", "Can check out things"),
+            ("check_in", "Can check in things"),
+        ]
 
 
 class Check(models.Model):
-    item = models.ForeignKey(Item, on_delete=models.CASCADE, related_name="checks", verbose_name="Objekt")
-    check_out = models.ForeignKey(CheckOutProcess, on_delete=models.CASCADE, related_name="checks",
-                                  verbose_name="Check-Out-Vorgang")
-    checked_in = models.BooleanField(default=False, verbose_name="Check-In durchgeführt?")
-    checked_in_at = models.DateTimeField(verbose_name="Check-In-Zeitpunkt", blank=True, null=True)
-    checked_in_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name="check_ins",
-                                      verbose_name="Check-In durchgeführt von", blank=True, null=True)
+    item = models.ForeignKey(
+        Item, on_delete=models.CASCADE, related_name="checks", verbose_name="Objekt"
+    )
+    check_out = models.ForeignKey(
+        CheckOutProcess,
+        on_delete=models.CASCADE,
+        related_name="checks",
+        verbose_name="Check-Out-Vorgang",
+    )
+    checked_in = models.BooleanField(
+        default=False, verbose_name="Check-In durchgeführt?"
+    )
+    checked_in_at = models.DateTimeField(
+        verbose_name="Check-In-Zeitpunkt", blank=True, null=True
+    )
+    checked_in_by = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name="check_ins",
+        verbose_name="Check-In durchgeführt von",
+        blank=True,
+        null=True,
+    )
 
     def __str__(self):
         return "{} [{}]".format(self.item, self.check_out)
 
     class Meta:
-        ordering = ["-check_out__check_in_until", "-check_out__checked_out_at", "item__name", "item__preset__name"]
+        ordering = [
+            "-check_out__check_in_until",
+            "-check_out__checked_out_at",
+            "item__name",
+            "item__preset__name",
+        ]
         verbose_name = "Check"
         verbose_name_plural = "Checks"

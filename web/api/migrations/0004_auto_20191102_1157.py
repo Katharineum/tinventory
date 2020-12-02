@@ -5,13 +5,13 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
     dependencies = [
-        ('api', '0003_checkoutcondition'),
+        ("api", "0003_checkoutcondition"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='checkoutcondition',
-            name='default',
-            field=models.BooleanField(verbose_name='Standard'),
+            model_name="checkoutcondition",
+            name="default",
+            field=models.BooleanField(verbose_name="Standard"),
         ),
     ]

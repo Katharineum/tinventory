@@ -17,7 +17,16 @@
 from django.contrib import admin, messages
 
 # Register your models here.
-from api.models import Category, Location, Preset, Item, Person, CheckOutProcess, Check, CheckOutCondition
+from api.models import (
+    Category,
+    Check,
+    CheckOutCondition,
+    CheckOutProcess,
+    Item,
+    Location,
+    Person,
+    Preset,
+)
 
 
 class ItemAdmin(admin.ModelAdmin):
@@ -34,12 +43,15 @@ admin.site.register(Check)
 
 
 class CheckOutConditionAdmin(admin.ModelAdmin):
-    actions = ['make_default']
+    actions = ["make_default"]
 
     def make_default(self, request, queryset):
         if queryset.count() > 1:
-            self.message_user(request, "Es kann nur eine Bedingung als Standard festgelegt werden.",
-                              level=messages.ERROR)
+            self.message_user(
+                request,
+                "Es kann nur eine Bedingung als Standard festgelegt werden.",
+                level=messages.ERROR,
+            )
             return
         cond = queryset[0]
         cond.default = True

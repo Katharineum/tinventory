@@ -18,19 +18,37 @@ from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.db.models import Model
 from django.forms import Form
+from django.http import (
+    FileResponse,
+    HttpResponseBadRequest,
+    HttpResponseNotAllowed,
+    JsonResponse,
+)
+from django.shortcuts import get_object_or_404, redirect, render
+from django.utils import timezone
 from django.utils.decorators import method_decorator
+from django.utils.translation import gettext as _
 from django.views import View
 from django.views.generic import ListView
 from django.views.generic.detail import DetailView
-from django.http import FileResponse, JsonResponse, HttpResponseNotAllowed, HttpResponseBadRequest
-from django.shortcuts import render, get_object_or_404, redirect
 
-from django.utils.translation import gettext as _
-from django.utils import timezone
-
-from api.models import Category, Location, Preset, Item, Person, CheckOutProcess, Check
-from api.reports import barcode_pdf, loan_form_pdf, check_in_confirmation_pdf, excuse_form_pdf
-from ui.forms import CategoryForm, LocationForm, PresetForm, ItemForm, InventoryForm, PersonForm, CheckForm, ExcuseForm
+from api.models import Category, Check, CheckOutProcess, Item, Location, Person, Preset
+from api.reports import (
+    barcode_pdf,
+    check_in_confirmation_pdf,
+    excuse_form_pdf,
+    loan_form_pdf,
+)
+from ui.forms import (
+    CategoryForm,
+    CheckForm,
+    ExcuseForm,
+    InventoryForm,
+    ItemForm,
+    LocationForm,
+    PersonForm,
+    PresetForm,
+)
 
 
 @login_required
@@ -38,7 +56,6 @@ def index(request):
     context = {
         "count_items": Item.objects.all().count(),
         "count_presets": Preset.objects.all().count(),
-
     }
     available = 0
     checked_out = 0
@@ -59,7 +76,6 @@ def index(request):
 
 
 class StandardListView(ListView, LoginRequiredMixin, PermissionRequiredMixin):
-
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         if self.request.session.get("msg", False):
@@ -69,7 +85,6 @@ class StandardListView(ListView, LoginRequiredMixin, PermissionRequiredMixin):
 
 
 class StandardDetailView(DetailView, LoginRequiredMixin, PermissionRequiredMixin):
-
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         if self.request.session.get("msg", False):
@@ -111,7 +126,9 @@ class StandardNewView(View, LoginRequiredMixin, PermissionRequiredMixin):
         return render(request, self.template_name, {"form": form, "mode": "new"})
 
 
-class StandardEditView(View, LoginRequiredMixin, PermissionRequiredMixin, InstanceMixin):
+class StandardEditView(
+    View, LoginRequiredMixin, PermissionRequiredMixin, InstanceMixin
+):
     form_class: Form = Form
     model_class: Model = Model
     template_name: str = "form.html"
@@ -121,7 +138,11 @@ class StandardEditView(View, LoginRequiredMixin, PermissionRequiredMixin, Instan
 
     def get(self, request, *args, **kwargs):
         form = self.form_class(instance=self.instance)
-        return render(request, self.template_name, {"form": form, "mode": "edit", "instance": self.instance})
+        return render(
+            request,
+            self.template_name,
+            {"form": form, "mode": "edit", "instance": self.instance},
+        )
 
     def post(self, request, *args, **kwargs):
         form = self.form_class(request.POST, instance=self.instance)
@@ -134,10 +155,16 @@ class StandardEditView(View, LoginRequiredMixin, PermissionRequiredMixin, Instan
             else:
                 return redirect(self.redirect_url)
 
-        return render(request, self.template_name, {"form": form, "mode": "edit", "instance": self.instance})
+        return render(
+            request,
+            self.template_name,
+            {"form": form, "mode": "edit", "instance": self.instance},
+        )
 
 
-class StandardDeleteView(View, LoginRequiredMixin, PermissionRequiredMixin, InstanceMixin):
+class StandardDeleteView(
+    View, LoginRequiredMixin, PermissionRequiredMixin, InstanceMixin
+):
     model_class: Model = Model
     redirect_url: str = "ui_index"
     success_message: str = _("Deleting was successfully.")
@@ -220,7 +247,9 @@ def location_add_item(request, pk):
                     try:
                         item = Item.objects.get(barcode=barcode)
                     except Item.DoesNotExist:
-                        give_location_error(400, _("No item with this barcode was found."))
+                        give_location_error(
+                            400, _("No item with this barcode was found.")
+                        )
                         return
 
                 location = Location.objects.get(pk=pk)
@@ -235,10 +264,14 @@ def location_add_item(request, pk):
                     status = 200
                     data = {"status": "success", "status_code": 200}
                 else:
-                    status, data = give_location_error(400, _("Item is already at this location."))
+                    status, data = give_location_error(
+                        400, _("Item is already at this location.")
+                    )
 
             except Item.DoesNotExist:
-                status, data = give_location_error(400, _("Barcode is not valid."))  # 400 - bad request
+                status, data = give_location_error(
+                    400, _("Barcode is not valid.")
+                )  # 400 - bad request
         else:
             return HttpResponseBadRequest()
     else:
@@ -272,6 +305,7 @@ class LocationDeleteView(StandardDeleteView):
 ###########
 # PRESETS #
 ###########
+
 
 class PresetListView(StandardListView):
     model = Preset
@@ -366,7 +400,7 @@ def item_barcode(request, id):
 @permission_required("api.add_item")
 def inventory(request):
     context = {}
-    if request.method == 'GET':
+    if request.method == "GET":
         form = InventoryForm()
     else:
         form = InventoryForm(request.POST)
@@ -451,7 +485,9 @@ def check_out(request):
                 person = Person.objects.get(id=int(request.POST["select-person"]))
             except (Person.DoesNotExist, ValueError):
                 return redirect("ui_check_out")
-            process = CheckOutProcess.objects.create(borrowing_person=person, lending_user=request.user)
+            process = CheckOutProcess.objects.create(
+                borrowing_person=person, lending_user=request.user
+            )
             request.session["process"] = process.id
             request.session["step"] = 2
             step = 2
@@ -462,7 +498,9 @@ def check_out(request):
                 person = Person.objects.create(name=request.POST["create-person"])
             else:
                 return redirect("ui_check_out")
-            process = CheckOutProcess.objects.create(borrowing_person=person, lending_user=request.user)
+            process = CheckOutProcess.objects.create(
+                borrowing_person=person, lending_user=request.user
+            )
             request.session["process"] = process.id
             request.session["step"] = 2
             step = 2
@@ -475,7 +513,8 @@ def check_out(request):
                 check = process.checks.get(id=id)
                 check.delete()
                 msg = _(
-                    "Object was removed from check out list successfully.")  # "Das Objekt wurde erfolgreich von der Check-Out-Liste entfernt."
+                    "Object was removed from check out list successfully."
+                )  # "Das Objekt wurde erfolgreich von der Check-Out-Liste entfernt."
             except (Check.DoesNotExist, ValueError):
                 return redirect("ui_check_out")
 
@@ -490,7 +529,9 @@ def check_out(request):
                 try:
                     item = Item.objects.get(barcode=scan)
                 except Item.DoesNotExist:
-                    msg = "Es gibt kein Objekt mit der ID oder dem Barcode {}.".format(scan)
+                    msg = "Es gibt kein Objekt mit der ID oder dem Barcode {}.".format(
+                        scan
+                    )
                     msg_type = "bad"
 
             if msg_type == "success":
@@ -505,11 +546,19 @@ def check_out(request):
                 check = process.checks.create(item=item)
                 msg = "Das Objekt wurde erfolgreich zur Check-Out-Liste hinzugefügt."
 
-        if step == 2 and request.POST.get("confirm", False) and process.checks.count() > 0:
+        if (
+            step == 2
+            and request.POST.get("confirm", False)
+            and process.checks.count() > 0
+        ):
             request.session["step"] = 3
             step = 3
 
-        elif step == 3 and request.POST.get("confirm", False) and process.checks.count() > 0:
+        elif (
+            step == 3
+            and request.POST.get("confirm", False)
+            and process.checks.count() > 0
+        ):
             process.is_check_out_in_process = False
             process.checked_out_at = timezone.now()
             process.save()
@@ -520,9 +569,17 @@ def check_out(request):
     if step == 1:
         technicians = Person.objects.all().filter(is_technician=True).order_by("name")
         persons = Person.objects.all().filter(is_technician=False).order_by("name")
-        return render(request, "ui/check-out-1.html", context={"technicians": technicians, "persons": persons})
+        return render(
+            request,
+            "ui/check-out-1.html",
+            context={"technicians": technicians, "persons": persons},
+        )
     elif step == 2:
-        return render(request, "ui/check-out-2.html", context={"process": process, "msg": msg, "msg_type": msg_type})
+        return render(
+            request,
+            "ui/check-out-2.html",
+            context={"process": process, "msg": msg, "msg_type": msg_type},
+        )
     elif step == 3:
         return render(request, "ui/check-out-3.html", context={"process": process})
     elif step == 4:
@@ -541,9 +598,7 @@ def loan_form(request, id):
 @permission_required("api.check_out")
 def checks(request):
     checks = CheckOutProcess.objects.all().filter(is_check_out_in_process=False)
-    context = {
-        "checks": checks
-    }
+    context = {"checks": checks}
     if request.session.get("msg", False):
         context["msg"] = request.session["msg"]
         request.session["msg"] = None
@@ -555,9 +610,7 @@ def checks(request):
 @permission_required("api.check_out")
 def check_view(request, id):
     check = get_object_or_404(CheckOutProcess, pk=id, is_check_out_in_process=False)
-    context = {
-        "check": check
-    }
+    context = {"check": check}
     if request.session.get("msg", False):
         context["msg"] = request.session["msg"]
         request.session["msg"] = None
@@ -569,14 +622,16 @@ def check_view(request, id):
 def check_edit(request, id):
     check = get_object_or_404(CheckOutProcess, pk=id)
 
-    if request.method == 'GET':
+    if request.method == "GET":
         form = CheckForm(instance=check)
     else:
         form = CheckForm(request.POST, instance=check)
         if form.is_valid():
             form.save()
-            request.session["msg"] = "Die Rückgabebedingungen wurden erfolgreich aktualisiert."
-            return redirect('ui_checks_view', check.id)
+            request.session[
+                "msg"
+            ] = "Die Rückgabebedingungen wurden erfolgreich aktualisiert."
+            return redirect("ui_checks_view", check.id)
 
     return render(request, "ui/person/form.html", {"check": check, "form": form})
 
@@ -630,14 +685,18 @@ def check_in_confirmation(request, id):
 
 @login_required
 def excuse(request):
-    if request.method == 'GET':
+    if request.method == "GET":
         form = ExcuseForm()
     else:
         form = ExcuseForm(request.POST)
         if form.is_valid():
-            filename = excuse_form_pdf(form.cleaned_data["technician"], form.cleaned_data["date"],
-                                       form.cleaned_data["start"],
-                                       form.cleaned_data["stop"], form.cleaned_data["reason"])
+            filename = excuse_form_pdf(
+                form.cleaned_data["technician"],
+                form.cleaned_data["date"],
+                form.cleaned_data["start"],
+                form.cleaned_data["stop"],
+                form.cleaned_data["reason"],
+            )
 
             return PDFResponse(filename)
 
@@ -651,37 +710,102 @@ def license(request):
     LICENSE_MIT = "MIT License"
 
     components = [
-        ("Docker (u.a. Engine, CLI, docker-compose)", "https://github.com/docker", LICENSE_APACHE_2,
-         "https://github.com/docker/docker/blob/master/LICENSE"),
-        ("Django", "https://www.djangoproject.com/", "Django BSD License",
-         "https://github.com/django/django/blob/master/LICENSE"),
-        ("Python 3", "https://www.python.org/", "PSF LICENSE AGREEMENT FOR PYTHON",
-         "https://docs.python.org/3/license.html"),
         (
-            "Bootstrap", "https://getbootstrap.com/", LICENSE_MIT,
-            "https://github.com/twbs/bootstrap/blob/master/LICENSE"),
-        ("jQuery", "https://jquery.com/", LICENSE_MIT, "https://github.com/jquery/jquery/blob/master/LICENSE.txt"),
-        ("FontAwesome Icon Font", "https://github.com/FortAwesome/Font-Awesome", "SIL OFL 1.1 License",
-         "https://scripts.sil.org/OFL"),
-        ("DataTables", "https://datatables.net", LICENSE_MIT, "https://datatables.net/license/mit"),
-        ("pip", "https://pypi.org/project/pip/", LICENSE_MIT, "https://github.com/pypa/pip/blob/master/LICENSE.txt"),
-        ("requests", "https://requests.kennethreitz.org/", LICENSE_APACHE_2,
-         "https://github.com/psf/requests/blob/master/LICENSE"),
-        ("django-bootstrap-form", "https://github.com/tzangms/django-bootstrap-form", LICENSE_BSD_3,
-         "https://github.com/tzangms/django-bootstrap-form/blob/master/LICENSE"),
-        ("django-cors-headers", "https://github.com/adamchainz/django-cors-headers", LICENSE_MIT,
-         "https://github.com/adamchainz/django-cors-headers/blob/master/LICENSE"),
-        ("django-oauth-toolkit", "https://github.com/jazzband/django-oauth-toolkit", LICENSE_BSD,
-         "https://github.com/jazzband/django-oauth-toolkit/blob/master/LICENSE"),
-        ("django-widget-tweaks", "https://github.com/jazzband/django-widget-tweaks", LICENSE_MIT,
-         "https://github.com/jazzband/django-widget-tweaks/blob/master/LICENSE"),
-        ("djangorestframework", "https://www.django-rest-framework.org/", LICENSE_BSD_3,
-         "https://www.django-rest-framework.org/#license"),
-        ("fpdf (PyFPDF)", "https://github.com/reingart/pyfpdf", "GNU Lesser General Public License v3.0",
-         "https://github.com/reingart/pyfpdf/blob/master/LICENSE"),
-        ("Django-Select2", "https://github.com/codingjoe/django-select2", "MIT License",
-         "https://github.com/codingjoe/django-select2/blob/master/LICENSE"),
-
+            "Docker (u.a. Engine, CLI, docker-compose)",
+            "https://github.com/docker",
+            LICENSE_APACHE_2,
+            "https://github.com/docker/docker/blob/master/LICENSE",
+        ),
+        (
+            "Django",
+            "https://www.djangoproject.com/",
+            "Django BSD License",
+            "https://github.com/django/django/blob/master/LICENSE",
+        ),
+        (
+            "Python 3",
+            "https://www.python.org/",
+            "PSF LICENSE AGREEMENT FOR PYTHON",
+            "https://docs.python.org/3/license.html",
+        ),
+        (
+            "Bootstrap",
+            "https://getbootstrap.com/",
+            LICENSE_MIT,
+            "https://github.com/twbs/bootstrap/blob/master/LICENSE",
+        ),
+        (
+            "jQuery",
+            "https://jquery.com/",
+            LICENSE_MIT,
+            "https://github.com/jquery/jquery/blob/master/LICENSE.txt",
+        ),
+        (
+            "FontAwesome Icon Font",
+            "https://github.com/FortAwesome/Font-Awesome",
+            "SIL OFL 1.1 License",
+            "https://scripts.sil.org/OFL",
+        ),
+        (
+            "DataTables",
+            "https://datatables.net",
+            LICENSE_MIT,
+            "https://datatables.net/license/mit",
+        ),
+        (
+            "pip",
+            "https://pypi.org/project/pip/",
+            LICENSE_MIT,
+            "https://github.com/pypa/pip/blob/master/LICENSE.txt",
+        ),
+        (
+            "requests",
+            "https://requests.kennethreitz.org/",
+            LICENSE_APACHE_2,
+            "https://github.com/psf/requests/blob/master/LICENSE",
+        ),
+        (
+            "django-bootstrap-form",
+            "https://github.com/tzangms/django-bootstrap-form",
+            LICENSE_BSD_3,
+            "https://github.com/tzangms/django-bootstrap-form/blob/master/LICENSE",
+        ),
+        (
+            "django-cors-headers",
+            "https://github.com/adamchainz/django-cors-headers",
+            LICENSE_MIT,
+            "https://github.com/adamchainz/django-cors-headers/blob/master/LICENSE",
+        ),
+        (
+            "django-oauth-toolkit",
+            "https://github.com/jazzband/django-oauth-toolkit",
+            LICENSE_BSD,
+            "https://github.com/jazzband/django-oauth-toolkit/blob/master/LICENSE",
+        ),
+        (
+            "django-widget-tweaks",
+            "https://github.com/jazzband/django-widget-tweaks",
+            LICENSE_MIT,
+            "https://github.com/jazzband/django-widget-tweaks/blob/master/LICENSE",
+        ),
+        (
+            "djangorestframework",
+            "https://www.django-rest-framework.org/",
+            LICENSE_BSD_3,
+            "https://www.django-rest-framework.org/#license",
+        ),
+        (
+            "fpdf (PyFPDF)",
+            "https://github.com/reingart/pyfpdf",
+            "GNU Lesser General Public License v3.0",
+            "https://github.com/reingart/pyfpdf/blob/master/LICENSE",
+        ),
+        (
+            "Django-Select2",
+            "https://github.com/codingjoe/django-select2",
+            "MIT License",
+            "https://github.com/codingjoe/django-select2/blob/master/LICENSE",
+        ),
     ]
     components.sort(key=lambda elem: elem[0].lower())
     return render(request, "ui/license.html", context={"components": components})

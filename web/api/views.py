@@ -14,7 +14,7 @@
 #  You should have received a copy of the GNU General Public License
 #  along with TInventory.  If not, see <http://www.gnu.org/licenses/>.
 
-from rest_framework import viewsets, permissions, routers
+from rest_framework import permissions, routers, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
@@ -71,7 +71,9 @@ class CheckProcessViewSet(viewsets.ModelViewSet):
                 try:
                     item = Item.objects.get(barcode=scan)
                 except Item.DoesNotExist:
-                    msg = "Es gibt kein Objekt mit dieser ID oder diesem Barcode: {}".format(scan)
+                    msg = "Es gibt kein Objekt mit dieser ID oder diesem Barcode: {}".format(
+                        scan
+                    )
                     msg_type = "bad"
 
         if msg_type == "success":
@@ -92,7 +94,7 @@ class CheckProcessViewSet(viewsets.ModelViewSet):
     def checks(self, request, pk=None):
         process = self.get_object()
         checks = process.checks
-        serializer = CheckSerializer(checks, many=True, context={'request': request})
+        serializer = CheckSerializer(checks, many=True, context={"request": request})
         return Response(serializer.data)
 
     @action(detail=False, methods=["post"])
@@ -134,10 +136,14 @@ class CheckProcessViewSet(viewsets.ModelViewSet):
                 check.checked_in_by = user
                 check.save()
 
-                serializer = CheckSerializer(check, many=False, context={'request': request})
+                serializer = CheckSerializer(
+                    check, many=False, context={"request": request}
+                )
                 context["check"] = serializer.data
-                msg = "Das Objekt {} {}wurde erfolgreich eingecheckt.".format(check.item.name, "({}) ".format(
-                    check.item.preset.name) if check.item.preset else "")
+                msg = "Das Objekt {} {}wurde erfolgreich eingecheckt.".format(
+                    check.item.name,
+                    "({}) ".format(check.item.preset.name) if check.item.preset else "",
+                )
         context["msg"] = msg
         context["msg_type"] = msg_type
 
@@ -151,9 +157,9 @@ class CheckViewSet(viewsets.ModelViewSet):
 
 
 router = routers.DefaultRouter()
-router.register(r'categories', CategoryViewSet)
-router.register(r'users', UserList)
-router.register(r'persons/technicians', TechniciansList)
-router.register(r'persons/normal', NormalPersonsList)
-router.register(r'check_processes', CheckProcessViewSet)
-router.register(r'checks', CheckViewSet)
+router.register(r"categories", CategoryViewSet)
+router.register(r"users", UserList)
+router.register(r"persons/technicians", TechniciansList)
+router.register(r"persons/normal", NormalPersonsList)
+router.register(r"check_processes", CheckProcessViewSet)
+router.register(r"checks", CheckViewSet)

@@ -21,13 +21,19 @@ from django.db import migrations
 
 class Migration(migrations.Migration):
     dependencies = [
-        ('api', '0001_initial'),
+        ("api", "0001_initial"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='checkoutprocess',
-            options={'permissions': [('check_out', 'Can check out things'), ('check_in', 'Can check in things')],
-                     'verbose_name': 'Check-Out-Vorgang', 'verbose_name_plural': 'Check-Out-Vorgänge'},
+            name="checkoutprocess",
+            options={
+                "permissions": [
+                    ("check_out", "Can check out things"),
+                    ("check_in", "Can check in things"),
+                ],
+                "verbose_name": "Check-Out-Vorgang",
+                "verbose_name_plural": "Check-Out-Vorgänge",
+            },
         ),
     ]
