@@ -555,16 +555,19 @@ def check_out(request):
             step = 3
 
         elif (
-            step == 3
-            and request.POST.get("confirm", False)
-            and process.checks.count() > 0
+                step == 3
+                and process.checks.count() > 0
         ):
-            process.is_check_out_in_process = False
-            process.checked_out_at = timezone.now()
-            process.save()
-            del request.session["step"]
-            del request.session["process"]
-            step = 4
+            form = CheckForm(request.POST, instance=process)
+            if form.is_valid():
+                process.condition = form.cleaned_data["condition"]
+                process.check_in_until = form.cleaned_data["check_in_until"]
+                process.is_check_out_in_process = False
+                process.checked_out_at = timezone.now()
+                process.save()
+                del request.session["step"]
+                del request.session["process"]
+                step = 4
 
     if step == 1:
         technicians = Person.objects.all().filter(is_technician=True).order_by("name")
@@ -581,7 +584,8 @@ def check_out(request):
             context={"process": process, "msg": msg, "msg_type": msg_type},
         )
     elif step == 3:
-        return render(request, "ui/check-out-3.html", context={"process": process})
+        form = CheckForm(instance=process)
+        return render(request, "ui/check-out-3.html", context={"process": process, "form": form})
     elif step == 4:
         return render(request, "ui/check-out-done.html", context={"process": process})
 

@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load bootstrap %}
 {% load widget_tweaks %}
 
 {% block content %}
@@ -67,14 +68,21 @@
 
         <form action="" method="post" class="d-inline">
             {% csrf_token %}
-            <button type="submit" class="btn btn-success btn-lg" name="confirm" value="confirm">
+          <div class="row">
+            <div class="col-sm">
+              <button type="submit" class="btn btn-success btn-lg" name="confirm" value="confirm">
                 <i class="fas fa-save mr-1"></i>
                 Check-Out bestätigen
-            </button>
-            <button type="submit" class="btn btn-danger btn-lg" name="cancel" value="cancel">
+              </button>
+              <button type="submit" class="btn btn-danger btn-lg" name="cancel" value="cancel">
                 <i class="far fa-times-circle mr-1"></i>
                 Check-Out abbrechen
-            </button>
+              </button>
+            </div>
+            <div class="col-sm">
+              {{ form|bootstrap }}
+            </div>
+          </div>
         </form>
 
     </div>
