@@ -679,6 +679,8 @@ def license(request):
          "https://www.django-rest-framework.org/#license"),
         ("fpdf (PyFPDF)", "https://github.com/reingart/pyfpdf", "GNU Lesser General Public License v3.0",
          "https://github.com/reingart/pyfpdf/blob/master/LICENSE"),
+        ("Django-Select2", "https://github.com/codingjoe/django-select2", "MIT License",
+         "https://github.com/codingjoe/django-select2/blob/master/LICENSE"),
 
     ]
     components.sort(key=lambda elem: elem[0].lower())
