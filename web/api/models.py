@@ -46,7 +46,7 @@ class Location(models.Model):
 
 
 def default_category():
-    return Category.objects.get_or_create(name="Sonstiges")
+    return Category.objects.get_or_create(name="Sonstiges")[0]
 
 
 class Preset(models.Model):
