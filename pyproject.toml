@@ -16,7 +16,7 @@ django-widget-tweaks = "^1.4.8"
 djangorestframework = "^3.12.2"
 fpdf = "^1.7.2"
 Pillow = "^8.0.1"
-django-debug-toolbar = "^3.1.1"
+django-debug-toolbar = "^3.2"
 django-yarnpkg = "^6.0.1"
 django-select2 = "^7.4.2"
 
