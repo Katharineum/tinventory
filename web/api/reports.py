@@ -129,7 +129,8 @@ def loan_form_pdf(process: CheckOutProcess):
 
         pdf.normal_font()
         pdf.cell(
-            w=9, txt=" bei ",
+            w=9,
+            txt=" bei ",
         )
 
         pdf.mono_font()
@@ -264,7 +265,8 @@ def check_in_confirmation_pdf(process):
 
             pdf.normal_font(10)
             pdf.cell(
-                w=7, txt=" bei ",
+                w=7,
+                txt=" bei ",
             )
 
             pdf.mono_font(12)

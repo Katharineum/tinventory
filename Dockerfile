@@ -10,7 +10,7 @@ ENV PYTHONUNBUFFERED 1
 RUN apt-get update && \
     apt-get upgrade -y && \
     apt-get install -y \
-	libmariadbclient-dev yarnpkg gettext && \
+	libmariadbclient-dev yarnpkg gettext memcached redis && \
 	pip3 install --upgrade pip && \
 	pip3 install uwsgi mysqlclient poetry && \
     rm -rf /var/lib/apt/lists/*

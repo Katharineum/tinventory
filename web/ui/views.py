@@ -554,10 +554,7 @@ def check_out(request):
             request.session["step"] = 3
             step = 3
 
-        elif (
-                step == 3
-                and process.checks.count() > 0
-        ):
+        elif step == 3 and process.checks.count() > 0:
             form = CheckForm(request.POST, instance=process)
             if form.is_valid():
                 process.condition = form.cleaned_data["condition"]
@@ -585,7 +582,9 @@ def check_out(request):
         )
     elif step == 3:
         form = CheckForm(instance=process)
-        return render(request, "ui/check-out-3.html", context={"process": process, "form": form})
+        return render(
+            request, "ui/check-out-3.html", context={"process": process, "form": form}
+        )
     elif step == 4:
         return render(request, "ui/check-out-done.html", context={"process": process})
 

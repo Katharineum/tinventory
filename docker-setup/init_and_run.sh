@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+service redis-server restart
 cd /var/www/
 chown -R www-data:www-data /var/www/ && chmod -R 777 /var/www/media
 python3 manage.py wait_for_db

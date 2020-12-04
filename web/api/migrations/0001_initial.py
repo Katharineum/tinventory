@@ -45,7 +45,10 @@ class Migration(migrations.Migration):
                 ),
                 ("name", models.CharField(max_length=100, verbose_name="Name")),
             ],
-            options={"verbose_name": "Kategorie", "verbose_name_plural": "Kategorien",},
+            options={
+                "verbose_name": "Kategorie",
+                "verbose_name_plural": "Kategorien",
+            },
         ),
         migrations.CreateModel(
             name="Location",
@@ -67,7 +70,10 @@ class Migration(migrations.Migration):
                     ),
                 ),
             ],
-            options={"verbose_name": "Ort", "verbose_name_plural": "Orte",},
+            options={
+                "verbose_name": "Ort",
+                "verbose_name_plural": "Orte",
+            },
         ),
         migrations.CreateModel(
             name="Person",
@@ -100,7 +106,10 @@ class Migration(migrations.Migration):
                     ),
                 ),
             ],
-            options={"verbose_name": "Person", "verbose_name_plural": "Personen",},
+            options={
+                "verbose_name": "Person",
+                "verbose_name_plural": "Personen",
+            },
         ),
         migrations.CreateModel(
             name="Preset",
@@ -142,7 +151,10 @@ class Migration(migrations.Migration):
                     ),
                 ),
             ],
-            options={"verbose_name": "Preset", "verbose_name_plural": "Presets",},
+            options={
+                "verbose_name": "Preset",
+                "verbose_name_plural": "Presets",
+            },
         ),
         migrations.CreateModel(
             name="Item",
@@ -208,7 +220,10 @@ class Migration(migrations.Migration):
                     ),
                 ),
             ],
-            options={"verbose_name": "Objekt", "verbose_name_plural": "Objekte",},
+            options={
+                "verbose_name": "Objekt",
+                "verbose_name_plural": "Objekte",
+            },
         ),
         migrations.CreateModel(
             name="CheckOutProcess",
@@ -318,6 +333,9 @@ class Migration(migrations.Migration):
                     ),
                 ),
             ],
-            options={"verbose_name": "Check", "verbose_name_plural": "Checks",},
+            options={
+                "verbose_name": "Check",
+                "verbose_name_plural": "Checks",
+            },
         ),
     ]
