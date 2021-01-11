@@ -235,7 +235,7 @@ redis = ">=3.0.0"
 
 [[package]]
 name = "django-select2"
-version = "7.5.0"
+version = "7.6.0"
 description = "Select2 option fields for Django"
 category = "main"
 optional = false
@@ -1133,7 +1133,7 @@ socks = ["PySocks (>=1.5.6,!=1.5.7,<2.0)"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "b732d24ea7736afec84f0082c4a488dde368f82673fb6b508ee6d45fb4f48878"
+content-hash = "cbfb07e47bee8e763d26c9b32db89049001b57a5205b9ce20b1c792f02a6b5f3"
 
 [metadata.files]
 alabaster = [
@@ -1251,8 +1251,8 @@ django-redis = [
     {file = "django_redis-4.12.1-py3-none-any.whl", hash = "sha256:1133b26b75baa3664164c3f44b9d5d133d1b8de45d94d79f38d1adc5b1d502e5"},
 ]
 django-select2 = [
-    {file = "django-select2-7.5.0.tar.gz", hash = "sha256:df71dedba9a362041b65e3cd692cb8b4f9e1e17a19681c7b4e61f331868bae0c"},
-    {file = "django_select2-7.5.0-py2.py3-none-any.whl", hash = "sha256:6662aa1c21d4839b8fff38e4c9d402ed3da81f7c5ef7f7e703c862255ba3b9ed"},
+    {file = "django-select2-7.6.0.tar.gz", hash = "sha256:6a85ae28d865f13d32451fce750357d5cb639096472e1066b2ba21c2257d6141"},
+    {file = "django_select2-7.6.0-py2.py3-none-any.whl", hash = "sha256:614cda6aee0972161c4c062ea28c17b98868b3a019cce708a3185aadb8c2ca99"},
 ]
 django-stubs = [
     {file = "django-stubs-1.7.0.tar.gz", hash = "sha256:ddd190aca5b9adb4d30760d5c64f67cb3658703f5f42c3bb0c2c71ff4d752c39"},
