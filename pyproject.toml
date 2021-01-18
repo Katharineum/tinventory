@@ -18,7 +18,7 @@ fpdf = "^1.7.2"
 Pillow = "^8.1.0"
 django-debug-toolbar = "^3.2"
 django-yarnpkg = "^6.0.1"
-django-select2 = "^7.6.0"
+django-select2 = "^7.6.1"
 python-memcached = "^1.59"
 django-redis = "^4.12.1"
 
