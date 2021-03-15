@@ -210,7 +210,7 @@ sqlparse = ">=0.2.0"
 
 [[package]]
 name = "django-oauth-toolkit"
-version = "1.4.0"
+version = "1.4.1"
 description = "OAuth2 Provider for Django"
 category = "main"
 optional = false
@@ -1133,7 +1133,7 @@ socks = ["PySocks (>=1.5.6,!=1.5.7,<2.0)"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "6bb9d04c52ceb43fa163f5c8c947137dc9a0f229e0318e079ab743459754fd90"
+content-hash = "5d076dc2c105981671d92076e66b08ed0929157b357226c1410b0d47ff0629fb"
 
 [metadata.files]
 alabaster = [
@@ -1243,8 +1243,8 @@ django-debug-toolbar = [
     {file = "django_debug_toolbar-3.2-py3-none-any.whl", hash = "sha256:9e5a25d0c965f7e686f6a8ba23613ca9ca30184daa26487706d4829f5cfb697a"},
 ]
 django-oauth-toolkit = [
-    {file = "django-oauth-toolkit-1.4.0.tar.gz", hash = "sha256:87cc482cfb0f9ef8fa3730857cdadcc2a25fcfd9b587804dd8f2ad7f0d457e2d"},
-    {file = "django_oauth_toolkit-1.4.0-py3-none-any.whl", hash = "sha256:b8fbf226dbafeb429563de03623cc771dda18c5dbd5a1c9850fde969c245c74f"},
+    {file = "django-oauth-toolkit-1.4.1.tar.gz", hash = "sha256:3415eff552a18a8499356bbb8e31b62250377149286711634ac173910cb9bce4"},
+    {file = "django_oauth_toolkit-1.4.1-py3-none-any.whl", hash = "sha256:6f03d527c7410af094ea0e339d5d2b39a44c114fe18fab26096a25e53d3aa42d"},
 ]
 django-redis = [
     {file = "django-redis-4.12.1.tar.gz", hash = "sha256:306589c7021e6468b2656edc89f62b8ba67e8d5a1c8877e2688042263daa7a63"},
