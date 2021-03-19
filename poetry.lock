@@ -382,7 +382,7 @@ flake8 = "*"
 
 [[package]]
 name = "flake8-docstrings"
-version = "1.5.0"
+version = "1.6.0"
 description = "Extension for flake8 which uses pydocstyle to check docstrings"
 category = "dev"
 optional = false
@@ -1133,7 +1133,7 @@ socks = ["PySocks (>=1.5.6,!=1.5.7,<2.0)"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "6bb9d04c52ceb43fa163f5c8c947137dc9a0f229e0318e079ab743459754fd90"
+content-hash = "5b52d50db1ec72b472fd9aa288a22932251da3dea3a5e2eab712dc66700dd79a"
 
 [metadata.files]
 alabaster = [
@@ -1296,8 +1296,8 @@ flake8-django = [
     {file = "flake8_django-1.1.1-py3-none-any.whl", hash = "sha256:c71da0e61b6119dae91cbffdbdb00f1d6ebe3f5d0c43f5bf136929997ab0b72d"},
 ]
 flake8-docstrings = [
-    {file = "flake8-docstrings-1.5.0.tar.gz", hash = "sha256:3d5a31c7ec6b7367ea6506a87ec293b94a0a46c0bce2bb4975b7f1d09b6f3717"},
-    {file = "flake8_docstrings-1.5.0-py2.py3-none-any.whl", hash = "sha256:a256ba91bc52307bef1de59e2a009c3cf61c3d0952dbe035d6ff7208940c2edc"},
+    {file = "flake8-docstrings-1.6.0.tar.gz", hash = "sha256:9fe7c6a306064af8e62a055c2f61e9eb1da55f84bb39caef2b84ce53708ac34b"},
+    {file = "flake8_docstrings-1.6.0-py2.py3-none-any.whl", hash = "sha256:99cac583d6c7e32dd28bbfbef120a7c0d1b6dde4adb5a9fd441c4227a6534bde"},
 ]
 flake8-fixme = [
     {file = "flake8-fixme-1.1.1.tar.gz", hash = "sha256:50cade07d27a4c30d4f12351478df87339e67640c83041b664724bda6d16f33a"},
