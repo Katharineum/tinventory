@@ -1,0 +1,30 @@
+version: 2
+updates:
+- package-ecosystem: pip
+  directory: "/"
+  schedule:
+    interval: daily
+  open-pull-requests-limit: 10
+  ignore:
+  - dependency-name: django-select2
+    versions:
+    - 7.7.0
+  - dependency-name: djangorestframework
+    versions:
+    - 3.12.3
+  - dependency-name: sphinx
+    versions:
+    - 3.5.0
+    - 3.5.3
+  - dependency-name: urllib3
+    versions:
+    - 1.26.3
+  - dependency-name: flake8
+    versions:
+    - 3.9.0
+  - dependency-name: django-oauth-toolkit
+    versions:
+    - 1.4.1
+  - dependency-name: django
+    versions:
+    - 3.1.6
